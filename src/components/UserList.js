@@ -3,6 +3,11 @@ import UserRecord from './UserRecord';
 
 class UserList extends Component {
     render() {
+        const users = this.props.users.map(user => {
+            return (
+                <UserRecord key={user.id} user={user} onChange={this.props.onChange}/>
+            );
+        })
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -29,16 +34,16 @@ class UserList extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <UserRecord />
+                                                        {users}
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th>Name</th>
-                                                            <th>Position</th>
-                                                            <th>Office</th>
-                                                            <th>Age</th>
-                                                            <th>Start date</th>
-                                                            <th>Salary</th>
+                                                            <th>Id</th>
+                                                            <th>Username</th>
+                                                            <th>Email</th>
+                                                            <th>Role</th>
+                                                            <th>Create date</th>
+                                                            <th>Active</th>
                                                         </tr>
                                                     </tfoot>
                                                 </table>

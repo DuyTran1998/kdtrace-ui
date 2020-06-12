@@ -1,7 +1,32 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
+import '../assets/css/DropBox.css';
+const styleDrop = {
+        
+};
 class Navigation extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            anchorEl: null
+        }
+    }
+
+    
+
+    handleMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+      };
+    
+      handleClose = () => {
+        this.setState({ anchorEl: null });
+      };
+        
     render() {
+        const open = Boolean(this.state.anchorEl);
         return (
             <nav className="header-navbar navbar-expand-md navbar navbar-with-menu navbar-static-top navbar-light navbar-border navbar-brand-center">
                 <div className="navbar-wrapper">
@@ -17,9 +42,6 @@ class Navigation extends Component {
                             <ul className="nav navbar-nav mr-auto float-left">
                             </ul>
                             <ul className="nav navbar-nav float-right">
-                                <li className="dropdown dropdown-language nav-item"><a className="dropdown-toggle nav-link" id="dropdown-flag" href="!!#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="flag-icon flag-icon-gb"></i><span>English</span><span className="selected-language"></span></a>
-                                    <div className="dropdown-menu" aria-labelledby="dropdown-flag"><a className="dropdown-item" href="!!#"><i className="flag-icon flag-icon-gb"></i> English</a><a className="dropdown-item" href="!!#"><i className="flag-icon flag-icon-fr"></i> French</a><a className="dropdown-item" href="!!#"><i className="flag-icon flag-icon-cn"></i> Chinese</a><a className="dropdown-item" href="!!#"><i className="flag-icon flag-icon-de"></i> German</a></div>
-                                </li>
                                 <li className="dropdown dropdown-notification nav-item"><a className="nav-link nav-link-label" href="!!#" data-toggle="dropdown"><i className="ficon ft-bell"></i><span className="badge badge-pill badge-default badge-danger badge-default badge-up">5</span></a>
                                     <ul className="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                         <li className="dropdown-menu-header">
@@ -108,10 +130,27 @@ class Navigation extends Component {
                                         <li className="dropdown-menu-footer"><a className="dropdown-item text-muted text-center" href="!!#">Read all messages</a></li>
                                     </ul>
                                 </li>
-                                <li className="dropdown dropdown-user nav-item"><a className="dropdown-toggle nav-link dropdown-user-link" href="!!#" data-toggle="dropdown"><span className="avatar avatar-online"><img src="../../../app-assets/images/portrait/small/avatar-s-1.png" alt="avatar" /><i></i></span><span className="user-name">John Doe</span></a>
-                                    <div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" href="user-profile.html"><i className="ft-user"></i> Edit Profile</a><a className="dropdown-item" href="email-application.html"><i className="ft-mail"></i> My Inbox</a><a className="dropdown-item" href="user-cards.html"><i className="ft-check-square"></i> Task</a><a className="dropdown-item" href="chat-application.html"><i className="ft-message-square"></i> Chats</a>
-                                        <div className="dropdown-divider"></div><a className="dropdown-item" href="login-with-bg-image.html"><i className="ft-power"></i> Logout</a>
+                                <li className="dropdown dropdown-user nav-item">
+                                <div className="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
+                                    <span className="avatar avatar-online"><img src="../../../app-assets/images/portrait/small/avatar-s-1.png" alt="avatar" /><i></i></span>
+                                <div class="dropdown">
+                                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
+                                        {this.props.username}
+                                        </Button>
+                                        <Menu
+                                            id="simple-menu"
+                                            anchorEl={this.state.anchorEl}
+                                            keepMounted
+                                            open={open}
+                                            onClose={this.handleClose}
+                                        >
+                                            <MenuItem >Profile</MenuItem>
+                                            <MenuItem >My account</MenuItem>
+                                            <MenuItem >Logout</MenuItem>
+                                        </Menu>
                                     </div>
+                                </div>
+                                    
                                 </li>
                             </ul>
                         </div>

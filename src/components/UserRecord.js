@@ -8,33 +8,33 @@ const tdStyle = {
 };
 
 class UserRecord extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            isChecked: false,
+            isChecked: this.props.user.active,
         };
         this.handleChange = this.handleChange.bind(this);
     }
     handleChange = e => {
-        console.log(this.state.isChecked);
         let value = e.target.checked;
-        this.setState({'isChecked': value});
+        console.log(this.state.isChecked);
+        this.setState({ 'isChecked': value });
+        this.props.onChange(this.props.user.id);
     }
     render() {
         return (
             <tr className="UserRecord">
-                <td className="UserRecord_Id">1</td>
-                <td className="UserRecord_UserName">DuyTran1998</td>
-                <td className="UserRecord_Email">Duytran1998@gmail.com</td>
-                <td className="UserRecord_Role">ROLE_ADMIN</td>
+                <td className="UserRecord_Id">{this.props.user.id}</td>
+                <td className="UserRecord_UserName">{this.props.user.username}</td>
+                <td className="UserRecord_Email">{this.props.user.email}</td>
+                <td className="UserRecord_Role">{this.props.user.role.roleName}</td>
                 <td className="UserReCord_CreateAt">2011/04/25</td>
-                <td className= "UserRecord_Active" style={tdStyle}>
+                <td className="UserRecord_Active" style={tdStyle}>
                     <Switch
                         checked={this.state.isChecked}
                         onChange={this.handleChange}
                         color="primary"
                         name="isChecked"
-                        
                     />
                 </td>
             </tr>
