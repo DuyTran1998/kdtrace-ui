@@ -1,0 +1,9 @@
+.UserRecord_Id{
+    width: 30px;
+    text-align: center;
+}
+
+.UserRecord_Active{
+    padding-top: 1px;
+    padding-bottom: 5px;
+}
