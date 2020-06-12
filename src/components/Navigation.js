@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
 import '../assets/css/DropBox.css';
-const styleDrop = {
-        
-};
+
 class Navigation extends Component {
     constructor(props){
         super(props);
@@ -14,8 +11,6 @@ class Navigation extends Component {
             anchorEl: null
         }
     }
-
-    
 
     handleMenu = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -133,7 +128,7 @@ class Navigation extends Component {
                                 <li className="dropdown dropdown-user nav-item">
                                 <div className="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
                                     <span className="avatar avatar-online"><img src="../../../app-assets/images/portrait/small/avatar-s-1.png" alt="avatar" /><i></i></span>
-                                <div class="dropdown">
+                                <div className="dropdown">
                                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
                                         {this.props.username}
                                         </Button>
@@ -150,7 +145,6 @@ class Navigation extends Component {
                                         </Menu>
                                     </div>
                                 </div>
-                                    
                                 </li>
                             </ul>
                         </div>

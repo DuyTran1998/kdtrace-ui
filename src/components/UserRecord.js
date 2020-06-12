@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Switch from '@material-ui/core/Switch';
-import '../assets/css/UserRecord.css'
 
 const tdStyle = {
     paddingTop: '1px',
