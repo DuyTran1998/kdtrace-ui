@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Menu from '../components/Menu';
 import UserList from '../components/UserList';
+import {isLoggedIn} from '../services/Authentication.js';
 
 class PageAdmin extends Component {
   constructor(props){
@@ -66,9 +68,10 @@ class PageAdmin extends Component {
   }
 
   render() {
-    // if(localStorage.getItem("key") === null){
-    //   return (<Redirect to="/" />);
-    // }
+    if(!isLoggedIn()){
+      return (<Redirect to="/" />);
+    }
+
     const roleName = this.state.roleName;
     let dashboard;
     if(roleName === "ROLE_ADMIN"){

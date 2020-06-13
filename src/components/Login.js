@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import img from './../assets/images/logo/logo-dark.png';
-
+import {isLoggedIn} from '../services/Authentication.js';
 class Login extends Component {
     constructor(props){
         super(props);
@@ -21,7 +21,6 @@ class Login extends Component {
     }
 
     handleSubmit = e =>{
-        console.log(this.state.username);
         const url = "http://localhost:8080/api/login";
         fetch(url, {
             method: "POST",
@@ -42,9 +41,9 @@ class Login extends Component {
         })
         .then( responseJson =>{
             if(responseJson.status === 200){
-                this.setState({'isLogged':true});
                 localStorage.clear();
                 localStorage.setItem("token", responseJson.accessToken);
+                this.setState({'isLogged':true});
             }
         })
         .catch(error =>{
@@ -53,7 +52,7 @@ class Login extends Component {
         e.preventDefault();
     }
     render() {
-        if(this.state.isLogged === true){
+        if(isLoggedIn()){
             return (<Redirect to="/home" />);
         }
         return (

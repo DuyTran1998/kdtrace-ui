@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
+import {isLoggedIn} from '../services/Authentication.js';
  
 class Register extends Component {
     constructor(props){
@@ -53,6 +54,9 @@ class Register extends Component {
             this.setState({'roleName': e.target.value});
     }
     render() {
+        if(isLoggedIn()){
+            return (<Redirect to="/home" />);
+        }
         if(this.state.status === 200){
             return (<Redirect to="/login" />);
         }

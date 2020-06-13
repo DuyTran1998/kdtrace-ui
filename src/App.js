@@ -6,10 +6,10 @@ import PageAdmin from './pages/PageAdmin';
 
 function App() {
   return (
-      <Switch>
-        <Route exact path='/' component={LoginAndRegister}/>
-        <Route path='/home' component={PageAdmin} />
-      </Switch>
+    <Switch>
+      <Route exact path='/home' component={PageAdmin} />
+      <Route path='/' component={LoginAndRegister} />
+    </Switch>
   );
 }
 

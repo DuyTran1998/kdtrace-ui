@@ -15,9 +15,9 @@ class LoginAndRegister extends Component {
                             <section className="flexbox-container">
                                 <div className="col-12 d-flex align-items-center justify-content-center">
                                     <Switch>
-                                        <Route exact path='/' component={Login}/>
-                                        <Route path='/login' component={Login}/>
-                                        <Route path='/register' component={Register}/>
+                                        <Route exact path='/' component={Login} />
+                                        <Route path='/login' component={Login} />
+                                        <Route path='/register' component={Register} />
                                     </Switch>
                                 </div>
                             </section>
