@@ -41,7 +41,7 @@ class Login extends Component {
         })
         .then( responseJson =>{
             if(responseJson.status === 200){
-                localStorage.clear();
+                localStorage.removeItem("token");
                 localStorage.setItem("token", responseJson.accessToken);
                 this.setState({'isLogged':true});
             }

@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Redirect } from 'react-router';
 import '../assets/css/DropBox.css';
+import {deleteAccessToken} from '../services/Authentication.js';
 
 class Navigation extends Component {
     constructor(props){
         super(props);
         this.state = {
-            anchorEl: null
+            anchorEl: null,
+            redirect: false,
         }
+        this.handleMenu = this.handleMenu.bind(this);
+        this.handleClose = this.handleClose(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleMenu = event => {
@@ -19,8 +25,16 @@ class Navigation extends Component {
       handleClose = () => {
         this.setState({ anchorEl: null });
       };
+
+    handleLogout = () => {
+        deleteAccessToken();
+        this.setState({ redirect : true});
+    }
         
     render() {
+        if(this.state.redirect){
+            return <Redirect to='/login' />;
+        }
         const open = Boolean(this.state.anchorEl);
         return (
             <nav className="header-navbar navbar-expand-md navbar navbar-with-menu navbar-static-top navbar-light navbar-border navbar-brand-center">
@@ -50,7 +64,7 @@ class Navigation extends Component {
                                                     <p className="notification-text font-small-3 text-muted">Lorem ipsum dolor sit amet, consectetuer elit.</p><small>
                                                         <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">30 minutes ago</time></small>
                                                 </div>
-                                            </div></a><a href="!!#">
+                                            </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left align-self-center"><i className="ft-download-cloud icon-bg-circle bg-red bg-darken-1"></i></div>
                                                     <div className="media-body">
@@ -58,7 +72,7 @@ class Navigation extends Component {
                                                         <p className="notification-text font-small-3 text-muted">Aliquam tincidunt mauris eu risus.</p><small>
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Five hour ago</time></small>
                                                     </div>
-                                                </div></a><a href="!#!">
+                                                </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left align-self-center"><i className="ft-alert-triangle icon-bg-circle bg-yellow bg-darken-3"></i></div>
                                                     <div className="media-body">
@@ -66,7 +80,7 @@ class Navigation extends Component {
                                                         <p className="notification-text font-small-3 text-muted">Vestibulum auctor dapibus neque.</p><small>
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Today</time></small>
                                                     </div>
-                                                </div></a><a href="!!#">
+                                                </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left align-self-center"><i className="ft-check-circle icon-bg-circle bg-cyan"></i></div>
                                                     <div className="media-body">
@@ -81,10 +95,10 @@ class Navigation extends Component {
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Last month</time></small>
                                                     </div>
                                                 </div></a></li>
-                                        <li className="dropdown-menu-footer"><a className="dropdown-item text-muted text-center" href="!!#">Read all notifications</a></li>
+                                        <li className="dropdown-menu-footer"><a className="dropdown-item text-muted text-center" href="!#">Read all notifications</a></li>
                                     </ul>
                                 </li>
-                                <li className="dropdown dropdown-notification nav-item"><a className="nav-link nav-link-label" href="!!#" data-toggle="dropdown"><i className="ficon ft-mail"></i><span className="badge badge-pill badge-default badge-info badge-default badge-up">5              </span></a>
+                                <li className="dropdown dropdown-notification nav-item"><a className="nav-link nav-link-label" href="!#" data-toggle="dropdown"><i className="ficon ft-mail"></i><span className="badge badge-pill badge-default badge-info badge-default badge-up">5              </span></a>
                                     <ul className="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                         <li className="dropdown-menu-header">
                                             <h6 className="dropdown-header m-0"><span className="grey darken-2">Messages</span></h6><span className="notification-tag badge badge-default badge-warning float-right m-0">4 New</span>
@@ -97,7 +111,7 @@ class Navigation extends Component {
                                                     <p className="notification-text font-small-3 text-muted">I like your portfolio, let's start.</p><small>
                                                         <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Today</time></small>
                                                 </div>
-                                            </div></a><a href="!!#">
+                                            </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left"><span className="avatar avatar-sm avatar-busy rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-2.png" alt="avatar" /><i></i></span></div>
                                                     <div className="media-body">
@@ -105,7 +119,7 @@ class Navigation extends Component {
                                                         <p className="notification-text font-small-3 text-muted">I have seen your work, there is</p><small>
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Tuesday</time></small>
                                                     </div>
-                                                </div></a><a href="!!#">
+                                                </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left"><span className="avatar avatar-sm avatar-online rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="avatar" /><i></i></span></div>
                                                     <div className="media-body">
@@ -113,7 +127,7 @@ class Navigation extends Component {
                                                         <p className="notification-text font-small-3 text-muted">Can we have call in this week ?</p><small>
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Friday</time></small>
                                                     </div>
-                                                </div></a><a href="!!#">
+                                                </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left"><span className="avatar avatar-sm avatar-away rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar" /><i></i></span></div>
                                                     <div className="media-body">
@@ -122,7 +136,7 @@ class Navigation extends Component {
                                                             <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">last month</time></small>
                                                     </div>
                                                 </div></a></li>
-                                        <li className="dropdown-menu-footer"><a className="dropdown-item text-muted text-center" href="!!#">Read all messages</a></li>
+                                        <li className="dropdown-menu-footer"><a className="dropdown-item text-muted text-center" href="!#">Read all messages</a></li>
                                     </ul>
                                 </li>
                                 <li className="dropdown dropdown-user nav-item">
@@ -135,13 +149,13 @@ class Navigation extends Component {
                                         <Menu
                                             id="simple-menu"
                                             anchorEl={this.state.anchorEl}
-                                            keepMounted
+                                            // keepMounted
                                             open={open}
                                             onClose={this.handleClose}
                                         >
                                             <MenuItem >Profile</MenuItem>
                                             <MenuItem >My account</MenuItem>
-                                            <MenuItem >Logout</MenuItem>
+                                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                                         </Menu>
                                     </div>
                                 </div>
