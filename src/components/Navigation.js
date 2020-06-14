@@ -13,9 +13,6 @@ class Navigation extends Component {
             anchorEl: null,
             redirect: false,
         }
-        this.handleMenu = this.handleMenu.bind(this);
-        this.handleClose = this.handleClose(this);
-        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleMenu = event => {

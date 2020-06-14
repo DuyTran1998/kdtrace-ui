@@ -1,59 +1,95 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import img from './../assets/images/logo/logo-dark.png';
-import {isLoggedIn} from '../services/Authentication.js';
+import { isLoggedIn } from '../services/Authentication.js';
 class Login extends Component {
-    constructor(props){
+
+    constructor(props) {
         super(props);
         this.state = {
             username: '',
             password: '',
+            roleName: '',
             isLogged: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.getUserLogged = this.getUserLogged.bind(this);
     }
 
     handleChange = e => {
         const { name, value } = e.target;
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
         return true;
     }
 
-    handleSubmit = e =>{
-        const url = "http://localhost:8080/api/login";
+    getUserLogged(token) {
+        const url = "http://localhost:8080/api/getUserLogged";
         fetch(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                this.setState({
+                    username: jsonResponse.username,
+                    roleName: jsonResponse.role.roleName
+                })
+            })
+    }
+
+    handleSubmit = e => {
+        const url = "http://localhost:8080/api/login";
+        const result = fetch(url, {
             method: "POST",
             body: JSON.stringify({
                 username: this.state.username,
                 password: this.state.password,
             }),
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
             console.log(response);
-            if(response.ok){
+            if (response.ok) {
                 return response.json();
-            }else{
+            } else {
                 throw new Error(response.statusText);
             }
         })
-        .then( responseJson =>{
-            if(responseJson.status === 200){
-                localStorage.removeItem("token");
-                localStorage.setItem("token", responseJson.accessToken);
-                this.setState({'isLogged':true});
-            }
-        })
-        .catch(error =>{
-            console.log(error);
+            .then(responseJson => {
+                if (responseJson.status === 200) {
+                    localStorage.removeItem("token");
+                    const token = responseJson.accessToken
+                    localStorage.setItem("token", token);
+                    this.setState({ 'isLogged': true });
+                    return fetch("http://localhost:8080/api/getUserLogged", {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(jsonResponse => {
+                            return jsonResponse.role.roleName;
+                        })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        result.then(r =>{
+            this.setState({roleName : r});
         })
         e.preventDefault();
     }
     render() {
-        if(isLoggedIn()){
-            return (<Redirect to="/home" />);
+        console.log()
+        if (isLoggedIn() && this.state.roleName === "ROLE_ADMIN"){
+            return (<Redirect to="/admin" />);
+        }
+        else if(isLoggedIn() && this.state.roleName !== "ROLE_ADMIN" && this.state.roleName !== ''){
+            return (<Redirect to="/dashboard" />);
         }
         return (
             <div className="col-md-4 col-10 box-shadow-2 p-0">
@@ -68,7 +104,7 @@ class Login extends Component {
                         <div className="card-body">
                             <form className="form-horizontal form-simple" onSubmit={this.handleSubmit}>
                                 <fieldset className="form-group position-relative has-icon-left mb-0">
-                                    <input type="text" className="form-control form-control-lg input-lg" id="user-name" placeholder="Your Username" name="username" required  onChange={this.handleChange}/>
+                                    <input type="text" className="form-control form-control-lg input-lg" id="user-name" placeholder="Your Username" name="username" required onChange={this.handleChange} />
                                     <div className="form-control-position">
                                         <i className="ft-user"></i>
                                     </div>

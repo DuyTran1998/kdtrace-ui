@@ -6,6 +6,7 @@ import UserList from '../components/UserList';
 import {isLoggedIn} from '../services/Authentication.js';
 
 class PageAdmin extends Component {
+  _isMounted = false;
   constructor(props){
     super(props)
 
@@ -25,16 +26,17 @@ class PageAdmin extends Component {
     })
       .then(response => response.json())
       .then(jsonResponse => {
-        this.setState({'userList': jsonResponse.result});
-            console.log(this.state.userList);
+        console.log(this._isMounted);
+        if(this._isMounted){
+          this.setState({'userList': jsonResponse.result});
+          console.log(this.state.userList);
+        }
       })
   }
 
-  activeAccountUser(id){
+   activeAccountUser(id){
     const token = localStorage.getItem('token');
-    const data = {id: id}
-    console.log(data);
-    let url = `http://localhost:8080/api/admin/active?user_id=${data.id}`;
+    let url = "http://localhost:8080/api/admin/active?user_id="+id;
     fetch(url, {
         method: "POST",
         headers: {
@@ -48,7 +50,7 @@ class PageAdmin extends Component {
   }
 
   getUserLogged(token){
-    const url = "http://localhost:8080/api/admin/getUserLogged";
+    const url = "http://localhost:8080/api/getUserLogged";
     fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -56,32 +58,32 @@ class PageAdmin extends Component {
     })
       .then(response => response.json())
       .then(jsonResponse => {
-          console.log(jsonResponse);
+        if(this._isMounted){
           this.setState({'username': jsonResponse.username,
                           'roleName': jsonResponse.role.roleName })
+        }
       })
   } 
-  componentWillMount() {
+  componentDidMount() {
+    this._isMounted = true;
     const token = localStorage.getItem('token');
     this.getUserLogged(token);
     this.getAllUser(token);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
     if(!isLoggedIn()){
       return (<Redirect to="/" />);
     }
-
-    const roleName = this.state.roleName;
-    let dashboard;
-    if(roleName === "ROLE_ADMIN"){
-      dashboard = <UserList users={this.state.userList} onChange={this.activeAccountUser}/>;
-    }
     return (
       <div className="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns   menu-expanded" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
         <Navigation username={this.state.username}/>
         <Menu />
-        {dashboard}
+        <UserList users={this.state.userList} onChange={this.activeAccountUser}/>
       </div>
     );
   }
