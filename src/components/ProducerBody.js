@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ProductList from './ProductList';
 import { Switch, Route } from 'react-router-dom'
 import '../assets/css/ProducerBody.css';
+import ProductForm from './ProductForm';
+import ProducerProfile from './ProducerProfile';
 
 class ProducerBody extends Component {
     render() {
@@ -22,8 +24,9 @@ class ProducerBody extends Component {
                                                 <button className="btn btn-info round dropdown-toggle dropdown-menu-right px-2" type="button" aria-haspopup="true" ><i className="ft-settings icon-left"></i> Create Product</button>
                                             </div>
                                         </div>
-                                        <ProductList />
+                                       
                                     </div>
+                                    <ProducerProfile />
                                 </div>
                             </div>
                         </section>
