@@ -30,7 +30,7 @@ class Navigation extends Component {
         
     render() {
         if(this.state.redirect){
-            return <Redirect to='/login' />;
+            return <Redirect to="/login" />;
         }
         const open = Boolean(this.state.anchorEl);
         return (
@@ -38,7 +38,7 @@ class Navigation extends Component {
                 <div className="navbar-wrapper">
                     <div className="navbar-header">
                         <ul className="nav navbar-nav flex-row">
-                            <li className="nav-item"><a className="navbar-brand" href="../../../html/ltr/horizontal-menu-template/index.html"><img className="brand-logo" alt="robust admin logo" src="../../../app-assets/images/logo/logo-dark-sm.png" />
+                            <li className="nav-item"><a className="navbar-brand" href="."><img className="brand-logo" alt="robust admin logo" src="../../../app-assets/images/logo/logo-dark-sm.png" />
                                 <h3 className="brand-text">KD Trace</h3></a></li>
                             <li className="nav-item d-md-none"><a className="nav-link open-navbar-container" data-toggle="collapse" href="!!#" data-target="!#navbar-mobile"><i className="fa fa-ellipsis-v"></i></a></li>
                         </ul>
@@ -146,7 +146,6 @@ class Navigation extends Component {
                                         <Menu
                                             id="simple-menu"
                                             anchorEl={this.state.anchorEl}
-                                            // keepMounted
                                             open={open}
                                             onClose={this.handleClose}
                                         >

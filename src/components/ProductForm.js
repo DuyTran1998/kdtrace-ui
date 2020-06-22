@@ -105,7 +105,10 @@ class ProductForm extends Component {
                                     </div>
 
                                     <div className="form-actions">
-                                        <button type="button" className="btn btn-warning mr-1">
+                                        <button 
+                                            type="button" 
+                                            onClick={this.props.handleClose}
+                                            className="btn btn-warning mr-1">
                                             <i className="ft-x"></i> Cancel
 								        </button>
                                         <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>

@@ -1,10 +1,11 @@
-import UserList from './components/UserList';
+import ProductList from './components/ProductList';
 import NotFound from './components/NotFound';
+
 const routes = [
     {
         path : '/',
         exact : true,
-        component: UserList
+        component: ProductList
     },
     {
         path: '*',

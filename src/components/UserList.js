@@ -2,10 +2,46 @@ import React, { Component } from 'react';
 import UserRecord from './UserRecord';
 
 class UserList extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            userList: [],
+        }
+    }
+    getAllUser(token) {
+        const url = "http://localhost:8080/api/admin/getAllUsers";
+        fetch(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                this.setState({ userList: jsonResponse.result });
+            })
+    }
+
+    activeAccountUser(id) {
+        const token = localStorage.getItem('token');
+        let url = "http://localhost:8080/api/admin/active?user_id=" + id;
+        fetch(url, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                console.log(jsonResponse);
+            })
+    }
+
     render() {
-        const users = this.props.users.map(user => {
+        console.log(1);
+        console.log(this.state);
+        const users = this.state.userList.map(user => {
             return (
-                <UserRecord key={user.id} user={user} onChange={this.props.onChange}/>
+                <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
             );
         })
         return (
