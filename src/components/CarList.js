@@ -1,53 +1,43 @@
 import React, { Component } from 'react';
-import UserRecord from './UserRecord';
-import { withRouter } from 'react-router-dom';
-import {API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT} from '../constants/API/api';
-class UserList extends Component {
+import CarRecord from './CarRecord';
+import {API_GET_ALL_CAR} from '../constants/API/api';
+
+class CarList extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            userList: [],
+            cars: [],
+            error: '',
         }
     }
+
     componentDidMount() {
-        if (typeof localStorage !== undefined) {
-            if (localStorage.getItem('token')) {
-                this.props.history.push('/');
-            } else {
-                this.props.history.push('/login');
-            }
-        }
-        this.getAllUser(localStorage.getItem('token'));
+        this.getAllCars(localStorage.getItem('token'));
     }
-    getAllUser(token) {
-        const url = API_GET_ALL_USER;
-        fetch(url, {
+
+    getAllCars(token) {
+        fetch(API_GET_ALL_CAR, {
             method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => response.json())
-            .then(jsonResponse => {
-                this.setState({ userList: jsonResponse.result });
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        }).then(res => res.json())
+            .then(res => {
+                if (res.error) {
+                    throw (res.error);
+                }
+                console.log(res);
+                this.setState({
+                    cars: res.result,
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    error: error,
+                })
             })
     }
-
-    activeAccountUser(id) {
-        const token = localStorage.getItem('token');
-        let url = API_ACTIVE_USER_ACCOUNT + id;
-        fetch(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => response.json())
-            .then(jsonResponse => {
-                console.log(jsonResponse);
-            })
-    }
-
     render() {
         return (
             <div className="app-content container center-layout mt-2">
@@ -67,19 +57,18 @@ class UserList extends Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Id</th>
-                                                            <th>Username</th>
-                                                            <th>Email</th>
-                                                            <th>Role</th>
-                                                            <th>Create date</th>
-                                                            <th>Active</th>
+                                                            <th>Number Plate</th>
+                                                            <th>Type</th>
+                                                            <th>Status</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            Array.isArray(this.state.userList)
-                                                            && this.state.userList.map(user => {
+                                                            Array.isArray(this.state.cars)
+                                                            && this.state.cars.map(car => {
                                                                 return (
-                                                                    <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
+                                                                    <CarRecord key={car.id} car={car}/>
                                                                 );
                                                             })
                                                         }
@@ -87,11 +76,10 @@ class UserList extends Component {
                                                     <tfoot>
                                                         <tr>
                                                             <th>Id</th>
-                                                            <th>Username</th>
-                                                            <th>Email</th>
-                                                            <th>Role</th>
-                                                            <th>Create date</th>
-                                                            <th>Active</th>
+                                                            <th>Number Plate</th>
+                                                            <th>Type</th>
+                                                            <th>Status</th>
+                                                            <th></th>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -107,4 +95,4 @@ class UserList extends Component {
         );
     }
 }
-export default withRouter(UserList);
+export default CarList;

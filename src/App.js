@@ -4,19 +4,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation
 } from "react-router-dom";
-import LoginAndRegister from './pages/LoginAndRegister';
-import PrivateRoute from './components/PrivateRoute';
-import KDTracePage from './pages/KDTracePage';
 import Navigation from './components/Navigation';
-// import Menu from './components/Menu';
-import Menu from './components/AdminMenu';
-import routes from './routes';
-import routeLogin from './routeLogin';
+import AdminMenu from './components/AdminMenu';
+import Menu from './components/Menu';
+//import routes from './routes';
+import routesAdmin from './routesAdmin';
 import history from './utils/@history';
 class App extends Component {
   constructor(props) {
@@ -24,68 +17,63 @@ class App extends Component {
     this.state = {
       isLoading: true,
       token: '',
+      username: '',
+      role: ''
     }
   }
   componentDidMount() {
-    if ( typeof window !== undefined ) {
-      console.log('window is defined')
-      console.log(localStorage.getItem('token'));
-      if(localStorage && localStorage.getItem('token')) {
-        this.setState({ token: localStorage.getItem('token')})
+    if (typeof window !== undefined) {
+      if (localStorage && localStorage.getItem('token')) {
+        this.setState({ token: localStorage.getItem('token') })
       } else {
         history.push('/login');
       }
       window.onstorage = (e) => {
         console.log('event storage')
         if (e.key === 'token') {
-          console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
           this.setState({ token: e.newValue });
         }
       }
-      
+
     }
-    window.addEventListener("storage", e =>
-      console.log('Listen event')
-      );
+
+    document.addEventListener("addToken", (e) => {
+      this.setState({ token: e.value });
+    }, false);
+
+    document.addEventListener("removeToken", (e) => {
+      this.setState({ token: null });
+    }, false);
   }
+
   render() {
-    console.log('rerender...........')
     const showRoutes = (routes) => {
       var result = '';
-      result =  routes.map((route, index) => {
+      result = routes.map((route, index) => {
         return (
-          <Route key={index} exact={route.exact} path={route.path} component={route.main?route.main:route.component} />
+          <Route key={index} exact={route.exact} path={route.path} component={route.component} />
         )
       })
       return result;
     }
     const { token } = this.state;
+    console.log("token",token);
     return (
-      <React.Fragment>
+      <Router history={history}>
         {
-          token 
-          ? <Router>
-          <Navigation />
-          <Menu />
-          <Switch>
-            {/* <PrivateRoute path="/auth" component={KDTracePage} />
-            <Route path="/" component={LoginAndRegister} /> */}
-            {
-              showRoutes(routes)
-            }
-          </Switch>
-        </Router> 
-        : <Router>
-          {
-            showRoutes(routeLogin)
-          }
-        </Router>
+          token ?
+            <React.Fragment>
+              <Navigation token={this.state.token}/>
+              <Menu />
+            </React.Fragment> : null
         }
-        
-      </React.Fragment>
-      
+        <Switch>
+          {
+            showRoutes(routesAdmin)
+          }
+        </Switch>
+      </Router>
     );
   }
-
 }
 export default App;

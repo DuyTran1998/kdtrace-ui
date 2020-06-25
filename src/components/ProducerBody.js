@@ -14,10 +14,6 @@ class ProducerBody extends Component {
                         <section id="configuration">
                             <div className="row">
                                 <div className="col-12">
-                                    {/* <Switch>
-                                        <Route path="/" children={<ProductList/>} />
-                                        <Route path="/profile" children={<ProducerProfile/>} />
-                                    </Switch> */}
                                     <ProductList />
                                     <ProducerProfile/>
                                     <ProductForm />

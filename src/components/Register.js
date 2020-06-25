@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { isLoggedIn } from '../services/Authentication.js';
-
+import history from '../utils/@history';
+import {API_REGISTER} from '../constants/API/api';
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +16,13 @@ class Register extends Component {
             status: ''
         }
     }
+    componentDidMount() {
+        if (typeof localStorage !== undefined) {
+            if(localStorage.getItem('token')) {
+                history.push('/');
+            }
+        }
+    }
 
     handleSubmit = e => {
         const registerModel = {
@@ -24,8 +32,7 @@ class Register extends Component {
             roleName: this.state.roleName,
         };
         console.log(registerModel);
-        const url = "http://localhost:8080/api/register";
-        fetch(url, {
+        fetch(API_REGISTER, {
             method: "POST",
             body: JSON.stringify(registerModel),
             cache: 'no-cache',

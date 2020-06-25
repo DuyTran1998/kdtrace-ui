@@ -2,36 +2,78 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Redirect } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import '../assets/css/DropBox.css';
-import {deleteAccessToken} from '../services/Authentication.js';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
+import {API_GET_USER_CONTEXT} from '../constants/API/api';
 
 class Navigation extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             anchorEl: null,
             redirect: false,
+            username: '',
         }
     }
+    
+    componentDidMount() {
+       
+        // if (typeof localStorage !== undefined && localStorage.getItem('token')) {
+        //     console.log("run api");
+        //     this.getUserContext();
+        // }
+        this.getUserContext(this.props.token);
+    }
+ 
+    getUserContext = (token) => {
+        const url = API_GET_USER_CONTEXT;
+        try {
+            fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(jsonResponse => {
+                    this.props.setUserContext(jsonResponse.username, jsonResponse.role.roleName);
+                    // this.setState({isLoading: false})
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
 
     handleMenu = event => {
         this.setState({ anchorEl: event.currentTarget });
-      };
-    
-      handleClose = () => {
+    };
+
+    handleClose = () => {
         this.setState({ anchorEl: null });
-      };
+    };
 
     handleLogout = () => {
-        deleteAccessToken();
-        this.setState({ redirect : true});
+        // deleteAccessToken();
+        let originalSetItem = localStorage.removeItem;
+        localStorage.removeItem = function (key, value) {
+            var event = new Event('removeToken');
+
+            event.value = value; // Optional..
+            event.key = key; // Optional..
+
+            document.dispatchEvent(event);
+
+            originalSetItem.apply(this, arguments);
+        };
+        localStorage.removeItem("token");
+        this.props.deleteUserContext();
+        this.setState({ redirect: true });
+        this.props.history.push('/login');
     }
-        
+
     render() {
-        if(this.state.redirect){
-            return <Redirect to="/login" />;
-        }
         const open = Boolean(this.state.anchorEl);
         return (
             <nav className="header-navbar navbar-expand-md navbar navbar-with-menu navbar-static-top navbar-light navbar-border navbar-brand-center">
@@ -101,14 +143,6 @@ class Navigation extends Component {
                                             <h6 className="dropdown-header m-0"><span className="grey darken-2">Messages</span></h6><span className="notification-tag badge badge-default badge-warning float-right m-0">4 New</span>
                                         </li>
                                         <li className="scrollable-container media-list w-100"><a href="!!#">
-                                            <div className="media">
-                                                <div className="media-left"><span className="avatar avatar-sm avatar-online rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-19.png" alt="avatar" /><i></i></span></div>
-                                                <div className="media-body">
-                                                    <h6 className="media-heading">Margaret Govan</h6>
-                                                    <p className="notification-text font-small-3 text-muted">I like your portfolio, let's start.</p><small>
-                                                        <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Today</time></small>
-                                                </div>
-                                            </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left"><span className="avatar avatar-sm avatar-busy rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-2.png" alt="avatar" /><i></i></span></div>
                                                     <div className="media-body">
@@ -137,24 +171,24 @@ class Navigation extends Component {
                                     </ul>
                                 </li>
                                 <li className="dropdown dropdown-user nav-item">
-                                <div className="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
-                                    <span className="avatar avatar-online"><img src="../../../app-assets/images/portrait/small/avatar-s-1.png" alt="avatar" /><i></i></span>
-                                <div className="dropdown">
-                                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
-                                        {this.props.username}
-                                        </Button>
-                                        <Menu
-                                            id="simple-menu"
-                                            anchorEl={this.state.anchorEl}
-                                            open={open}
-                                            onClose={this.handleClose}
-                                        >
-                                            <MenuItem >Profile</MenuItem>
-                                            <MenuItem >My account</MenuItem>
-                                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                                        </Menu>
+                                    <div className="dropdown-toggle nav-link dropdown-user-link" data-toggle="dropdown">
+                                        <span className="avatar avatar-online"><img src="../../../app-assets/images/portrait/small/avatar-s-1.png" alt="avatar" /><i></i></span>
+                                        <div className="dropdown">
+                                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
+                                                {this.props.userContext.username}
+                                            </Button>
+                                            <Menu
+                                                id="simple-menu"
+                                                anchorEl={this.state.anchorEl}
+                                                open={open}
+                                                onClose={this.handleClose}
+                                            >
+                                                <MenuItem >Profile</MenuItem>
+                                                <MenuItem >My account</MenuItem>
+                                                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                                            </Menu>
+                                        </div>
                                     </div>
-                                </div>
                                 </li>
                             </ul>
                         </div>
@@ -164,4 +198,20 @@ class Navigation extends Component {
         );
     }
 }
-export default Navigation;
+const mapStateToProps = (state) =>{
+    return {
+        userContext: state.profile
+    }
+}
+const mapDispatchToProps = (dispatch, props) =>{
+    return {
+        setUserContext: (username, roleName) =>{
+            dispatch(actions.setUserContext(username, roleName));
+        },
+        deleteUserContext: () =>{
+            dispatch(actions.deleleUserContext());
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Navigation));

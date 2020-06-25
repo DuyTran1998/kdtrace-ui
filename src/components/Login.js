@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import img from './../assets/images/logo/logo-dark.png';
-import App from '../App';
+import history from '../utils/@history';
+import {API_LOGIN} from '../constants/API/api'
 class Login extends Component {
 
     constructor(props) {
@@ -14,15 +15,14 @@ class Login extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getUserLogged = this.getUserLogged.bind(this);
+        // this.getUserLogged = this.getUserLogged.bind(this);
     }
     componentDidMount() {
-        window.addEventListener('storage', (e) => {
-            console.log('Listen in Login componet')
-        })
-        window.addEventListener('click', (e) => {
-            console.log('Listen event click')
-        })
+        if (typeof localStorage !== undefined) {
+            if(localStorage.getItem('token')) {
+                history.push('/');
+            }
+        }
     }
 
     handleChange = e => {
@@ -31,25 +31,25 @@ class Login extends Component {
         return true;
     }
 
-    getUserLogged(token) {
-        const url = "http://localhost:8080/api/getUserLogged";
-        fetch(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => response.json())
-            .then(jsonResponse => {
-                this.setState({
-                    username: jsonResponse.username,
-                    roleName: jsonResponse.role.roleName
-                })
-            })
-    }
+    // getUserLogged(token) {
+    //     const url = "http://localhost:8080/api/getUserLogged";
+    //     fetch(url, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     })
+    //         .then(response => response.json())
+    //         .then(jsonResponse => {
+    //             this.setState({
+    //                 username: jsonResponse.username,
+    //                 roleName: jsonResponse.role.roleName
+    //             })
+    //         })
+    // }
 
     handleSubmit = e => {
-        const url = "http://localhost:8080/api/login";
-        const result = fetch(url, {
+        const url = API_LOGIN;
+        fetch(url, {
             method: "POST",
             body: JSON.stringify({
                 username: this.state.username,
@@ -59,7 +59,6 @@ class Login extends Component {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
-            console.log(response);
             if (response.ok) {
                 return response.json();
             } else {
@@ -69,25 +68,25 @@ class Login extends Component {
             .then(responseJson => {
                 if (responseJson.status === 200) {
                     const token = responseJson.accessToken
+                    let originalSetItem = localStorage.setItem;
+                    localStorage.setItem = function(key, value) {
+                    var event = new Event('addToken');
+
+                    event.value = value; // Optional..
+                    event.key = key; // Optional..
+
+                    document.dispatchEvent(event);
+
+                    originalSetItem.apply(this, arguments);
+                    };
                     localStorage.setItem("token", token);
                     this.setState({ 'isLogged': true });
-                    return fetch("http://localhost:8080/api/getUserLogged", {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(jsonResponse => {
-                            return jsonResponse.role.roleName;
-                        })
+                    this.props.history.push('/');
                 }
             })
             .catch(error => {
                 console.log(error);
             })
-        result.then(r => {
-            this.setState({ roleName: r });
-        })
         e.preventDefault();
     }
     render() {
@@ -156,4 +155,4 @@ class Login extends Component {
         );
     }
 }
-export default Login;
+export default withRouter(Login);

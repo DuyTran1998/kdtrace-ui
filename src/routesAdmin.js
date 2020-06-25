@@ -1,11 +1,40 @@
-import ProductList from './components/ProductList';
+import HomePage from './pages/HomePage';
 import NotFound from './components/NotFound';
+import Login from './components/Login';
+import Register from './components/Register';
+import ProducerProfile from './components/ProducerProfile';
+import ProductDetail from './components/ProductDetail';
 
 const routes = [
     {
         path : '/',
         exact : true,
-        component: ProductList
+        component: HomePage
+    },
+    {
+        path : '/dashboard',
+        exact : false,
+        component: HomePage
+    },
+    {
+        path : '/login',
+        exact : false,
+        component : Login,
+    },
+    {
+        path : '/register',
+        exact : false,
+        component : Register,
+    },
+    {
+        path : '/profile',
+        exact : false,
+        component : ProducerProfile,
+    },
+    {
+        path : '/product/:id',
+        exact : false,
+        component : ProductDetail,
     },
     {
         path: '*',
