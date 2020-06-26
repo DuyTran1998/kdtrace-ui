@@ -22,24 +22,28 @@ class ProducerProfile extends Component {
     }
     componentDidMount() {
         const a = this.props.userContext.role;
-        const token = localStorage.getItem('token');
-        this.setState({
-            token: localStorage.getItem('token')
-        })
-        console.log(this.state.token);
-        if (a === 'ROLE_PRODUCER') {
-            console.log(this.state.token);
-            this.getProfileCompany(API_GET_PROFILE_PRODUCER, token);
-        }
-        if (a === 'ROLE_TRANSPORT') {
-            this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
-        }
-        console.log(this.state);
+        this.setDataByRole(a)
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
             role: nextProps.userContext.role,
         })
+        if (nextProps.userContext.role) {
+            this.setDataByRole(nextProps.userContext.role)
+        }
+    }
+    setDataByRole(role) {
+        const token = localStorage.getItem('token');
+        this.setState({
+            token: localStorage.getItem('token')
+        })
+        if (role === 'ROLE_PRODUCER') {
+            console.log(this.state.token);
+            this.getProfileCompany(API_GET_PROFILE_PRODUCER, token);
+        }
+        if (role === 'ROLE_TRANSPORT') {
+            this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
+        }
     }
 
     getProfileCompany(url, token) {
