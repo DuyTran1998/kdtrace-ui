@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CarRecord from './CarRecord';
 import {API_GET_ALL_CAR} from '../constants/API/api';
+import CarForm from './CarForm';
+import { Dialog, DialogActions, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
 
 class CarList extends Component {
     constructor(props) {
@@ -8,11 +10,25 @@ class CarList extends Component {
         this.state = {
             cars: [],
             error: '',
+            open: false,
         }
     }
 
     componentDidMount() {
         this.getAllCars(localStorage.getItem('token'));
+    }
+
+    handleOpenDialog = () => {
+        this.setState({
+            open: true,
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false,
+        });
+        this.componentDidMount();
     }
 
     getAllCars(token) {
@@ -48,8 +64,19 @@ class CarList extends Component {
                                 <div className="col-12">
                                     <div className="card">
                                         <div className="card-header">
-                                            <h4 className="card-title">User Management</h4>
+                                            <h4 className="card-title">Car Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
+                                        </div>
+                                        <div className="content-header-right col-12">
+                                            <div className="btn-group float-md-right">
+                                                <button
+                                                    className="btn btn-info round dropdown-toggle dropdown-menu-right px-2"
+                                                    type="button"
+                                                    aria-haspopup="true"
+                                                    onClick={this.handleOpenDialog}>
+                                                    <i className="ft-settings icon-left"></i> New Car
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
@@ -85,6 +112,22 @@ class CarList extends Component {
                                                 </table>
                                             </div>
                                         </div>
+                                        <Dialog
+                                            open={this.state.open}
+                                            keepMounted
+                                            onClose={this.handleClose}
+                                            fullWidth
+                                            aria-labelledby="alert-dialog-slide-title"
+                                            aria-describedby="alert-dialog-slide-description">
+                                            <DialogTitle id="alert-dialog-slide-title">{"Insert Profile New Car"}</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-slide-description">
+                                                    <Typography>
+                                                        <CarForm handleClose={this.handleClose}/>
+                                                    </Typography>
+                                                </DialogContentText>
+                                            </DialogContent>
+                                        </Dialog>
                                     </div>
                                 </div>
                             </div>

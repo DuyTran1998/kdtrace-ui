@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import UserList from '../components/UserList';
 import ProductList from '../components/ProductList';
 import CarList from '../components/CarList';
+import Transactions from '../components/Transactions';
 
 class HomePage extends Component {
     constructor(props) {
@@ -35,6 +36,9 @@ class HomePage extends Component {
                 }
                 {
                     this.state.role === 'ROLE_TRANSPORT' ? <CarList /> : null
+                }
+                 {
+                    this.state.role === 'ROLE_DISTRIBUTOR' ? <Transactions /> : null
                 }
 
             </div>

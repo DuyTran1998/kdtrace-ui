@@ -19,11 +19,6 @@ class Navigation extends Component {
     }
     
     componentDidMount() {
-       
-        // if (typeof localStorage !== undefined && localStorage.getItem('token')) {
-        //     console.log("run api");
-        //     this.getUserContext();
-        // }
         this.getUserContext(this.props.token);
     }
  

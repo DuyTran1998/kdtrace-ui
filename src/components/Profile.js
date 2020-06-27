@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT, API_UPDATE_PROFILE_PRODUCER} from '../constants/API/api';
+import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT, 
+         API_UPDATE_PROFILE_PRODUCER, API_UPDATE_PROFILE_TRANSPORT, 
+        API_GET_PROFILE_DISTRIBUTOR, API_UPDATE_PROFILE_DISTRIBUTOR} 
+        from '../constants/API/api';
+
 import * as actions from '../actions/index';
-class ProducerProfile extends Component {
+
+class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,24 +27,31 @@ class ProducerProfile extends Component {
     }
     componentDidMount() {
         const a = this.props.userContext.role;
-        const token = localStorage.getItem('token');
-        this.setState({
-            token: localStorage.getItem('token')
-        })
-        console.log(this.state.token);
-        if (a === 'ROLE_PRODUCER') {
-            console.log(this.state.token);
-            this.getProfileCompany(API_GET_PROFILE_PRODUCER, token);
-        }
-        if (a === 'ROLE_TRANSPORT') {
-            this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
-        }
-        console.log(this.state);
+        this.setDataByRole(a)
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
             role: nextProps.userContext.role,
         })
+        if (nextProps.userContext.role) {
+            this.setDataByRole(nextProps.userContext.role)
+        }
+    }
+    setDataByRole(role) {
+        const token = localStorage.getItem('token');
+        this.setState({
+            token: localStorage.getItem('token')
+        })
+        if (role === 'ROLE_PRODUCER') {
+            console.log(this.state.token);
+            this.getProfileCompany(API_GET_PROFILE_PRODUCER, token);
+        }
+        if (role === 'ROLE_TRANSPORT') {
+            this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
+        }
+        if ( role === 'ROLE_DISTRIBUTOR'){
+            this.getProfileCompany(API_GET_PROFILE_DISTRIBUTOR, token);
+        }
     }
 
     getProfileCompany(url, token) {
@@ -88,7 +100,10 @@ class ProducerProfile extends Component {
             api = API_UPDATE_PROFILE_PRODUCER;
         }
         if(role === 'ROLE_TRANSPORT'){
-            api = API_GET_PROFILE_TRANSPORT;
+            api = API_UPDATE_PROFILE_TRANSPORT;
+        }
+        if(role === 'ROLE_DISTRIBUTOR'){
+            api = API_UPDATE_PROFILE_DISTRIBUTOR;
         }
         this.updateProfileCompany(api, this.state.token);
         this.componentDidMount();
@@ -217,4 +232,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(ProducerProfile);
+export default connect(mapStateToProps)(Profile);

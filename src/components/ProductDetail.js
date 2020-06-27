@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import QRCodeRecord from './QRCode';
-import {API_GET_PRODUCT_DETAIL} from '../constants/API/api';
+import TransactionForm  from './TransactionForm'
+import { API_GET_PRODUCT_DETAIL } from '../constants/API/api';
+import { connect } from 'react-redux';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
+import { throwStatement } from '@babel/types';
+
 class ProductDetail extends Component {
     constructor(props) {
         super(props);
@@ -41,12 +46,27 @@ class ProductDetail extends Component {
                 console.log(this.state);
             })
     }
+
+    handleOpenDialog = () => {
+        this.setState({
+            open: true,
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false,
+        });
+        this.componentDidMount();
+    }
+
     render() {
         const qrCodeList = this.state.codes.map(code => {
             return (
                 <QRCodeRecord key={code.id} code={code}></QRCodeRecord>
             );
         })
+        console.log(this.props.userContext.role);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -57,6 +77,19 @@ class ProductDetail extends Component {
                                     <div className="card">
                                         <div className="card-header">
                                             <h4 className="card-title"><i class="fa fa-eye"></i>Product Management</h4>
+                                            {
+                                                this.props.userContext.role === 'ROLE_DISTRIBUTOR' 
+                                                ?
+                                                    <div className="content-header-right col-12">
+                                                        <div className="btn-group float-md-right">
+                                                            <button className="btn btn-info btn-min-width mr-1 mb-1 ladda-button" data-style="zoom-in" onClick={this.handleOpenDialog}>
+                                                                <span class="ladda-label">Create Transaction</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                : null
+                                            }
                                         </div>
                                         <table class="table">
                                             <thead>
@@ -112,6 +145,23 @@ class ProductDetail extends Component {
                                                 </table>
                                             </div>
                                         </div>
+                                        <Dialog
+                                            open={this.state.open}
+                                            keepMounted
+                                            onClose={this.handleClose}
+                                            fullWidth
+                                            aria-labelledby="alert-dialog-slide-title"
+                                            aria-describedby="alert-dialog-slide-description">
+                                            <DialogTitle id="alert-dialog-slide-title">{"Create Transaction"}</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-slide-description">
+                                                    <Typography>
+                                                        <TransactionForm product={this.state} 
+                                                        handleClose={this.handleClose}/>
+                                                    </Typography>
+                                                </DialogContentText>
+                                            </DialogContent>
+                                        </Dialog>
                                     </div>
                                 </div>
                             </div>
@@ -123,4 +173,9 @@ class ProductDetail extends Component {
         );
     }
 }
-export default ProductDetail;
+const mapStateToProps = (state) => {
+    return {
+        userContext: state.profile,
+    }
+}
+export default connect(mapStateToProps)(ProductDetail);

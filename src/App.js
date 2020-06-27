@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as QueryString from "query-string"
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -6,7 +7,6 @@ import {
   Route,
 } from "react-router-dom";
 import Navigation from './components/Navigation';
-import AdminMenu from './components/AdminMenu';
 import Menu from './components/Menu';
 //import routes from './routes';
 import routesAdmin from './routesAdmin';
@@ -26,7 +26,9 @@ class App extends Component {
       if (localStorage && localStorage.getItem('token')) {
         this.setState({ token: localStorage.getItem('token') })
       } else {
-        history.push('/login');
+        // const values = this.props.match.params.code;
+        // console.log(values);
+      history.push('/login');
       }
       window.onstorage = (e) => {
         console.log('event storage')

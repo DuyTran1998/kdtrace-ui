@@ -31,22 +31,6 @@ class Login extends Component {
         return true;
     }
 
-    // getUserLogged(token) {
-    //     const url = "http://localhost:8080/api/getUserLogged";
-    //     fetch(url, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     })
-    //         .then(response => response.json())
-    //         .then(jsonResponse => {
-    //             this.setState({
-    //                 username: jsonResponse.username,
-    //                 roleName: jsonResponse.role.roleName
-    //             })
-    //         })
-    // }
-
     handleSubmit = e => {
         const url = API_LOGIN;
         fetch(url, {

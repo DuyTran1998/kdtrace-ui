@@ -25,6 +25,22 @@ export const API_CREATE_PRODUCT = "http://35.201.180.133:8080/api/product/create
 export const API_GET_PRODUCT_DETAIL = "http://35.201.180.133:8080/api/product/get?id=";
 
 
-export const API_GET_PROFILE_TRANSPORT = "http://35.201.180.133:8080/api/transport/get";
+export const API_UPDATE_PROFILE_TRANSPORT = "http://35.201.180.133:8080/api/transport/update";
+
+export const  API_GET_PROFILE_TRANSPORT = "http://35.201.180.133:8080/api/transport/get";
 
 export const API_GET_ALL_CAR = "http://35.201.180.133:8080/api/transport/deliveryTruck/getAll";
+
+export const API_CREATE_CAR = "http://35.201.180.133:8080/api/transport/deliveryTruck/create";
+
+
+export const API_GET_PROFILE_DISTRIBUTOR = "http://35.201.180.133:8080/api/distributor/get";
+
+export const API_UPDATE_PROFILE_DISTRIBUTOR = "http://35.201.180.133:8080/api/distributor/update";
+
+export const API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR = "http://35.201.180.133:8080/api/distributor/getAllProduct";
+
+
+export const API_CREATE_TRANSACTION = "http://35.201.180.133:8080/api/process/create";
+
+export const API_GET_ALL_TRANSACTION = ""

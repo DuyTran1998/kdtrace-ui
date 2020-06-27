@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AdminMenu from './AdminMenu';
 import ProducerMenu from './ProducerMenu';
+import DistributorMenu from './DistributorMenu';
 import { connect } from 'react-redux';
 
 class Menu extends Component {
@@ -34,6 +35,9 @@ class Menu extends Component {
                 }
                 {
                     this.state.role === 'ROLE_TRANSPORT' ? <ProducerMenu /> : null
+                }
+                {
+                    this.state.role === 'ROLE_DISTRIBUTOR' ? <DistributorMenu /> : null
                 }
             </div>
         );

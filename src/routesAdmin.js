@@ -2,8 +2,10 @@ import HomePage from './pages/HomePage';
 import NotFound from './components/NotFound';
 import Login from './components/Login';
 import Register from './components/Register';
-import ProducerProfile from './components/ProducerProfile';
+import Profile from './components/Profile';
 import ProductDetail from './components/ProductDetail';
+import Market from './components/Market';
+import PrivateRoute from './components/PrivateRoute';
 
 const routes = [
     {
@@ -29,12 +31,22 @@ const routes = [
     {
         path : '/profile',
         exact : false,
-        component : ProducerProfile,
+        component : Profile,
     },
     {
         path : '/product/:id',
         exact : false,
         component : ProductDetail,
+    },
+    {
+        path : '/market',
+        exact : false,
+        component : Market,
+    },
+    {
+        path : '/check-information/:code',
+        exact : false,
+        component : PrivateRoute,
     },
     {
         path: '*',
