@@ -49,9 +49,6 @@ class Profile extends Component {
         if (role === 'ROLE_TRANSPORT') {
             this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
         }
-        if ( role === 'ROLE_DISTRIBUTOR'){
-            this.getProfileCompany(API_GET_PROFILE_DISTRIBUTOR, token);
-        }
     }
 
     getProfileCompany(url, token) {

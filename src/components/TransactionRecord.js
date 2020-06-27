@@ -14,6 +14,9 @@ class TransactionRecord extends Component {
            link: "/message"
         }
     }
+    componentDidMount(){
+        
+    }
     render() {
         return (
             <div></div>

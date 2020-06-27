@@ -4,9 +4,37 @@ import TransactionRecord from './TransactionRecord';
 class Transactions extends Component {
     constructor(props){
         super(props);
-        this.state={
-            
+        this.state = {
+            listTransactions : [],
         }
+    }
+    componentDidMount(){
+        const token = localStorage.getItem('token');
+        this.getData();
+    }
+
+    getData(url, token) {
+        fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        }).then(res => res.json())
+            .then(res => {
+                if (res.error) {
+                    throw (res.error);
+                }
+                console.log(res);
+                this.setState({
+                   listTransactions: res.result,
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    error: error,
+                })
+            })
     }
     render() {
         return (
