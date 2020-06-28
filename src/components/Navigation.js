@@ -76,7 +76,7 @@ class Navigation extends Component {
                     <div className="navbar-header">
                         <ul className="nav navbar-nav flex-row">
                             <li className="nav-item"><a className="navbar-brand" href="."><img className="brand-logo" alt="robust admin logo" src="../../../app-assets/images/logo/logo-dark-sm.png" />
-                                <h3 className="brand-text">KD Trace</h3></a></li>
+                                <h3 className="brand-text">KDTrace</h3></a></li>
                             <li className="nav-item d-md-none"><a className="nav-link open-navbar-container" data-toggle="collapse" href="!!#" data-target="!#navbar-mobile"><i className="fa fa-ellipsis-v"></i></a></li>
                         </ul>
                     </div>

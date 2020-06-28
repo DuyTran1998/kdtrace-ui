@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {AP, API_CREATE_PRODUCT} from '../constants/API/api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 class ProductForm extends Component {
     constructor(props) {
         super(props);
@@ -9,7 +11,9 @@ class ProductForm extends Component {
             type: 'Vegetable',
             unit: 'PCS',
             exp: '',
-            mfg: ''
+            mfg: '',
+            alertSuccess: false,
+            alertFail: false,
         }
     }
 
@@ -42,7 +46,11 @@ class ProductForm extends Component {
         }).then(response => response.json())
             .then(res => {
                 if(res.status === 200){
+                    this.props.handleOpenAlert('success');
                     this.props.handleClose();
+                }
+                else{
+                    this.props.handleOpenAlert('fail');
                 }
             })
         e.preventDefault();

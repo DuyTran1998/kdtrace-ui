@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import ProductRecord from './ProductRecord';
-import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
 import ProductForm from './ProductForm';
-import {API_GET_ALL_PRODUCT} from '../constants/API/api'
+import { API_GET_ALL_PRODUCT } from '../constants/API/api'
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 class ProductList extends Component {
     constructor(props) {
@@ -41,6 +43,17 @@ class ProductList extends Component {
             open: false,
         });
         this.componentDidMount();
+    }
+    handleOpenAlert = (flag) => {
+        if (flag == 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag == 'fail') {
+            this.setState({ alertFail: true })
+        }
+    }
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false});
     }
     render() {
         const productList = this.state.productList.map(product => {
@@ -110,15 +123,23 @@ class ProductList extends Component {
                                             fullWidth
                                             aria-labelledby="alert-dialog-slide-title"
                                             aria-describedby="alert-dialog-slide-description">
-                                            <DialogTitle id="alert-dialog-slide-title">{"Use Google's location service?"}</DialogTitle>
+                                            <DialogTitle id="alert-dialog-slide-title">{"Create product form"}</DialogTitle>
                                             <DialogContent>
                                                 <DialogContentText id="alert-dialog-slide-description">
                                                     <Typography>
-                                                    <ProductForm handleClose={this.handleClose} />
+                                                        <ProductForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert} />
                                                     </Typography>
                                                 </DialogContentText>
                                             </DialogContent>
                                         </Dialog>
+                                        <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                            <Alert severity="success" style={{ fontSize: '15px' }}>Create product successfully!</Alert>
+                                        </Snackbar>
+                                        <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                                            <Alert severity="error" style={{ fontSize: '15px' }}>Fail to create product!</Alert>
+                                        </Snackbar>
                                     </div>
                                 </div>
                             </div>

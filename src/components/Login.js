@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import img from './../assets/images/logo/logo-dark.png';
+import img from './../assets/images/logo/logo.png';
 import history from '../utils/@history';
-import {API_LOGIN} from '../constants/API/api'
+import { API_LOGIN } from '../constants/API/api'
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 class Login extends Component {
 
     constructor(props) {
@@ -12,6 +14,9 @@ class Login extends Component {
             password: '',
             roleName: '',
             isLogged: false,
+            alertSuccess: false,
+            alertFail: false,
+            alertNonActive: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,7 +24,7 @@ class Login extends Component {
     }
     componentDidMount() {
         if (typeof localStorage !== undefined) {
-            if(localStorage.getItem('token')) {
+            if (localStorage.getItem('token')) {
                 history.push('/');
             }
         }
@@ -51,27 +56,46 @@ class Login extends Component {
         })
             .then(responseJson => {
                 if (responseJson.status === 200) {
+                    this.handleOpenAlert('success');
                     const token = responseJson.accessToken
                     let originalSetItem = localStorage.setItem;
-                    localStorage.setItem = function(key, value) {
-                    var event = new Event('addToken');
+                    localStorage.setItem = function (key, value) {
+                        var event = new Event('addToken');
 
-                    event.value = value; // Optional..
-                    event.key = key; // Optional..
+                        event.value = value; // Optional..
+                        event.key = key; // Optional..
 
-                    document.dispatchEvent(event);
+                        document.dispatchEvent(event);
 
-                    originalSetItem.apply(this, arguments);
+                        originalSetItem.apply(this, arguments);
                     };
                     localStorage.setItem("token", token);
                     this.setState({ 'isLogged': true });
                     this.props.history.push('/');
                 }
+                if (responseJson.status === 400) {
+                    this.handleOpenAlert('nonActive');
+                }
             })
             .catch(error => {
+                this.handleOpenAlert('fail');
                 console.log(error);
             })
         e.preventDefault();
+    }
+    handleOpenAlert = (flag) => {
+        if (flag == 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag == 'fail') {
+            this.setState({ alertFail: true })
+        }
+        if (flag == 'nonActive') {
+            this.setState({ alertNonActive: true })
+        }
+    }
+    handleClose = e => {
+        this.setState({ alertSuccess: false, alertFail: false, alertNonActive: false });
     }
     render() {
         // if (this.state.isLogged) {
@@ -92,7 +116,7 @@ class Login extends Component {
                                                 <div className="card-title text-center">
                                                     <div className="p-1"><img src={img} alt="branding logo" /></div>
                                                 </div>
-                                                <h6 className="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span>Login with KDTrace</span></h6>
+                                                <h6 className="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span style={{fontSize: '18px'}}>Login with KDTrace</span></h6>
                                             </div>
                                             <div className="card-content">
                                                 <div className="card-body">
@@ -109,22 +133,13 @@ class Login extends Component {
                                                                 <i className="fa fa-key"></i>
                                                             </div>
                                                         </fieldset>
-                                                        <div className="form-group row">
-                                                            <div className="col-md-6 col-12 text-center text-md-left">
-                                                                <fieldset>
-                                                                    <input type="checkbox" id="remember-me" className="chk-remember" />
-                                                                    <label htmlFor="remember-me"> Remember Me</label>
-                                                                </fieldset>
-                                                            </div>
-                                                            <div className="col-md-6 col-12 text-center text-md-right"><a href="recover-password.html" className="card-link">Forgot Password?</a></div>
-                                                        </div>
                                                         <button type="submit" className="btn btn-info btn-lg btn-block"><i className="ft-unlock"></i> Login</button>
                                                     </form>
                                                 </div>
                                             </div>
                                             <div className="card-footer">
                                                 <div className="">
-                                                    <p className="float-sm-right text-center m-0">New to Moden Admin? <a href="/register" className="card-link">Sign Up</a></p>
+                                                    <p className="float-sm-right text-center m-0">Let's become our new member! <a href="/register" className="card-link">Sign Up</a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -134,6 +149,18 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert severity="success" style={{ fontSize: '15px' }}>Login Successfully!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>Username or password is wrong!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertNonActive} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    <Alert severity="warning" style={{ fontSize: '15px' }}>Your account is non-active!</Alert>
+                </Snackbar>
             </div>
 
         );

@@ -3,6 +3,8 @@ import { Redirect } from 'react-router';
 import { isLoggedIn } from '../services/Authentication.js';
 import history from '../utils/@history';
 import {API_REGISTER} from '../constants/API/api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +15,9 @@ class Register extends Component {
             roleName: '',
             success: null,
             message: '',
-            status: ''
+            status: '',
+            alertSuccess: false,
+            alertFail: false
         }
     }
     componentDidMount() {
@@ -46,7 +50,12 @@ class Register extends Component {
                 console.log(jsonResponse);
                 this.setState({ 'message': jsonResponse.message });
                 this.setState({ 'status': jsonResponse.status });
-                console.log(this.state.status);
+                if(this.state.status == 200){
+                    this.handleOpenAlert('success');
+                }
+                else{
+                    this.handleOpenAlert('fail');
+                }
             })
         e.preventDefault();
     }
@@ -59,6 +68,18 @@ class Register extends Component {
 
     handleChangeSelected = e => {
         this.setState({ 'roleName': e.target.value });
+    }
+
+    handleOpenAlert = (flag) => {
+        if (flag == 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag == 'fail') {
+            this.setState({ alertFail: true })
+        }
+    }
+    handleClose = e => {
+        this.setState({ alertSuccess: false, alertFail: false });
     }
     render() {
         if (isLoggedIn()) {
@@ -123,6 +144,14 @@ class Register extends Component {
                         </div>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert severity="success" style={{ fontSize: '15px' }}>Register Successfully!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>Fail to register, refill again!!</Alert>
+                </Snackbar>
             </div>
         );
     }

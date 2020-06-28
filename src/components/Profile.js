@@ -6,6 +6,8 @@ import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT,
         from '../constants/API/api';
 
 import * as actions from '../actions/index';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 class Profile extends Component {
     constructor(props) {
@@ -13,7 +15,7 @@ class Profile extends Component {
         this.state = {
             id: '',
             companyName: '',
-            TIN: '',
+            tin: '',
             email: '',
             url: '',
             phone: '',
@@ -23,6 +25,8 @@ class Profile extends Component {
             token:'',
             role: null,
             reload: false,
+            alertSuccess: false,
+            alertFail: false,
         }
     }
     componentDidMount() {
@@ -71,7 +75,9 @@ class Profile extends Component {
                     companyName: res.result.companyName,
                     email: res.result.email,
                     address: res.result.address,
-                    phone: res.result.phone
+                    phone: res.result.phone,
+                    website: res.result.website,
+                    tin: res.result.tin
                 })
             })
             .catch(error => {
@@ -113,7 +119,9 @@ class Profile extends Component {
             companyName: this.state.companyName,
             email: this.state.email,
             address: this.state.address,
-            phone: this.state.phone
+            phone: this.state.phone,
+            website: this.state.website,
+            tin: this.state.tin
         }
         console.log(profile);
         fetch(url, {
@@ -130,14 +138,31 @@ class Profile extends Component {
                     throw (res.error);
                 }
                 console.log(res);
+                if(res.status === 200){
+                    this.handleOpenAlert('success');
+                }
+                else{
+                    this.handleOpenAlert('fail');
+                }
             })
             .catch(error => {
+                this.handleOpenAlert('fail');
                 this.setState({
                     error: error,
                 })
             })
     }
-
+    handleOpenAlert = (flag) => {
+        if (flag == 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag == 'fail') {
+            this.setState({ alertFail: true })
+        }
+    }
+    handleClose = e => {
+        this.setState({ alertSuccess: false, alertFail: false});
+    }
     render() {
         return (
             <div className="app-content container center-layout mt-2">
@@ -166,8 +191,8 @@ class Profile extends Component {
                                                                     </div>
                                                                     <div className="col-md-6">
                                                                         <div className="form-group">
-                                                                            <label htmlFor="userinput2">TIN</label>
-                                                                            <input type="text" id="userinput2" className="form-control border-primary" placeholder="text indentify num" name="tin" disabled={this.state.disable} />
+                                                                            <label htmlFor="userinput2">Tax identification number</label>
+                                                                            <input type="text" id="userinput2" className="form-control border-primary" placeholder="text indentify num" name="tin" disabled={this.state.disable} defaultValue={this.state.tin} onChange={this.handleChange} />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -181,7 +206,7 @@ class Profile extends Component {
 
                                                                 <div className="form-group">
                                                                     <label htmlFor="userinput6">Website</label>
-                                                                    <input className="form-control border-primary" type="url" placeholder="http://" id="userinput6" disabled={this.state.disable} />
+                                                                    <input className="form-control border-primary" type="url" placeholder="http://" name ="website" id="userinput6" defaultValue={this.state.website} disabled={this.state.disable} onChange={this.handleChange} />
                                                                 </div>
 
                                                                 <div className="form-group">
@@ -216,6 +241,14 @@ class Profile extends Component {
                         </section>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert severity="success" style={{ fontSize: '15px' }}>Update profile information successfully!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleClose}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>Fail to update profile information!</Alert>
+                </Snackbar>
             </div>
 
         )
