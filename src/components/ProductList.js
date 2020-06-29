@@ -133,11 +133,11 @@ class ProductList extends Component {
                                             </DialogContent>
                                         </Dialog>
                                         <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
-                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                                             <Alert severity="success" style={{ fontSize: '15px' }}>Create product successfully!</Alert>
                                         </Snackbar>
                                         <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
-                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                                            autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                                             <Alert severity="error" style={{ fontSize: '15px' }}>Fail to create product!</Alert>
                                         </Snackbar>
                                     </div>

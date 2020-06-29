@@ -6,7 +6,7 @@ import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT,
         from '../constants/API/api';
 
 import * as actions from '../actions/index';
-import Snackbar from '@material-ui/core/Snackbar';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 class Profile extends Component {
@@ -27,6 +27,7 @@ class Profile extends Component {
             reload: false,
             alertSuccess: false,
             alertFail: false,
+            progress: false
         }
     }
     componentDidMount() {
@@ -97,6 +98,7 @@ class Profile extends Component {
     }
 
     handleSubmit = e => {
+        this.setState({ progress: true });
         const role = this.props.userContext.role;
         let api;
         if(role === "ROLE_PRODUCER"){
@@ -153,6 +155,7 @@ class Profile extends Component {
             })
     }
     handleOpenAlert = (flag) => {
+        this.handleCloseAlert();
         if (flag == 'success') {
             this.setState({ alertSuccess: true });
         }
@@ -160,8 +163,8 @@ class Profile extends Component {
             this.setState({ alertFail: true })
         }
     }
-    handleClose = e => {
-        this.setState({ alertSuccess: false, alertFail: false});
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false, progress: false});
     }
     render() {
         return (
@@ -241,13 +244,16 @@ class Profile extends Component {
                         </section>
                     </div>
                 </div>
-                <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
                     <Alert severity="success" style={{ fontSize: '15px' }}>Update profile information successfully!</Alert>
                 </Snackbar>
-                <Snackbar open={this.state.alertFail} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="error" style={{ fontSize: '15px' }}>Fail to update profile information!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.progress} onClose={this.handleCloseAlert} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <CircularProgress color="secondary" />
                 </Snackbar>
             </div>
 

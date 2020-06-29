@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {AP, API_CREATE_PRODUCT} from '../constants/API/api';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
+import {Snackbar, CircularProgress} from '@material-ui/core';
 class ProductForm extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +13,7 @@ class ProductForm extends Component {
             mfg: '',
             alertSuccess: false,
             alertFail: false,
+            progress: false
         }
     }
 
@@ -23,6 +23,7 @@ class ProductForm extends Component {
     }
 
     handleSubmit = (e) => {
+        this.setState({ progress: true });
         const productModel = {
             exp: this.state.exp,
             mfg: this.state.mfg,
@@ -45,6 +46,7 @@ class ProductForm extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(res => {
+                this.handleCloseAlert();
                 if(res.status === 200){
                     this.props.handleOpenAlert('success');
                     this.props.handleClose();
@@ -54,6 +56,9 @@ class ProductForm extends Component {
                 }
             })
         e.preventDefault();
+    }
+    handleCloseAlert = e => {
+        this.setState({ progress: false});
     }
     render() {
         return (
@@ -105,7 +110,7 @@ class ProductForm extends Component {
                     </div>
                 </div>
 
-                <div className="form-actions">
+                <div className="form-actions right">
                     <button
                         type="button"
                         onClick={this.props.handleClose}
@@ -116,6 +121,9 @@ class ProductForm extends Component {
                         <i className="fa fa-check-square-o"></i> Save
 					</button>
                 </div>
+                <Snackbar open={this.state.progress} onClose={this.handleCloseAlert}  >
+                    <CircularProgress color="secondary" />
+                </Snackbar>
             </form>
         );
     }

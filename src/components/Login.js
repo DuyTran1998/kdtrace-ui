@@ -150,15 +150,15 @@ class Login extends Component {
                     </div>
                 </div>
                 <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="success" style={{ fontSize: '15px' }}>Login Successfully!</Alert>
                 </Snackbar>
                 <Snackbar open={this.state.alertFail} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="error" style={{ fontSize: '15px' }}>Username or password is wrong!</Alert>
                 </Snackbar>
                 <Snackbar open={this.state.alertNonActive} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="warning" style={{ fontSize: '15px' }}>Your account is non-active!</Alert>
                 </Snackbar>
             </div>
