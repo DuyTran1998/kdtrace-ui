@@ -50,7 +50,7 @@ class Register extends Component {
                 console.log(jsonResponse);
                 this.setState({ 'message': jsonResponse.message });
                 this.setState({ 'status': jsonResponse.status });
-                if(this.state.status == 200){
+                if(this.state.status === 200){
                     this.handleOpenAlert('success');
                 }
                 else{
@@ -71,10 +71,10 @@ class Register extends Component {
     }
 
     handleOpenAlert = (flag) => {
-        if (flag == 'success') {
+        if (flag === 'success') {
             this.setState({ alertSuccess: true });
         }
-        if (flag == 'fail') {
+        if (flag ==='fail') {
             this.setState({ alertFail: true })
         }
     }

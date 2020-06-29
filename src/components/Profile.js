@@ -4,9 +4,13 @@ import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT,
          API_UPDATE_PROFILE_PRODUCER, API_UPDATE_PROFILE_TRANSPORT, 
         API_GET_PROFILE_DISTRIBUTOR, API_UPDATE_PROFILE_DISTRIBUTOR} 
         from '../constants/API/api';
+<<<<<<< Updated upstream
 
 import * as actions from '../actions/index';
 import {Snackbar, CircularProgress} from '@material-ui/core';
+=======
+import Snackbar from '@material-ui/core/Snackbar';
+>>>>>>> Stashed changes
 import Alert from '@material-ui/lab/Alert';
 
 class Profile extends Component {
@@ -53,6 +57,9 @@ class Profile extends Component {
         }
         if (role === 'ROLE_TRANSPORT') {
             this.getProfileCompany(API_GET_PROFILE_TRANSPORT, token);
+        }
+        if (role === 'ROLE_DISTRIBUTOR') {
+            this.getProfileCompany(API_GET_PROFILE_DISTRIBUTOR, token);
         }
     }
 
@@ -155,11 +162,15 @@ class Profile extends Component {
             })
     }
     handleOpenAlert = (flag) => {
+<<<<<<< Updated upstream
         this.handleCloseAlert();
         if (flag == 'success') {
+=======
+        if (flag === 'success') {
+>>>>>>> Stashed changes
             this.setState({ alertSuccess: true });
         }
-        if (flag == 'fail') {
+        if (flag === 'fail') {
             this.setState({ alertFail: true })
         }
     }

@@ -6,6 +6,7 @@ import Profile from './components/Profile';
 import ProductDetail from './components/ProductDetail';
 import Market from './components/Market';
 import PrivateRoute from './components/PrivateRoute';
+import TransactionDetails from './components/TransactionDetails';
 
 const routes = [
     {
@@ -37,6 +38,11 @@ const routes = [
         path : '/product/:id',
         exact : false,
         component : ProductDetail,
+    },
+    {
+        path : '/transaction/:id',
+        exact : false,
+        component : TransactionDetails,
     },
     {
         path : '/market',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TransactionRecord from './TransactionRecord';
+import {API_GET_ALL_TRANSACTION} from '../constants/API/api';
 
 class Transactions extends Component {
     constructor(props){
@@ -10,7 +11,7 @@ class Transactions extends Component {
     }
     componentDidMount(){
         const token = localStorage.getItem('token');
-        this.getData();
+        this.getData(API_GET_ALL_TRANSACTION, token);
     }
 
     getData(url, token) {
@@ -25,10 +26,10 @@ class Transactions extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 this.setState({
                    listTransactions: res.result,
                 })
+                console.log(this.state.listTransactions);
             })
             .catch(error => {
                 this.setState({
@@ -55,7 +56,6 @@ class Transactions extends Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Transaction_Id</th>
-                                                            <th>Product_Id</th>
                                                             <th>Product_Name</th>
                                                             <th>Quantity</th>
                                                             <th>Status_Process</th>
@@ -65,12 +65,18 @@ class Transactions extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <TransactionRecord/>
+                                                    {
+                                                            Array.isArray(this.state.listTransactions)
+                                                            && this.state.listTransactions.map(transaction => {
+                                                                return (
+                                                                    <TransactionRecord key={transaction.id} transaction={transaction}/>
+                                                                );
+                                                            })
+                                                        }
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
                                                             <th>Transaction_Id</th>
-                                                            <th>Product_Id</th>
                                                             <th>Product_Name</th>
                                                             <th>Quantity</th>
                                                             <th>Status_Process</th>

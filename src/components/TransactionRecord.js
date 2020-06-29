@@ -5,21 +5,23 @@ class TransactionRecord extends Component {
     constructor(props){
         super(props)
         this.state = {
-           id : 1,
-           productId: 20,
-           productName: "Cherry",
-           quantity: 20,
-           statusProcess: "WAITING",
-           createAt: "27/6/2020",
-           link: "/message"
+            
         }
     }
-    componentDidMount(){
-        
-    }
+
     render() {
+        const link = "/transaction/"+ this.props.transaction.id;
         return (
-            <div></div>
+             <tr className="TransactionRecord">
+                <td className="Transaction">{this.props.transaction.id}</td>
+                <td className="Transaction">{this.props.transaction.productID}</td>
+                <td className="Transaction">{this.props.transaction.quanlity}</td>
+                <td className="Transaction">{this.props.transaction.statusProcess}</td>
+                <td className="Transaction">null</td>
+                <td className="Transaction">
+                    <Link to={link}><button className="btn btn-info"><span class="ladda-label">View Details</span></button></Link>
+                </td>
+            </tr>
         );
     }
 }

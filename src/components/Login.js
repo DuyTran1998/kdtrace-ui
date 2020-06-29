@@ -84,13 +84,13 @@ class Login extends Component {
         e.preventDefault();
     }
     handleOpenAlert = (flag) => {
-        if (flag == 'success') {
+        if (flag === 'success') {
             this.setState({ alertSuccess: true });
         }
-        if (flag == 'fail') {
+        if (flag ==='fail') {
             this.setState({ alertFail: true })
         }
-        if (flag == 'nonActive') {
+        if (flag ==='nonActive') {
             this.setState({ alertNonActive: true })
         }
     }

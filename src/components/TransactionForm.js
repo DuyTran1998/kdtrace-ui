@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {API_CREATE_TRANSACTION} from '../constants/API/api';
 import history from '../utils/@history';
-import { throwStatement } from '@babel/types';
 
 class TransactionForm extends Component {
     constructor(props){

@@ -43,4 +43,6 @@ export const API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR = "http://35.201.180.133:8080/a
 
 export const API_CREATE_TRANSACTION = "http://35.201.180.133:8080/api/process/create";
 
-export const API_GET_ALL_TRANSACTION = ""
+export const API_GET_ALL_TRANSACTION = "http://35.201.180.133:8080/api/process/getAllByDistributor";
+
+export const API_GET_TRANSACTION = "http://35.201.180.133:8080/api/process/get?id=";

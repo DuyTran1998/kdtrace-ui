@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as QueryString from "query-string"
 import './App.css';
 import {
   BrowserRouter as Router,

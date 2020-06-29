@@ -4,7 +4,6 @@ import TransactionForm  from './TransactionForm'
 import { API_GET_PRODUCT_DETAIL } from '../constants/API/api';
 import { connect } from 'react-redux';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
-import { throwStatement } from '@babel/types';
 
 class ProductDetail extends Component {
     constructor(props) {

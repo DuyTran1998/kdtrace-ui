@@ -45,10 +45,10 @@ class ProductList extends Component {
         this.componentDidMount();
     }
     handleOpenAlert = (flag) => {
-        if (flag == 'success') {
+        if (flag === 'success') {
             this.setState({ alertSuccess: true });
         }
-        if (flag == 'fail') {
+        if (flag === 'fail') {
             this.setState({ alertFail: true })
         }
     }
