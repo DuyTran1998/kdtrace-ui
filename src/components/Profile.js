@@ -4,13 +4,7 @@ import { API_GET_PROFILE_PRODUCER, API_GET_PROFILE_TRANSPORT,
          API_UPDATE_PROFILE_PRODUCER, API_UPDATE_PROFILE_TRANSPORT, 
         API_GET_PROFILE_DISTRIBUTOR, API_UPDATE_PROFILE_DISTRIBUTOR} 
         from '../constants/API/api';
-<<<<<<< Updated upstream
-
-import * as actions from '../actions/index';
 import {Snackbar, CircularProgress} from '@material-ui/core';
-=======
-import Snackbar from '@material-ui/core/Snackbar';
->>>>>>> Stashed changes
 import Alert from '@material-ui/lab/Alert';
 
 class Profile extends Component {
@@ -162,12 +156,9 @@ class Profile extends Component {
             })
     }
     handleOpenAlert = (flag) => {
-<<<<<<< Updated upstream
         this.handleCloseAlert();
-        if (flag == 'success') {
-=======
-        if (flag === 'success') {
->>>>>>> Stashed changes
+        if (flag ==='success') {
+
             this.setState({ alertSuccess: true });
         }
         if (flag === 'fail') {

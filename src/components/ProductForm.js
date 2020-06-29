@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-<<<<<<< Updated upstream
-import {AP, API_CREATE_PRODUCT} from '../constants/API/api';
-import {Snackbar, CircularProgress} from '@material-ui/core';
-=======
 import { API_CREATE_PRODUCT} from '../constants/API/api';
->>>>>>> Stashed changes
+import {Snackbar, CircularProgress} from '@material-ui/core';
 class ProductForm extends Component {
     constructor(props) {
         super(props);
