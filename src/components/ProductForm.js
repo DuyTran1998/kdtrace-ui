@@ -46,6 +46,7 @@ class ProductForm extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(res => {
+                console.log(res);
                 this.handleCloseAlert();
                 if(res.status === 200){
                     this.props.handleOpenAlert('success');

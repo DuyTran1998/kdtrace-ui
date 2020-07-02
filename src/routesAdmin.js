@@ -7,6 +7,7 @@ import ProductDetail from './components/ProductDetail';
 import Market from './components/Market';
 import PrivateRoute from './components/PrivateRoute';
 import TransactionDetails from './components/TransactionDetails';
+import TransactionComponent from './components/TransactionComponent'
 
 const routes = [
     {
@@ -48,6 +49,11 @@ const routes = [
         path : '/market',
         exact : false,
         component : Market,
+    },
+    {
+        path : '/transactions',
+        exact : false,
+        component : TransactionComponent,
     },
     {
         path : '/check-information/:code',

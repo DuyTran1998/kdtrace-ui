@@ -18,7 +18,7 @@ class CarForm extends Component {
         const carModel = {
             numberPlate: this.state.numberPlate,
             autoMaker: this.state.type,
-            status: "AVAILABLE"
+            statusDeliveryTruck: "AVAILABLE"
         }
         console.log(JSON.stringify(carModel));
 
@@ -37,6 +37,9 @@ class CarForm extends Component {
             .then(res => {
                 console.log(res);
                 if(res.status === 201){
+                    this.setState({
+                        numberPlate: ''
+                    })
                     this.props.handleClose();
                 }
             })

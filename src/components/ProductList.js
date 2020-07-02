@@ -85,35 +85,40 @@ class ProductList extends Component {
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
-                                                <table className="table table-striped table-bordered zero-configuration">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Product Name</th>
-                                                            <th>Type</th>
-                                                            <th>Quantity</th>
-                                                            <th>Unit</th>
-                                                            <th>Manufacture Date</th>
-                                                            <th>Expiration Date</th>
-                                                            <th>Details</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {productList}
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Product Name</th>
-                                                            <th>Type</th>
-                                                            <th>Quantity</th>
-                                                            <th>Unit</th>
-                                                            <th>Manufacture Date</th>
-                                                            <th>Expiration Date</th>
-                                                            <th>Details</th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
+                                                {   this.state.productList.length !== 0
+                                                ?
+                                                    <table className="table table-striped table-bordered zero-configuration">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Product Name</th>
+                                                                <th>Type</th>
+                                                                <th>Quantity</th>
+                                                                <th>Unit</th>
+                                                                <th>Manufacture Date</th>
+                                                                <th>Expiration Date</th>
+                                                                <th>Details</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {productList}
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Product Name</th>
+                                                                <th>Type</th>
+                                                                <th>Quantity</th>
+                                                                <th>Unit</th>
+                                                                <th>Manufacture Date</th>
+                                                                <th>Expiration Date</th>
+                                                                <th>Details</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                :
+                                                null
+                                                }
                                             </div>
                                         </div>
                                         <Dialog

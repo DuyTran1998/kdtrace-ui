@@ -7,7 +7,7 @@ class CarRecord extends Component {
                 <td className="CarRecord">{this.props.car.id}</td>
                 <td className="CarRecord">{this.props.car.numberPlate}</td>
                 <td className="CarRecord">{this.props.car.autoMaker}</td>
-                <td className="CarRecord">{this.props.car.status}</td>
+                <td className="CarRecord">{this.props.car.statusDeliveryTruck}</td>
                 <td className="CarRecord"></td>
             </tr>
         );
