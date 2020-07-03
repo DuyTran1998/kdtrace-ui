@@ -44,10 +44,6 @@ class TransactionDetails extends Component {
         const url = API_GET_TRANSACTION + id;
         this.getData(url, token);
         console.log(this.state.statusProcess);
-        // if (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT') {
-        //     console.log("GET AA;lll");
-        //     this.getDataTransport(token, API_GET_ALL_TRANSPORT)
-        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -71,12 +67,12 @@ class TransactionDetails extends Component {
                     throw (res.error);
                 }
                 console.log(res);
-                if(listName === 'listTransportCompany'){
+                if (listName === 'listTransportCompany') {
                     this.setState({
                         listTransportCompany: res.result,
                     })
                 }
-                if(listName === 'listTruckCar'){
+                if (listName === 'listTruckCar') {
                     this.setState({
                         listTruckCar: res.result,
                     })
@@ -117,7 +113,7 @@ class TransactionDetails extends Component {
                     if (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT') {
                         this.getDataForSelect(API_GET_ALL_TRANSPORT, token, 'listTransportCompany');
                     }
-                    if(this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT'){
+                    if (this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT') {
                         this.getDataForSelect(API_GET_ALL_CAR, token, 'listTruckCar');
                     }
                 })
@@ -192,19 +188,19 @@ class TransactionDetails extends Component {
         this.postData(url, token);
     }
 
-    handleOnSubmitChooseTruck = () =>{
+    handleOnSubmitChooseTruck = () => {
         const url = API_ACCEPT_TO_DELIVERY + this.state.id + "&id_deliveryTruck=" + this.state.id_truck;
         const token = localStorage.getItem('token');
-        this.postData(url,token);
+        this.postData(url, token);
     }
 
-    handleOnSubmitToConfirmTheGoodIsGotten = ()=>{
+    handleOnSubmitToConfirmTheGoodIsGotten = () => {
         const url = API_CONFIRM_TO_GET + this.state.id;
         const token = localStorage.getItem('token');
         this.postData(url, token);
     }
 
-    handleOnSubmitToConfirmTheGoodIsReceipted = ()=>{
+    handleOnSubmitToConfirmTheGoodIsReceipted = () => {
         const url = API_CONFIRM_TO_RECEIPT + this.state.id;
         const token = localStorage.getItem('token');
         this.postData(url, token);
@@ -306,58 +302,74 @@ class TransactionDetails extends Component {
                                                                     <h2 className="my-0 font-weight-bold">Transport</h2>
                                                                 </div>
                                                                 <div className="card-body">
-                                                                    <h2 className="pricing-card-title">{this.state.transportModel.companyName}</h2>
-                                                                    <ul className="list-unstyled mt-2 mb-2">
-                                                                        <li>Phone: {this.state.transportModel.phone}</li>
-                                                                        <li>Email: {this.state.transportModel.email}</li>
-                                                                        <li>Website: {this.state.transportModel.website}</li>
-                                                                        <li>Address: {this.state.transportModel.address}</li>
-                                                                    </ul>
+                                                                    {
+                                                                        this.state.transportModel !== null ?
+                                                                            <div>
+                                                                                <h2 className="pricing-card-title">{this.state.transportModel.companyName}</h2>
+                                                                                <ul className="list-unstyled mt-2 mb-2">
+                                                                                    <li>Phone: {this.state.transportModel.phone}</li>
+                                                                                    <li>Email: {this.state.transportModel.email}</li>
+                                                                                    <li>Website: {this.state.transportModel.website}</li>
+                                                                                    <li>Address: {this.state.transportModel.address}</li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        : 
+                                                                        <div>
+                                                                        <h2 className="pricing-card-title">...</h2>
+                                                                        <ul className="list-unstyled mt-2 mb-2">
+                                                                            <li>Phone: ...</li>
+                                                                            <li>Email: ...</li>
+                                                                            <li>Website: ...</li>
+                                                                            <li>Address: ...</li>
+                                                                        </ul>
+                                                                    </div>  
+                                                                    }
+
                                                                     {
                                                                         this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' && this.state.role === 'ROLE_DISTRIBUTOR'
-                                                                        ?
-                                                                        <div>
-                                                                            <select id="projectinput6" name="id_transport" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_transport}>
-                                                                                <option value="none" disabled="">Choose Transport Company</option>
-                                                                                {
-                                                                                    Array.isArray(this.state.listTransportCompany)
-                                                                                    && this.state.listTransportCompany.map(transport => {
-                                                                                        console.log(transport);
-                                                                                        return (
-                                                                                            <option key={transport.id} value={transport.id} >{transport.companyName}</option>
-                                                                                        );
-                                                                                    })
-                                                                                }
-                                                                            </select>
-                                                                            <br></br>
-                                                                            <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmit}>Submit</button>
-                                                                        </div>
-                                                                        :
-                                                                        null
+                                                                            ?
+                                                                            <div>
+                                                                                <select id="projectinput6" name="id_transport" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_transport}>
+                                                                                    <option value="none" disabled="">Choose Transport Company</option>
+                                                                                    {
+                                                                                        Array.isArray(this.state.listTransportCompany)
+                                                                                        && this.state.listTransportCompany.map(transport => {
+                                                                                            console.log(transport);
+                                                                                            return (
+                                                                                                <option key={transport.id} value={transport.id} >{transport.companyName}</option>
+                                                                                            );
+                                                                                        })
+                                                                                    }
+                                                                                </select>
+                                                                                <br></br>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmit}>Submit</button>
+                                                                            </div>
+                                                                            :
+                                                                            null
                                                                     }
                                                                     {
                                                                         this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT' && this.state.role === 'ROLE_TRANSPORT'
-                                                                        ?
-                                                                        <div>
-                                                                            <select id="projectinput6" name="id_truck" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_truck}>
-                                                                                <option value="none" disabled="">Choose Car To Delivery</option>
-                                                                                {
-                                                                                    Array.isArray(this.state.listTruckCar)
-                                                                                    && this.state.listTruckCar.map(truck => {
-                                                                                        return (
-                                                                                            <option key={truck.id} value={truck.id} >{truck.numberPlate}</option>
-                                                                                        );
-                                                                                    })
-                                                                                }
-                                                                            </select>
-                                                                            <br></br>
-                                                                            <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmitChooseTruck}>Accept</button>
-                                                                            <button type="button" className="btn btn-lg btn-block btn-info">Reject</button>
-                                                                        </div>
-                                                                        :
-                                                                        null
+                                                                            ?
+                                                                            <div>
+                                                                                <select id="projectinput6" name="id_truck" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_truck}>
+                                                                                    <option value="none" disabled="">Choose Car To Delivery</option>
+                                                                                    {
+                                                                                        Array.isArray(this.state.listTruckCar)
+                                                                                        && this.state.listTruckCar.map(truck => {
+                                                                                            return (
+                                                                                                <option key={truck.id} value={truck.id} >{truck.numberPlate}</option>
+                                                                                            );
+                                                                                        })
+                                                                                    }
+                                                                                </select>
+                                                                                <br></br>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmitChooseTruck}>Accept</button>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-info">Reject</button>
+                                                                            </div>
+                                                                            :
+                                                                            null
                                                                     }
-                                                                     {
+                                                                    {
                                                                         this.state.statusProcess === 'ON_BOARDING_GET' && this.state.role === 'ROLE_TRANSPORT'
                                                                             ?
                                                                             <button type="button"
@@ -394,14 +406,14 @@ class TransactionDetails extends Component {
                                                                     </ul>
                                                                     {
                                                                         this.state.statusProcess === 'ON_BOARDING_REVEIVE' && this.state.role === 'ROLE_DISTRIBUTOR'
-                                                                        ?
-                                                                        <button type="button"
-                                                                            className="btn btn-lg btn-block btn-info"
-                                                                            onClick={this.handleOnSubmitToConfirmTheGoodIsReceipted}>
-                                                                            Confirm
+                                                                            ?
+                                                                            <button type="button"
+                                                                                className="btn btn-lg btn-block btn-info"
+                                                                                onClick={this.handleOnSubmitToConfirmTheGoodIsReceipted}>
+                                                                                Confirm
                                                                         </button>
-                                                                        :
-                                                                        null
+                                                                            :
+                                                                            null
                                                                     }
                                                                 </div>
                                                             </div>
