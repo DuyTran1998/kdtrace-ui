@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import history from '../utils/@history';
 import {
     API_GET_TRANSACTION, API_GET_ALL_TRANSPORT,
     API_ACCEPT_TO_SELL_TRANSACTION,
@@ -7,9 +8,13 @@ import {
     API_ACCEPT_TO_DELIVERY,
     API_CONFIRM_TO_GET,
     API_CONFIRM_TO_RECEIPT,
+    API_REJECT_TO_SHELL_TRANSACTION,
+    API_REJECT_TO_DELIVERY,
+    API_DELETE_TRANSACTION
 } from '../constants/API/api';
 import { connect } from 'react-redux';
 import QRCode from './QRCode';
+
 
 class TransactionDetails extends Component {
     constructor(props) {
@@ -18,6 +23,7 @@ class TransactionDetails extends Component {
             reload: false,
             id: '',
             statusProcess: '',
+            create_at: '',
             delivery_at: '',
             qrCodeList: [],
             productID: '',
@@ -107,10 +113,12 @@ class TransactionDetails extends Component {
                     deliveryTruckModel: res.result.deliveryTruckModel,
                     transportModel: res.result.transportModel,
                     producerModel: res.result.producerModel,
-                    qrCodeList: res.result.qrCodeModels
+                    qrCodeList: res.result.qrCodeModels,
+                    create_at: res.result.create_at,
                 }, () => {
                     console.log(this.state.statusProcess);
-                    if (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT') {
+                    if (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ||
+                        this.state.statusProcess === 'TRANSPORT_REJECT') {
                         this.getDataForSelect(API_GET_ALL_TRANSPORT, token, 'listTransportCompany');
                     }
                     if (this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT') {
@@ -167,6 +175,13 @@ class TransactionDetails extends Component {
         this.postData(api, token)
     }
 
+    handleClickRejectToShell = (e) => {
+        const api = API_REJECT_TO_SHELL_TRANSACTION + this.state.id;
+        const token = localStorage.getItem('token');
+        this.postData(api, token)
+        history.push('./transactions');
+    }
+
     handleClose = () => {
         this.setState({
             open: false,
@@ -194,6 +209,12 @@ class TransactionDetails extends Component {
         this.postData(url, token);
     }
 
+    handleOnRejectToDelivery = () => {
+        const url = API_REJECT_TO_DELIVERY + this.state.id;
+        const token = localStorage.getItem('token');
+        this.postData(url, token);
+    }
+
     handleOnSubmitToConfirmTheGoodIsGotten = () => {
         const url = API_CONFIRM_TO_GET + this.state.id;
         const token = localStorage.getItem('token');
@@ -216,14 +237,55 @@ class TransactionDetails extends Component {
                             <div className="row">
                                 <div className="card col-12">
                                     <div className="card-header">
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="card text-white box-shadow-0 bg-info">
-                                                <div class="card-header">
-                                                    <h2 class="card-title text-white">PROCESS NUMBER: # {this.state.id}</h2>
+                                        <div className="col-md-6 col-sm-12">
+                                            <div className="card text-white box-shadow-0 bg-info">
+                                                <div className="card-header">
+                                                    <h2 className="card-title text-white">PROCESS NUMBER: # {this.state.id}</h2>
                                                 </div>
-                                                <div class="card-content collapse show">
-                                                    <div class="card-body">
-                                                        <h4 class="card-text">STATUS: {this.state.statusProcess}</h4>
+                                                <div className="card-content collapse show">
+                                                    <div className="card-body">
+                                                        <h4 className="card-text">STATUS:
+                                                        {
+                                                                this.state.statusProcess === 'PRODUCER_REJECT' ?
+                                                                    <span className="badge badge-danger">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'WAITING_RESPONSE_PRODUCER' ?
+                                                                    <span className="badge badge-info">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ?
+                                                                    <span className="badge badge-info">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT' ?
+                                                                    <span className="badge badge-info">{this.state.statusProcessss}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'ON_BOARDING_GET' ?
+                                                                    <span className="badge badge-info">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'ON_BOARDING_REVEIVE' ?
+                                                                    <span className="badge badge-info">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'REVEIVED' ?
+                                                                    <span className="badge badge-success">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'TRANSPORT_REJECT' ?
+                                                                    <span class="badge badge-warning">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                        </h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -281,11 +343,19 @@ class TransactionDetails extends Component {
                                                                     {
                                                                         this.state.statusProcess === 'WAITING_RESPONSE_PRODUCER' && this.state.role === 'ROLE_PRODUCER'
                                                                             ?
-                                                                            <button type="button"
-                                                                                className="btn btn-lg btn-block btn-info"
-                                                                                onClick={this.handleClickAcceptToShell}>
-                                                                                Accept
-                                                                            </button>
+                                                                            <div>
+                                                                                <button type="button"
+                                                                                    className="btn btn-lg btn-block btn-info"
+                                                                                    onClick={this.handleClickAcceptToShell}>
+                                                                                    Accept
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                    className="btn btn-lg btn-block btn-info"
+                                                                                    onClick={this.handleClickRejectToShell}>
+                                                                                    Reject
+                                                                                </button>
+                                                                            </div>
+
                                                                             :
                                                                             null
                                                                     }
@@ -313,20 +383,20 @@ class TransactionDetails extends Component {
                                                                                     <li>Address: {this.state.transportModel.address}</li>
                                                                                 </ul>
                                                                             </div>
-                                                                        : 
-                                                                        <div>
-                                                                        <h2 className="pricing-card-title">...</h2>
-                                                                        <ul className="list-unstyled mt-2 mb-2">
-                                                                            <li>Phone: ...</li>
-                                                                            <li>Email: ...</li>
-                                                                            <li>Website: ...</li>
-                                                                            <li>Address: ...</li>
-                                                                        </ul>
-                                                                    </div>  
+                                                                            :
+                                                                            <div>
+                                                                                <h2 className="pricing-card-title">...</h2>
+                                                                                <ul className="list-unstyled mt-2 mb-2">
+                                                                                    <li>Phone: ...</li>
+                                                                                    <li>Email: ...</li>
+                                                                                    <li>Website: ...</li>
+                                                                                    <li>Address: ...</li>
+                                                                                </ul>
+                                                                            </div>
                                                                     }
 
                                                                     {
-                                                                        this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' && this.state.role === 'ROLE_DISTRIBUTOR'
+                                                                        (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' || this.state.statusProcess === 'TRANSPORT_REJECT') && this.state.role === 'ROLE_DISTRIBUTOR'
                                                                             ?
                                                                             <div>
                                                                                 <select id="projectinput6" name="id_transport" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_transport}>
@@ -364,7 +434,7 @@ class TransactionDetails extends Component {
                                                                                 </select>
                                                                                 <br></br>
                                                                                 <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmitChooseTruck}>Accept</button>
-                                                                                <button type="button" className="btn btn-lg btn-block btn-info">Reject</button>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-warning" onClick={this.handleOnRejectToDelivery}>Reject</button>
                                                                             </div>
                                                                             :
                                                                             null

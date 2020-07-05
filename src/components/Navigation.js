@@ -7,6 +7,7 @@ import '../assets/css/DropBox.css';
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import {API_GET_USER_CONTEXT} from '../constants/API/api';
+import history from '../utils/@history';
 
 class Navigation extends Component {
     constructor(props) {
@@ -48,6 +49,10 @@ class Navigation extends Component {
     handleClose = () => {
         this.setState({ anchorEl: null });
     };
+
+    handleRedirect = () => {
+        history.push('/profile');
+    }
 
     handleLogout = () => {
         // deleteAccessToken();
@@ -178,7 +183,7 @@ class Navigation extends Component {
                                                 open={open}
                                                 onClose={this.handleClose}
                                             >
-                                                <MenuItem >Profile</MenuItem>
+                                                <MenuItem onClick={this.handleRedirect}>Profile</MenuItem>
                                                 <MenuItem >My account</MenuItem>
                                                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                                             </Menu>

@@ -142,7 +142,11 @@ class Profile extends Component {
                 }
                 console.log(res);
                 if(res.status === 200){
+                    this.setState({
+                        disable: true
+                    })
                     this.handleOpenAlert('success');
+
                 }
                 else{
                     this.handleOpenAlert('fail');
@@ -231,7 +235,7 @@ class Profile extends Component {
                                                                     <i className="ft-x"></i> Edit
 								                                 </button>
 
-                                                                <button type="submit" className="btn bg-blue-grey bg-lighten-2" onClick={this.handleSubmit}>
+                                                                <button type="submit" className="btn bg-blue-grey bg-lighten-2" onClick={this.handleSubmit} disabled={this.state.disable}>
                                                                     <i className="fa fa-check-square-o"></i> Save
 								                                 </button>
                                                             </div>

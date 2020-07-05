@@ -49,6 +49,7 @@ class UserList extends Component {
     }
 
     render() {
+        console.log(this.props.param)
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
