@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import ProductRecord from './ProductRecord';
-import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
 import ProductForm from './ProductForm';
 import { API_GET_ALL_PRODUCT } from '../constants/API/api'
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { Link } from "react-router-dom";
 
 class ProductList extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class ProductList extends Component {
             productList: [],
             open: false,
             reload: false,
+            page: 1,
         }
     }
     componentDidMount() {
@@ -55,6 +57,23 @@ class ProductList extends Component {
     }
     handleCloseAlert = e => {
         this.setState({ alertSuccess: false, alertFail: false });
+    }
+
+    increatePage = () =>{
+        let newPageNum = this.state.page + 1;
+        this.setState({
+            page: newPageNum
+        })
+    }
+
+    decreatePage = () =>{
+        let newPageNum = this.state.page;
+        if(newPageNum > 1){
+            console.log(this.state.page);
+            this.setState({
+                page: newPageNum - 1
+            })
+        }
     }
     render() {
         const productList = this.state.productList.map(product => {
@@ -146,27 +165,21 @@ class ProductList extends Component {
                                             autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                                             <Alert severity="error" style={{ fontSize: '15px' }}>Fail to create product!</Alert>
                                         </Snackbar>
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center pagination-round">
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">«</span>
-                                                        <span className="sr-only">Previous</span>
-                                                    </a>
-                                                </li>
-                                                <li className="page-item active"><a className="page-link" href="?">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">4</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">5</a></li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#" aria-label="Next">
-                                                        <span aria-hidden="true">»</span>
-                                                        <span className="sr-only">Next</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                        <div className="content-header-right col-12">
+                                            <div className="btn-group float-md-right">
+                                                <div class="float-right my-1">
+                                                    <ul class="pager pager-round">
+                                                        <li>
+                                                            <Link to={'?page=' + ( this.state.page - 1 )} onClick={this.decreatePage}><i class="ft-arrow-left"></i> Previous</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to={'?page=' + ( this.state.page + 1 )} onClick={this.increatePage}>Next <i class="ft-arrow-right"></i></Link>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -60,6 +60,7 @@ class ProductDetail extends Component {
     }
 
     render() {
+        console.log(this.props);
         const qrCodeList = this.state.codes.map(code => {
             return (
                 <QRCodeRecord key={code.id} code={code}></QRCodeRecord>

@@ -18,7 +18,7 @@ class DistributorMenu extends Component {
 
                 <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/message" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Messages</span></Link></li>
 
-                <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/message" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Blockchain System</span></Link></li>
+                <li className="dropdown nav-item" ><a className="dropdown-toggle nav-link" target='_blank' href="http://explorer.kdtrace.xyz/?fbclid=IwAR2UKn2zrVwN32m02dcIGCLYqv6c4BROrVl0R4dOuidcqljxEkWsG-g0pfQ#/" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Blockchain System</span></a></li>
              
               </ul>
             </div>

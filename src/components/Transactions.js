@@ -89,7 +89,7 @@ class Transactions extends Component {
                                             </div>
                                         </div>
                                         <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center pagination-round">
+                                            <ul className="pagination justify-content-center pagination-round">
                                                 <li className="page-item">
                                                     <a className="page-link" href="#" aria-label="Previous">
                                                         <span aria-hidden="true">«</span>

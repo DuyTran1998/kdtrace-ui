@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import UserRecord from './UserRecord';
 import { withRouter } from 'react-router-dom';
 import {API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT} from '../constants/API/api';
+import { Link } from "react-router-dom";
 class UserList extends Component {
     constructor(props) {
         super(props)
         this.state = {
             userList: [],
+            page: 1,
         }
     }
     componentDidMount() {
@@ -47,9 +49,36 @@ class UserList extends Component {
                 console.log(jsonResponse);
             })
     }
+    increatePage = () =>{
+        let newPageNum = this.state.page + 1;
+        this.setState({
+            page: newPageNum
+        })
+    }
+
+    decreatePage = () =>{
+        let newPageNum = this.state.page;
+        console.log(newPageNum);
+        if(newPageNum > 1){
+            console.log(this.state.page);
+            this.setState({
+                page: newPageNum - 1
+            })
+        }
+    }
+
+    pagation(list, page){
+        if(list.length < 10){
+            return list;
+        }
+        const newlist = list.slice(page*10 -10, page*10);
+        return newlist;
+    }
 
     render() {
         console.log(this.props.param)
+        const list = this.pagation(this.state.userList, this.state.page);
+        console.log(list);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -77,8 +106,8 @@ class UserList extends Component {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            Array.isArray(this.state.userList)
-                                                            && this.state.userList.map(user => {
+                                                            Array.isArray(list)
+                                                            && list.map(user => {
                                                                 return (
                                                                     <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
                                                                 );
@@ -96,6 +125,20 @@ class UserList extends Component {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
+                                            </div>
+                                        </div>
+                                        <div className="content-header-right col-12">
+                                            <div className="btn-group float-md-right">
+                                                <div class="float-right my-1">
+                                                    <ul class="pager pager-round">
+                                                        <li>
+                                                            <Link to={'?page=' + ( this.state.page - 1 )} onClick={this.decreatePage}><i class="ft-arrow-left"></i> Previous</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to={'?page=' + ( this.state.page + 1 )} onClick={this.increatePage}>Next <i class="ft-arrow-right"></i></Link>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

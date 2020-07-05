@@ -19,42 +19,42 @@ class TransactionRecord extends Component {
                 <td className="Transaction">
                     {
                         this.props.transaction.statusProcess === 'PRODUCER_REJECT' ?
-                        <h4><span class="badge badge-danger">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-danger">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'WAITING_RESPONSE_PRODUCER' ?
-                        <h4><span class="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ?
-                        <h4><span class="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'WAITING_RESPONSE_TRANSPORT' ?
-                        <h4><span class="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                      {
                         this.props.transaction.statusProcess === 'ON_BOARDING_GET' ?
-                        <h4><span class="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'ON_BOARDING_REVEIVE' ?
-                        <h4><span class="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'REVEIVED' ?
-                        <h4><span class="badge badge-success">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-success">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'TRANSPORT_REJECT' ?
-                        <h4><span class="badge badge-warning">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge badge-warning">{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                 </td>
