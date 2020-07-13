@@ -3,6 +3,8 @@ import CarRecord from './CarRecord';
 import {API_GET_ALL_CAR} from '../constants/API/api';
 import CarForm from './CarForm';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 class CarList extends Component {
     constructor(props) {
@@ -11,11 +13,27 @@ class CarList extends Component {
             cars: [],
             error: '',
             open: false,
+            alertMessage: '',
+            alertSuccess: false,
+            alertFail: false,
         }
     }
 
     componentDidMount() {
         this.getAllCars(localStorage.getItem('token'));
+    }
+
+    handleOpenAlert = (flag, message) => {
+        if (flag === 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag === 'fail') {
+            this.setState({ alertFail: true })
+        }
+        this.setState({ alertMessage: message });
+    }
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false });
     }
 
     handleOpenDialog = () => {
@@ -123,7 +141,7 @@ class CarList extends Component {
                                             <DialogContent>
                                                 <DialogContentText id="alert-dialog-slide-description">
                                                     <Typography>
-                                                        <CarForm handleClose={this.handleClose}/>
+                                                        <CarForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert}/>
                                                     </Typography>
                                                 </DialogContentText>
                                             </DialogContent>
@@ -155,6 +173,14 @@ class CarList extends Component {
                         </section>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
             </div>
         );
     }

@@ -74,17 +74,6 @@ class Transactions extends Component {
                                                             })
                                                         }
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Transaction_Id</th>
-                                                            <th>Product_Name</th>
-                                                            <th>Quantity</th>
-                                                            <th>Status_Process</th>
-                                                            <th>Create_At</th>
-                                                            <th>Details</th>
-                                                        
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

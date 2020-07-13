@@ -4,7 +4,7 @@ import {
     API_GET_TRANSACTION, API_GET_ALL_TRANSPORT,
     API_ACCEPT_TO_SELL_TRANSACTION,
     API_CHOOSE_TRANSPORT,
-    API_GET_ALL_CAR,
+    API_GET_ALL_CAR_AVAILABLE,
     API_ACCEPT_TO_DELIVERY,
     API_CONFIRM_TO_GET,
     API_CONFIRM_TO_RECEIPT,
@@ -14,13 +14,13 @@ import {
 } from '../constants/API/api';
 import { connect } from 'react-redux';
 import QRCode from './QRCode';
-
+import { Snackbar, CircularProgress } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 class TransactionDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            reload: false,
             id: '',
             statusProcess: '',
             create_at: '',
@@ -36,7 +36,11 @@ class TransactionDetails extends Component {
             listTransportCompany: [],
             id_transport: '',
             listTruckCar: [],
-            id_truck: ''
+            id_truck: '',
+            progress: false,
+            alertMessage: '',
+            alertSuccess: false,
+            alertFail: false,
         }
     }
     componentDidMount() {
@@ -116,13 +120,12 @@ class TransactionDetails extends Component {
                     qrCodeList: res.result.qrCodeModels,
                     create_at: res.result.create_at,
                 }, () => {
-                    console.log(this.state.statusProcess);
-                    if (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ||
-                        this.state.statusProcess === 'TRANSPORT_REJECT') {
+                    if ((this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ||
+                        this.state.statusProcess === 'TRANSPORT_REJECT') && this.state.role === 'ROLE_DISTRIBUTOR') {
                         this.getDataForSelect(API_GET_ALL_TRANSPORT, token, 'listTransportCompany');
                     }
-                    if (this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT') {
-                        this.getDataForSelect(API_GET_ALL_CAR, token, 'listTruckCar');
+                    if ((this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT') && this.state.role === 'ROLE_TRANSPORT') {
+                        this.getDataForSelect(API_GET_ALL_CAR_AVAILABLE, token, 'listTruckCar');
                     }
                 })
                 console.log(this.state);
@@ -135,6 +138,7 @@ class TransactionDetails extends Component {
     }
 
     postData(url, token) {
+        this.setState({ progress: true });
         fetch(url, {
             method: "POST",
             cache: 'no-cache',
@@ -150,18 +154,32 @@ class TransactionDetails extends Component {
                 }
                 console.log(res);
                 if (res.status === 200) {
-                    this.setState(
-                        { reload: true },
-                        () => this.setState({ reload: false })
-                    )
+                    this.handleClosePopup();
+                    this.handleOpenAlert('success', res.message);
+                    this.getData(API_GET_TRANSACTION + this.props.match.params.id, token);
+                }else{
+                    this.handleOpenAlert('fail', res.message);
                 }
             })
             .catch(error => {
+                this.handleClosePopup();
                 console.log(error);
                 this.setState({
                     error: error,
                 })
             })
+    }
+    handleClosePopup = e => {
+        this.setState({ progress: false, alertSuccess: false, alertFail: false });
+    }
+    handleOpenAlert = (flag, message) => {
+        if (flag === 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag === 'fail') {
+            this.setState({ alertFail: true })
+        }
+        this.setState({ alertMessage: message });
     }
     handleOpenDialog = () => {
         this.setState({
@@ -179,7 +197,7 @@ class TransactionDetails extends Component {
         const api = API_REJECT_TO_SHELL_TRANSACTION + this.state.id;
         const token = localStorage.getItem('token');
         this.postData(api, token)
-        history.push('./transactions');
+        history.push('../transactions');
     }
 
     handleClose = () => {
@@ -204,9 +222,12 @@ class TransactionDetails extends Component {
     }
 
     handleOnSubmitChooseTruck = () => {
-        const url = API_ACCEPT_TO_DELIVERY + this.state.id + "&id_deliveryTruck=" + this.state.id_truck;
-        const token = localStorage.getItem('token');
-        this.postData(url, token);
+        if (this.state.id_truck === '') { this.handleOpenAlert('fail', 'Please choose a delivery truck !') }
+        else {
+            const url = API_ACCEPT_TO_DELIVERY + this.state.id + "&id_deliveryTruck=" + this.state.id_truck;
+            const token = localStorage.getItem('token');
+            this.postData(url, token);
+        }
     }
 
     handleOnRejectToDelivery = () => {
@@ -245,14 +266,14 @@ class TransactionDetails extends Component {
                                                 <div className="card-content collapse show">
                                                     <div className="card-body">
                                                         <h4 className="card-text">STATUS:
-                                                        {
-                                                                this.state.statusProcess === 'PRODUCER_REJECT' ?
-                                                                    <span className="badge badge-danger">{this.state.statusProcess}</span>
-                                                                    : null
-                                                            }
                                                             {
                                                                 this.state.statusProcess === 'WAITING_RESPONSE_PRODUCER' ?
                                                                     <span className="badge badge-info">{this.state.statusProcess}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.statusProcess === 'PRODUCER_REJECT' ?
+                                                                    <span className="badge badge-danger">{this.state.statusProcess}</span>
                                                                     : null
                                                             }
                                                             {
@@ -262,7 +283,7 @@ class TransactionDetails extends Component {
                                                             }
                                                             {
                                                                 this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT' ?
-                                                                    <span className="badge badge-info">{this.state.statusProcessss}</span>
+                                                                    <span className="badge badge-info">{this.state.statusProcess}</span>
                                                                     : null
                                                             }
                                                             {
@@ -543,6 +564,17 @@ class TransactionDetails extends Component {
                         </section>
                     </div>
                 </div>
+                <Snackbar open={this.state.progress} onClose={this.handleClosePopup}  >
+                    <CircularProgress color="primary" />
+                </Snackbar>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleClosePopup}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleClosePopup}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
             </div>
         );
     }

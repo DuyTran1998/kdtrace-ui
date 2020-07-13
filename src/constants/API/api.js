@@ -37,6 +37,8 @@ export const  API_GET_PROFILE_TRANSPORT = "http://35.201.180.133:8080/api/transp
 
 export const API_GET_ALL_CAR = "http://35.201.180.133:8080/api/transport/deliveryTruck/getAll";
 
+export const API_GET_ALL_CAR_AVAILABLE = "http://35.201.180.133:8080/api/transport/deliveryTruck/getAllAvailable";
+
 export const API_CREATE_CAR = "http://35.201.180.133:8080/api/transport/deliveryTruck/create";
 
 export const API_ACCEPT_TO_DELIVERY = "http://35.201.180.133:8080/api/process/acceptToDelivery?id=";
@@ -67,7 +69,7 @@ export const API_GET_ALL_TRANSACTION_BY_PRODUCER = "http://35.201.180.133:8080/a
 
 export const API_GET_ALL_TRANSACTION_BY_TRANSPORT = "http://35.201.180.133:8080/api/process/getAllByTransport";
 
-export const API_DELETE_TRANSACTION = "http://http://35.201.180.133:8080/api/process?id=";
+export const API_DELETE_TRANSACTION = "http://35.201.180.133:8080/api/process?id=";
 
 // -----------------------------------------------------------------------------------------------------------------------------
 
@@ -107,6 +109,8 @@ export const API_DELETE_TRANSACTION = "http://http://35.201.180.133:8080/api/pro
 // export const  API_GET_PROFILE_TRANSPORT = "http://localhost:8080/api/transport/get";
 
 // export const API_GET_ALL_CAR = "http://localhost:8080/api/transport/deliveryTruck/getAll";
+
+// export const API_GET_ALL_CAR_AVAILABLE = "http://localhost:8080/api/transport/deliveryTruck/getAllAvailable";
 
 // export const API_CREATE_CAR = "http://localhost:8080/api/transport/deliveryTruck/create";
 

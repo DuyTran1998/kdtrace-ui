@@ -15,6 +15,8 @@ class ProductList extends Component {
             open: false,
             reload: false,
             page: 1,
+            alertSuccess: false,
+            alertFail: false,
         }
     }
     componentDidMount() {

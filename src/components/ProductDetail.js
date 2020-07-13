@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import QRCodeRecord from './QRCode';
-import TransactionForm  from './TransactionForm'
+import TransactionForm from './TransactionForm'
 import { API_GET_PRODUCT_DETAIL } from '../constants/API/api';
 import { connect } from 'react-redux';
-import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 class ProductDetail extends Component {
     constructor(props) {
@@ -17,6 +19,9 @@ class ProductDetail extends Component {
             mfg: '',
             exp: '',
             codes: [],
+            alertMessage: '',
+            alertSuccess: false,
+            alertFail: false,
         }
     }
     componentDidMount() {
@@ -59,6 +64,18 @@ class ProductDetail extends Component {
         this.componentDidMount();
     }
 
+    handleOpenAlert = (flag, message) => {
+        if (flag === 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag === 'fail') {
+            this.setState({ alertFail: true })
+        }
+        this.setState({ alertMessage: message });
+    }
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false });
+    }
     render() {
         console.log(this.props);
         const qrCodeList = this.state.codes.map(code => {
@@ -78,8 +95,8 @@ class ProductDetail extends Component {
                                         <div className="card-header">
                                             <h4 className="card-title"><i class="fa fa-eye"></i>Product Management</h4>
                                             {
-                                                this.props.userContext.role === 'ROLE_DISTRIBUTOR' 
-                                                ?
+                                                this.props.userContext.role === 'ROLE_DISTRIBUTOR'
+                                                    ?
                                                     <div className="content-header-right col-12">
                                                         <div className="btn-group float-md-right">
                                                             <button className="btn btn-info btn-min-width mr-1 mb-1 ladda-button" data-style="zoom-in" onClick={this.handleOpenDialog}>
@@ -88,7 +105,7 @@ class ProductDetail extends Component {
                                                         </div>
                                                     </div>
 
-                                                : null
+                                                    : null
                                             }
                                         </div>
                                         <table class="table">
@@ -156,8 +173,8 @@ class ProductDetail extends Component {
                                             <DialogContent>
                                                 <DialogContentText id="alert-dialog-slide-description">
                                                     <Typography>
-                                                        <TransactionForm product={this.state} 
-                                                        handleClose={this.handleClose}/>
+                                                        <TransactionForm product={this.state}
+                                                            handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert} />
                                                     </Typography>
                                                 </DialogContentText>
                                             </DialogContent>
@@ -168,6 +185,14 @@ class ProductDetail extends Component {
                         </section>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
             </div>
 
         );

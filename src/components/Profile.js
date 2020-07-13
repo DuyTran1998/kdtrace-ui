@@ -259,7 +259,7 @@ class Profile extends Component {
                     <Alert severity="error" style={{ fontSize: '15px' }}>Fail to update profile information!</Alert>
                 </Snackbar>
                 <Snackbar open={this.state.progress} onClose={this.handleCloseAlert} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
-                    <CircularProgress color="secondary" />
+                    <CircularProgress color="primary" />
                 </Snackbar>
             </div>
 

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {API_CREATE_CAR} from '../constants/API/api';
+import { Snackbar, CircularProgress } from '@material-ui/core';
 
 class CarForm extends Component {
     constructor(props){
         super(props)
         this.state = {
             numberPlate: '',
-            type: 'TOYOTA'
+            type: 'TOYOTA',
+            progress: false
         } 
     }
     handleChange = e => {
@@ -14,7 +16,12 @@ class CarForm extends Component {
         this.setState({ [name]: value });
     }
 
+    handleCloseProgress = e => {
+        this.setState({ progress: false });
+    }
+
     handleSubmit = (e) => {
+        this.setState({ progress: true });
         const carModel = {
             numberPlate: this.state.numberPlate,
             autoMaker: this.state.type,
@@ -40,8 +47,13 @@ class CarForm extends Component {
                     this.setState({
                         numberPlate: ''
                     })
+                    this.props.handleOpenAlert('success', res.message);
                     this.props.handleClose();
                 }
+                else{
+                    this.props.handleOpenAlert('fail', res.message); 
+                }
+                this.handleCloseProgress();
             })
         e.preventDefault();
     }
@@ -78,17 +90,20 @@ class CarForm extends Component {
                     </div>
                 </div>
 
-                <div className="form-actions center">
+                <div className="form-actions right">
                     <button
                         type="button"
                         onClick={this.props.handleClose}
                         className="btn btn-warning mr-1">
                         <i className="ft-x"></i> Cancel
-                                    </button>
-                    <button type="submit" className="btn btn-success">
-                        <i className="fa fa-thumbs-o-up position-right"></i> Save
-                     </button>
+								        </button>
+                    <button type="submit" className="btn btn-primary">
+                        <i className="fa fa-check-square-o"></i> Save
+					</button>
                 </div>
+                <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
+                    <CircularProgress color="primary" />
+                </Snackbar>
             </form>
         );
     }

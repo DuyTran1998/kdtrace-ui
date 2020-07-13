@@ -24,32 +24,32 @@ class TransactionRecord extends Component {
                     }
                     {
                         this.props.transaction.statusProcess === 'WAITING_RESPONSE_PRODUCER' ?
-                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'steelblue'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ?
-                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'steelblue'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'WAITING_RESPONSE_TRANSPORT' ?
-                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'darkturquoise'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                      {
                         this.props.transaction.statusProcess === 'ON_BOARDING_GET' ?
-                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'deepskyblue'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'ON_BOARDING_REVEIVE' ?
-                        <h4><span className="badge badge-info">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'mediumorchid'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
                         this.props.transaction.statusProcess === 'REVEIVED' ?
-                        <h4><span className="badge badge-success">{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'mediumaquamarine'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {

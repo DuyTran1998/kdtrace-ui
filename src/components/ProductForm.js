@@ -11,8 +11,6 @@ class ProductForm extends Component {
             unit: 'PCS',
             exp: '',
             mfg: '',
-            alertSuccess: false,
-            alertFail: false,
             progress: false
         }
     }
@@ -58,7 +56,7 @@ class ProductForm extends Component {
             })
         e.preventDefault();
     }
-    handleCloseAlert = e => {
+    handleCloseProgress = e => {
         this.setState({ progress: false});
     }
     render() {
@@ -122,8 +120,8 @@ class ProductForm extends Component {
                         <i className="fa fa-check-square-o"></i> Save
 					</button>
                 </div>
-                <Snackbar open={this.state.progress} onClose={this.handleCloseAlert}  >
-                    <CircularProgress color="secondary" />
+                <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
+                    <CircularProgress color="primary" />
                 </Snackbar>
             </form>
         );
