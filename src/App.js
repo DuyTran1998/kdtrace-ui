@@ -20,14 +20,12 @@ class App extends Component {
       role: ''
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     if (typeof window !== undefined) {
       if (localStorage && localStorage.getItem('token')) {
         this.setState({ token: localStorage.getItem('token') })
-      } else {
-        // const values = this.props.match.params.code;
-        // console.log(values);
-      history.push('/login');
+      } else if (window.location.pathname !== "/register") {
+        history.push('/login');
       }
       window.onstorage = (e) => {
         console.log('event storage')
@@ -58,13 +56,13 @@ class App extends Component {
       return result;
     }
     const { token } = this.state;
-    console.log("token",token);
+    console.log("token", token);
     return (
       <Router history={history}>
         {
           token ?
             <React.Fragment>
-              <Navigation token={this.state.token}/>
+              <Navigation token={this.state.token} />
               <Menu />
             </React.Fragment> : null
         }

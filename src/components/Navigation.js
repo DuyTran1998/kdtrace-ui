@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import '../assets/css/DropBox.css';
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
-import {API_GET_USER_CONTEXT} from '../constants/API/api';
+import { API_GET_USER_CONTEXT } from '../constants/API/api';
 import history from '../utils/@history';
 
 class Navigation extends Component {
@@ -18,11 +18,11 @@ class Navigation extends Component {
             username: '',
         }
     }
-    
+
     componentDidMount() {
         this.getUserContext(this.props.token);
     }
- 
+
     getUserContext = (token) => {
         const url = API_GET_USER_CONTEXT;
         try {
@@ -31,10 +31,20 @@ class Navigation extends Component {
                     Authorization: `Bearer ${token}`
                 }
             })
-                .then(response => response.json())
+                .then(response => {
+                    console.log({ response });
+                    if (response.ok) {
+                        console.log("voooo");
+                        return response.json();
+                    } else {
+                        console.log("ra");
+                        this.handleLogout();
+                    }
+                })
                 .then(jsonResponse => {
-                    this.props.setUserContext(jsonResponse.username, jsonResponse.role.roleName);
-                    // this.setState({isLoading: false})
+                    if (jsonResponse) {
+                        this.props.setUserContext(jsonResponse.username, jsonResponse.role.roleName);
+                    }
                 })
         } catch (e) {
             alert(e);
@@ -143,14 +153,14 @@ class Navigation extends Component {
                                             <h6 className="dropdown-header m-0"><span className="grey darken-2">Messages</span></h6><span className="notification-tag badge badge-default badge-warning float-right m-0">4 New</span>
                                         </li>
                                         <li className="scrollable-container media-list w-100"><a href="!!#">
-                                                <div className="media">
-                                                    <div className="media-left"><span className="avatar avatar-sm avatar-busy rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-2.png" alt="avatar" /><i></i></span></div>
-                                                    <div className="media-body">
-                                                        <h6 className="media-heading">Bret Lezama</h6>
-                                                        <p className="notification-text font-small-3 text-muted">I have seen your work, there is</p><small>
-                                                            <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Tuesday</time></small>
-                                                    </div>
-                                                </div></a><a href="!#">
+                                            <div className="media">
+                                                <div className="media-left"><span className="avatar avatar-sm avatar-busy rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-2.png" alt="avatar" /><i></i></span></div>
+                                                <div className="media-body">
+                                                    <h6 className="media-heading">Bret Lezama</h6>
+                                                    <p className="notification-text font-small-3 text-muted">I have seen your work, there is</p><small>
+                                                        <time className="media-meta text-muted" dateTime="2015-06-11T18:29:20+08:00">Tuesday</time></small>
+                                                </div>
+                                            </div></a><a href="!#">
                                                 <div className="media">
                                                     <div className="media-left"><span className="avatar avatar-sm avatar-online rounded-circle"><img src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="avatar" /><i></i></span></div>
                                                     <div className="media-body">
@@ -198,20 +208,20 @@ class Navigation extends Component {
         );
     }
 }
-const mapStateToProps = (state) =>{
+const mapStateToProps = (state) => {
     return {
         userContext: state.profile
     }
 }
-const mapDispatchToProps = (dispatch, props) =>{
+const mapDispatchToProps = (dispatch, props) => {
     return {
-        setUserContext: (username, roleName) =>{
+        setUserContext: (username, roleName) => {
             dispatch(actions.setUserContext(username, roleName));
         },
-        deleteUserContext: () =>{
+        deleteUserContext: () => {
             dispatch(actions.deleleUserContext());
         }
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Navigation));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navigation));
