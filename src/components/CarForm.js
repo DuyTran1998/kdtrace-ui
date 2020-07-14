@@ -84,7 +84,6 @@ class CarForm extends Component {
                                 <option value="ISUZU">ISUZU</option>
                                 <option value="SUZUKI">SUZUKI</option>
                                 <option value="MITSUBISHI">MITSUBISHI</option>
-                                <option value="NISSAN,">NISSAN</option>
                             </select>
                         </div>
                     </div>

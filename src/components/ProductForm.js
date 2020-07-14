@@ -45,7 +45,7 @@ class ProductForm extends Component {
         }).then(response => response.json())
             .then(res => {
                 console.log(res);
-                this.handleCloseAlert();
+                this.handleCloseProgress();
                 if(res.status === 200){
                     this.props.handleOpenAlert('success');
                     this.props.handleClose();
