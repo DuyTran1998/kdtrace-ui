@@ -14,9 +14,9 @@ class DistributorMenu extends Component {
                 
                 <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/market" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Market</span></Link></li>
                 
-                <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/message" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">WareHouse</span></Link></li>
+                <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/warehouse" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">WareHouse</span></Link></li>
 
-                <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/message" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Messages</span></Link></li>
+                {/* <li className="dropdown nav-item" ><Link className="dropdown-toggle nav-link" to="/message" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Messages</span></Link></li> */}
 
                 <li className="dropdown nav-item" ><a className="dropdown-toggle nav-link" target='_blank' href="http://explorer.kdtrace.xyz/?fbclid=IwAR2UKn2zrVwN32m02dcIGCLYqv6c4BROrVl0R4dOuidcqljxEkWsG-g0pfQ#/" ><i className="icon-drawer"></i><span data-i18n="nav.layouts.temp">Blockchain System</span></a></li>
              

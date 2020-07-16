@@ -88,27 +88,6 @@ class Transactions extends Component {
                                                             </table>
                                                         </div>
                                                     </div>
-                                                    <nav aria-label="Page navigation">
-                                                        <ul className="pagination justify-content-center pagination-round">
-                                                            <li className="page-item">
-                                                                <a className="page-link" href="#" aria-label="Previous">
-                                                                    <span aria-hidden="true">«</span>
-                                                                    <span className="sr-only">Previous</span>
-                                                                </a>
-                                                            </li>
-                                                            <li className="page-item active"><a className="page-link" href="?">1</a></li>
-                                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                                            <li className="page-item"><a className="page-link" href="#">4</a></li>
-                                                            <li className="page-item"><a className="page-link" href="#">5</a></li>
-                                                            <li className="page-item">
-                                                                <a className="page-link" href="#" aria-label="Next">
-                                                                    <span aria-hidden="true">»</span>
-                                                                    <span className="sr-only">Next</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </nav>
                                                 </div>
                                                 :
                                                 this.state.loading === true ?
@@ -121,7 +100,6 @@ class Transactions extends Component {
                                                         <h3>Don't have transactions!</h3>
                                                     </div>
                                         }
-
                                     </div>
                                 </div>
                             </div>

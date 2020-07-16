@@ -274,7 +274,7 @@ class TransactionDetails extends Component {
     }
 
     render() {
-        console.log(this.state.deliveryTruckModel);
+        console.log(this.state.qrCodeList);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -421,9 +421,9 @@ class TransactionDetails extends Component {
                                                                                 <ul className="list-unstyled mt-2 mb-2">
                                                                                     <li>Phone: {this.state.transportModel.phone}</li>
                                                                                     <li>Email: {this.state.transportModel.email}</li>
-                                                                                    <li>Website:
-                                                                                    <a href={this.state.producerModel.website} target='_blank'>
-                                                                                            {this.state.producerModel.website}
+                                                                                    <li>Website: 
+                                                                                    <a href={this.state.transportModel.website} target='_blank'>
+                                                                                             {this.state.transportModel.website}
                                                                                         </a></li>
                                                                                     <li>Address: {this.state.transportModel.address}</li>
                                                                                 </ul>

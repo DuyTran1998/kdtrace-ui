@@ -71,6 +71,8 @@ export const API_GET_ALL_TRANSACTION_BY_TRANSPORT = "https://kdtrace.xyz/api/pro
 
 export const API_DELETE_TRANSACTION = "https://kdtrace.xyz/api/process/delete?id=";
 
+export const API_WAREHOUSE = "https://kdtrace.xyz/api/process/getAllForWarehouse";
+
 // -----------------------------------------------------------------------------------------------------------------------------
 
 // export const API_GET_USER_CONTEXT = "http://localhost:8080/api/getUserLogged";

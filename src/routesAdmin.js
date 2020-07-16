@@ -8,6 +8,7 @@ import Market from './components/Market';
 import PrivateRoute from './components/PrivateRoute';
 import TransactionDetails from './components/TransactionDetails';
 import TransactionComponent from './components/TransactionComponent'
+import Warehouse from './components/Warehouse';
 
 const routes = [
     {
@@ -49,6 +50,11 @@ const routes = [
         path : '/market',
         exact : false,
         component : Market,
+    },
+    {
+        path : '/warehouse',
+        exact : false,
+        component : Warehouse,
     },
     {
         path : '/transactions',
