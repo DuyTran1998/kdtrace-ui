@@ -30,6 +30,7 @@ class TransactionDetails extends Component {
             distributorModel: {},
             transportModel: {},
             producerModel: {},
+            productModel: {},
             open: false,
             error: '',
             role: '',
@@ -53,7 +54,6 @@ class TransactionDetails extends Component {
         const token = localStorage.getItem('token');
         const url = API_GET_TRANSACTION + id;
         this.getData(url, token);
-        console.log(this.state.statusProcess);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,7 +64,6 @@ class TransactionDetails extends Component {
     }
 
     getDataForSelect(url, token, listName) {
-        console.log(url);
         fetch(url, {
             method: "GET",
             headers: {
@@ -76,7 +75,6 @@ class TransactionDetails extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 if (listName === 'listTransportCompany') {
                     this.setState({
                         listTransportCompany: res.result,
@@ -87,7 +85,6 @@ class TransactionDetails extends Component {
                         listTruckCar: res.result,
                     })
                 }
-                console.log(this.state);
             })
             .catch(error => {
                 this.setState({
@@ -108,7 +105,6 @@ class TransactionDetails extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 this.setState({
                     id: res.result.id,
                     productID: res.result.productID,
@@ -117,6 +113,7 @@ class TransactionDetails extends Component {
                     deliveryTruckModel: res.result.deliveryTruckModel,
                     transportModel: res.result.transportModel,
                     producerModel: res.result.producerModel,
+                    productModel: res.result.productModel,
                     qrCodeList: res.result.qrCodeModels,
                     create_at: res.result.create_at,
                 }, () => {
@@ -128,7 +125,6 @@ class TransactionDetails extends Component {
                         this.getDataForSelect(API_GET_ALL_CAR_AVAILABLE, token, 'listTruckCar');
                     }
                 })
-                console.log(this.state);
             })
             .catch(error => {
                 this.setState({
@@ -137,7 +133,7 @@ class TransactionDetails extends Component {
             })
     }
 
-    postData(url, token) {
+    postData(url, token, reload) {
         this.setState({ progress: true });
         fetch(url, {
             method: "POST",
@@ -152,23 +148,31 @@ class TransactionDetails extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 if (res.status === 200) {
                     this.handleClosePopup();
                     this.handleOpenAlert('success', res.message);
                     this.getData(API_GET_TRANSACTION + this.props.match.params.id, token);
-                }else{
+                    if (reload) {
+                        window.location.reload();
+                    }
+                } else {
                     this.handleOpenAlert('fail', res.message);
                 }
             })
             .catch(error => {
                 this.handleClosePopup();
-                console.log(error);
                 this.setState({
                     error: error,
                 })
             })
     }
+    handleClickDeleteProcess = () => {
+        const url = API_DELETE_TRANSACTION + this.state.id;
+        const token = localStorage.getItem('token');
+        this.postData(url, token, true);
+        history.push('/dashboard');
+    }
+
     handleClosePopup = e => {
         this.setState({ progress: false, alertSuccess: false, alertFail: false });
     }
@@ -196,7 +200,7 @@ class TransactionDetails extends Component {
     handleClickRejectToShell = (e) => {
         const api = API_REJECT_TO_SHELL_TRANSACTION + this.state.id;
         const token = localStorage.getItem('token');
-        this.postData(api, token)
+        this.postData(api, token, true)
         history.push('../transactions');
     }
 
@@ -209,10 +213,30 @@ class TransactionDetails extends Component {
 
     handleOnChangeSelect = (e) => {
         const { name, value } = e.target;
-        console.log(name);
-        this.setState({
-            [name]: value,
-        })
+        if (name === 'id_transport') {
+            this.state.listTransportCompany.forEach(transport => {
+                if (transport.id == value) {
+                    this.setState({
+                        transportModel: transport
+                    })
+                }
+            });
+            if (value === 'none') {
+                this.setState({
+                    transportModel: null
+                })
+            }
+        }
+        if (value === 'none') {
+            this.setState({
+                [name]: 0,
+            })
+        } else {
+            this.setState({
+                [name]: value,
+            })
+        }
+
     }
 
     handleOnSubmit = () => {
@@ -233,7 +257,8 @@ class TransactionDetails extends Component {
     handleOnRejectToDelivery = () => {
         const url = API_REJECT_TO_DELIVERY + this.state.id;
         const token = localStorage.getItem('token');
-        this.postData(url, token);
+        this.postData(url, token, true);
+        history.push('../transactions');
     }
 
     handleOnSubmitToConfirmTheGoodIsGotten = () => {
@@ -249,7 +274,6 @@ class TransactionDetails extends Component {
     }
 
     render() {
-        console.log(this.state.id_truck);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -292,18 +316,18 @@ class TransactionDetails extends Component {
                                                                     : null
                                                             }
                                                             {
-                                                                this.state.statusProcess === 'ON_BOARDING_REVEIVE' ?
+                                                                this.state.statusProcess === 'ON_BOARDING_RECEIVE' ?
                                                                     <span className="badge badge-info">{this.state.statusProcess}</span>
                                                                     : null
                                                             }
                                                             {
-                                                                this.state.statusProcess === 'REVEIVED' ?
+                                                                this.state.statusProcess === 'RECEIVED' ?
                                                                     <span className="badge badge-success">{this.state.statusProcess}</span>
                                                                     : null
                                                             }
                                                             {
                                                                 this.state.statusProcess === 'TRANSPORT_REJECT' ?
-                                                                    <span class="badge badge-warning">{this.state.statusProcess}</span>
+                                                                    <span className="badge badge-warning">{this.state.statusProcess}</span>
                                                                     : null
                                                             }
                                                         </h4>
@@ -326,20 +350,13 @@ class TransactionDetails extends Component {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                {/* <td>{this.state.id}</td>
-                                                <td>{this.state.productName}</td>
-                                                <td>{this.state.type}</td>
-                                                <td>{this.state.quantity}</td>
-                                                <td>{this.state.unit}</td>
-                                                <td>{this.state.mfg}</td>
-                                                <td>{this.state.exp}</td> */}
-                                                <td>1</td>
-                                                <td>Khoai Môn</td>
-                                                <td>Vegetables</td>
-                                                <td>10</td>
-                                                <td>KGS</td>
-                                                <td>20/11/2020</td>
-                                                <td>30/11/2020</td>
+                                                <td>{this.state.productModel.id}</td>
+                                                <td>{this.state.productModel.name}</td>
+                                                <td>{this.state.productModel.type}</td>
+                                                <td>{this.state.productModel.quantity}</td>
+                                                <td>{this.state.productModel.unit}</td>
+                                                <td>{this.state.productModel.mfg}</td>
+                                                <td>{this.state.productModel.exp}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -420,14 +437,13 @@ class TransactionDetails extends Component {
                                                                         (this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' || this.state.statusProcess === 'TRANSPORT_REJECT') && this.state.role === 'ROLE_DISTRIBUTOR'
                                                                             ?
                                                                             <div>
-                                                                                <select id="projectinput6" name="id_transport" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_transport}>
+                                                                                <select id="projectinput6" name="id_transport" className="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_transport} >
                                                                                     <option value="none" disabled="">Choose Transport Company</option>
                                                                                     {
                                                                                         Array.isArray(this.state.listTransportCompany)
                                                                                         && this.state.listTransportCompany.map(transport => {
-                                                                                            console.log(transport);
                                                                                             return (
-                                                                                                <option key={transport.id} value={transport.id} >{transport.companyName}</option>
+                                                                                                <option key={transport.id} value={transport.id}>{transport.companyName}</option>
                                                                                             );
                                                                                         })
                                                                                     }
@@ -442,7 +458,7 @@ class TransactionDetails extends Component {
                                                                         this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT' && this.state.role === 'ROLE_TRANSPORT'
                                                                             ?
                                                                             <div>
-                                                                                <select id="projectinput6" name="id_truck" class="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_truck}>
+                                                                                <select id="projectinput6" name="id_truck" className="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_truck}>
                                                                                     <option value="none" disabled="">Choose Car To Delivery</option>
                                                                                     {
                                                                                         Array.isArray(this.state.listTruckCar)
@@ -496,7 +512,7 @@ class TransactionDetails extends Component {
                                                                         <li>Address: {this.state.distributorModel.address}</li>
                                                                     </ul>
                                                                     {
-                                                                        this.state.statusProcess === 'ON_BOARDING_REVEIVE' && this.state.role === 'ROLE_DISTRIBUTOR'
+                                                                        this.state.statusProcess === 'ON_BOARDING_RECEIVE' && this.state.role === 'ROLE_DISTRIBUTOR'
                                                                             ?
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-info"
@@ -505,6 +521,26 @@ class TransactionDetails extends Component {
                                                                         </button>
                                                                             :
                                                                             null
+                                                                    }
+                                                                    {
+                                                                        this.state.statusProcess === 'PRODUCER_REJECT' && this.state.role === "ROLE_DISTRIBUTOR"
+                                                                            ?
+                                                                            <button type="button"
+                                                                                className="btn btn-lg btn-block btn-danger"
+                                                                                onClick={this.handleClickDeleteProcess}>
+                                                                                Delete Transaction
+                                                                        </button>
+                                                                            : null
+                                                                    }
+                                                                    {
+                                                                        this.state.statusProcess === 'WAITING_RESPONSE_PRODUCER' && this.state.role === "ROLE_DISTRIBUTOR"
+                                                                            ?
+                                                                            <button type="button"
+                                                                                className="btn btn-lg btn-block btn-danger"
+                                                                                onClick={this.handleClickDeleteProcess}>
+                                                                                Delete Transaction
+                                                                        </button>
+                                                                            : null
                                                                     }
                                                                 </div>
                                                             </div>
@@ -523,7 +559,7 @@ class TransactionDetails extends Component {
                                                 </div>
                                                 <div className="card-content collapse show">
                                                     <div className="card-body card-dashboard">
-                                                        <table className="table table-striped table-bordered zero-configuration">
+                                                        <table className="table table-striped table-bordered zero-configuration" style={{borderRightWidth:'0px', borderLeftWidth:'0px'}}>
                                                             <thead>
                                                                 <tr>
                                                                     <th>Id</th>
@@ -543,15 +579,6 @@ class TransactionDetails extends Component {
                                                                     })
                                                                 }
                                                             </tbody>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th>Id</th>
-                                                                    <th>Code</th>
-                                                                    <th>Ower</th>
-                                                                    <th>Status</th>
-                                                                    <th>QRCode</th>
-                                                                </tr>
-                                                            </tfoot>
                                                         </table>
                                                     </div>
                                                 </div>

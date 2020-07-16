@@ -20,7 +20,7 @@ class ProductRecord extends Component {
                 <td className="ProductRecord_Unit">{this.props.product.unit}</td>
                 <td className="ProductRecord_Mfg">{this.props.product.mfg}</td>
                 <td className="ProductRecord_Exp">{this.props.product.exp}</td>
-                <td className="ProductRecord_Details"><Link to={href}>Link</Link></td>
+                <td className="ProductRecord_Details"><Link to={href}>Details</Link></td>
             </tr>
         )
     }

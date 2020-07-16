@@ -36,7 +36,6 @@ class ProductDetail extends Component {
             },
         }).then(response => response.json())
             .then(jsonResponse => {
-                console.log(jsonResponse);
                 this.setState({
                     id: jsonResponse.result.id,
                     productName: jsonResponse.result.name,
@@ -47,7 +46,6 @@ class ProductDetail extends Component {
                     exp: jsonResponse.result.exp,
                     codes: jsonResponse.result.codes,
                 })
-                console.log(this.state);
             })
     }
 
@@ -77,13 +75,11 @@ class ProductDetail extends Component {
         this.setState({ alertSuccess: false, alertFail: false });
     }
     render() {
-        console.log(this.props);
         const qrCodeList = this.state.codes.map(code => {
             return (
                 <QRCodeRecord key={code.id} code={code}></QRCodeRecord>
             );
         })
-        console.log(this.props.userContext.role);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -93,14 +89,14 @@ class ProductDetail extends Component {
                                 <div className="col-12">
                                     <div className="card">
                                         <div className="card-header">
-                                            <h4 className="card-title"><i class="fa fa-eye"></i>Product Management</h4>
+                                            <h4 className="card-title"><i className="fa fa-eye"></i>Product Management</h4>
                                             {
                                                 this.props.userContext.role === 'ROLE_DISTRIBUTOR'
                                                     ?
                                                     <div className="content-header-right col-12">
                                                         <div className="btn-group float-md-right">
                                                             <button className="btn btn-info btn-min-width mr-1 mb-1 ladda-button" data-style="zoom-in" onClick={this.handleOpenDialog}>
-                                                                <span class="ladda-label">Create Transaction</span>
+                                                                <span className="ladda-label">Create Transaction</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -108,7 +104,7 @@ class ProductDetail extends Component {
                                                     : null
                                             }
                                         </div>
-                                        <table class="table">
+                                        <table className="table">
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
@@ -150,15 +146,6 @@ class ProductDetail extends Component {
                                                     <tbody>
                                                         {qrCodeList}
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Code</th>
-                                                            <th>Ower</th>
-                                                            <th>Status</th>
-                                                            <th>QRCode</th>
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

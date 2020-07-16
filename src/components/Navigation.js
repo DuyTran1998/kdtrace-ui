@@ -32,12 +32,9 @@ class Navigation extends Component {
                 }
             })
                 .then(response => {
-                    console.log({ response });
                     if (response.ok) {
-                        console.log("voooo");
                         return response.json();
-                    } else {
-                        console.log("ra");
+                    } else {    
                         this.handleLogout();
                     }
                 })

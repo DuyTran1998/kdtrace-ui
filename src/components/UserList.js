@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import UserRecord from './UserRecord';
 import { withRouter } from 'react-router-dom';
-import {API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT} from '../constants/API/api';
+import { API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT } from '../constants/API/api';
 import { Link } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 class UserList extends Component {
     constructor(props) {
         super(props)
         this.state = {
             userList: [],
             page: 1,
+            alertMessage: '',
+            alertSuccess: false,
+            alertFail: false,
         }
     }
     componentDidMount() {
@@ -21,7 +26,7 @@ class UserList extends Component {
         }
         this.getAllUser(localStorage.getItem('token'));
     }
-    getAllUser(token) {
+    getAllUser = (token) => {
         const url = API_GET_ALL_USER;
         fetch(url, {
             method: "GET",
@@ -35,7 +40,7 @@ class UserList extends Component {
             })
     }
 
-    activeAccountUser(id) {
+    activeAccountUser = (id) => {
         const token = localStorage.getItem('token');
         let url = API_ACTIVE_USER_ACCOUNT + id;
         fetch(url, {
@@ -46,39 +51,52 @@ class UserList extends Component {
         })
             .then(response => response.json())
             .then(jsonResponse => {
-                console.log(jsonResponse);
+                if (jsonResponse.status === 200) {
+                    this.handleOpenAlert('success', jsonResponse.message)
+                } else {
+                    this.handleOpenAlert('fail', jsonResponse.message)
+                }
             })
     }
-    increatePage = () =>{
+    increatePage = () => {
         let newPageNum = this.state.page + 1;
         this.setState({
             page: newPageNum
         })
     }
 
-    decreatePage = () =>{
+    decreatePage = () => {
         let newPageNum = this.state.page;
-        console.log(newPageNum);
-        if(newPageNum > 1){
-            console.log(this.state.page);
+        if (newPageNum > 1) {
             this.setState({
                 page: newPageNum - 1
             })
         }
     }
 
-    pagation(list, page){
-        if(list.length < 10){
+    pagation = (list, page) => {
+        if (list.length < 10) {
             return list;
         }
-        const newlist = list.slice(page*10 -10, page*10);
+        const newlist = list.slice(page * 10 - 10, page * 10);
         return newlist;
     }
 
+    handleOpenAlert = (flag, message) => {
+        if (flag === 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag === 'fail') {
+            this.setState({ alertFail: true });
+        }
+        this.setState({ alertMessage: message });
+    }
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false });
+    }
+
     render() {
-        console.log(this.props.param)
         const list = this.pagation(this.state.userList, this.state.page);
-        console.log(list);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -114,28 +132,18 @@ class UserList extends Component {
                                                             })
                                                         }
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Username</th>
-                                                            <th>Email</th>
-                                                            <th>Role</th>
-                                                            <th>Create date</th>
-                                                            <th>Active</th>
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
                                         <div className="content-header-right col-12">
                                             <div className="btn-group float-md-right">
-                                                <div class="float-right my-1">
-                                                    <ul class="pager pager-round">
+                                                <div className="float-right my-1">
+                                                    <ul className="pager pager-round">
                                                         <li>
-                                                            <Link to={'?page=' + ( this.state.page - 1 )} onClick={this.decreatePage}><i class="ft-arrow-left"></i> Previous</Link>
+                                                            <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
                                                         </li>
                                                         <li>
-                                                            <Link to={'?page=' + ( this.state.page + 1 )} onClick={this.increatePage}>Next <i class="ft-arrow-right"></i></Link>
+                                                            <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -147,6 +155,14 @@ class UserList extends Component {
                         </section>
                     </div>
                 </div>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
+                </Snackbar>
             </div>
         );
     }

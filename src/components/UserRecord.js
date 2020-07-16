@@ -16,7 +16,6 @@ class UserRecord extends Component {
     }
     handleChange = e => {
         let value = e.target.checked;
-        console.log(this.state.isChecked);
         this.setState({ 'isChecked': value });
         this.props.onChange(this.props.user.id);
     }
@@ -27,7 +26,7 @@ class UserRecord extends Component {
                 <td className="UserRecord_UserName">{this.props.user.username}</td>
                 <td className="UserRecord_Email">{this.props.user.email}</td>
                 <td className="UserRecord_Role">{this.props.user.role.roleName}</td>
-                <td className="UserReCord_CreateAt">2011/04/25</td>
+                <td className="UserReCord_CreateAt">{this.props.user.createAt}</td>
                 <td className="UserRecord_Active" style={tdStyle}>
                     <Switch
                         checked={this.state.isChecked}

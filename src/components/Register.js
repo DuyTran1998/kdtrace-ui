@@ -35,7 +35,6 @@ class Register extends Component {
             email: this.state.email,
             roleName: this.state.roleName,
         };
-        console.log(registerModel);
         fetch(API_REGISTER, {
             method: "POST",
             body: JSON.stringify(registerModel),
@@ -47,13 +46,16 @@ class Register extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(jsonResponse => {
-                console.log(jsonResponse);
                 this.setState({ 'message': jsonResponse.message });
                 this.setState({ 'status': jsonResponse.status });
                 if(this.state.status === 200){
                     this.handleOpenAlert('success');
                 }
-                else{
+                else if(this.state.status === 400){
+                    this.setState({ 'message': 'Invalid input' });
+                    this.handleOpenAlert('fail');
+                }
+                else {
                     this.handleOpenAlert('fail');
                 }
             })
@@ -144,13 +146,13 @@ class Register extends Component {
                         </div>
                     </div>
                 </div>
-                <Snackbar open={this.state.alertSuccess} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                    <Alert severity="success" style={{ fontSize: '15px' }}>Register Successfully!</Alert>
+                <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
                 </Snackbar>
-                <Snackbar open={this.state.alertFail} onClose={this.handleClose}
-                    autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
-                    <Alert severity="error" style={{ fontSize: '15px' }}>Fail to register, refill again!!</Alert>
+                <Snackbar open={this.state.alertFail} onClose={this.handleCloseAlert}
+                    autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+                    <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
                 </Snackbar>
             </div>
         );

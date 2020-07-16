@@ -326,6 +326,10 @@ pre code
 {
     padding: .75rem 2rem;
 }
+.custom-small-padding.table td, .custom-small-padding.table th {
+    padding: .75rem 0.7rem;
+}
+
 
 .table.table-xl th,
 .table.table-xl td

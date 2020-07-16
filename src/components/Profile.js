@@ -46,7 +46,6 @@ class Profile extends Component {
             token: localStorage.getItem('token')
         })
         if (role === 'ROLE_PRODUCER') {
-            console.log(this.state.token);
             this.getProfileCompany(API_GET_PROFILE_PRODUCER, token);
         }
         if (role === 'ROLE_TRANSPORT') {
@@ -58,8 +57,6 @@ class Profile extends Component {
     }
 
     getProfileCompany(url, token) {
-        console.log(url);
-        console.log(token);
         fetch(url, {
             method: "GET",
             headers: {
@@ -71,7 +68,6 @@ class Profile extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 this.setState({
                     id: res.result.id,
                     companyName: res.result.companyName,
@@ -95,7 +91,6 @@ class Profile extends Component {
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
-        console.log(this.state);
     }
 
     handleSubmit = e => {
@@ -126,7 +121,6 @@ class Profile extends Component {
             website: this.state.website,
             tin: this.state.tin
         }
-        console.log(profile);
         fetch(url, {
             method: "PATCH",
             body: JSON.stringify(profile),
@@ -140,7 +134,6 @@ class Profile extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 if(res.status === 200){
                     this.setState({
                         disable: true

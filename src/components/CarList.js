@@ -61,7 +61,6 @@ class CarList extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
-                console.log(res);
                 this.setState({
                     cars: res.result,
                 })
@@ -118,15 +117,6 @@ class CarList extends Component {
                                                             })
                                                         }
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Number Plate</th>
-                                                            <th>Type</th>
-                                                            <th>Status</th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

@@ -6,6 +6,7 @@ import {
 } from '../constants/API/api';
 import TransactionRecord from './TransactionRecord'
 import { connect } from 'react-redux';
+import { CircularProgress } from '@material-ui/core';
 
 class TransactionComponent extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class TransactionComponent extends Component {
             listTransactions: [],
             token: '',
             role: '',
+            loading: true,
         }
     }
     componentDidMount() {
@@ -47,6 +49,9 @@ class TransactionComponent extends Component {
     }
 
     getData(url, token) {
+        this.setState({
+            loading: true
+        })
         fetch(url, {
             method: "GET",
             headers: {
@@ -55,13 +60,15 @@ class TransactionComponent extends Component {
             },
         }).then(res => res.json())
             .then(res => {
+                this.setState({
+                    loading: false
+                })
                 if (res.error) {
                     throw (res.error);
                 }
                 this.setState({
                     listTransactions: res.result,
                 })
-                console.log(this.state.listTransactions);
             })
             .catch(error => {
                 this.setState({
@@ -86,14 +93,15 @@ class TransactionComponent extends Component {
                                             this.state.listTransactions.length !== 0 ?
                                                 <div className="card-content collapse show">
                                                     <div className="card-body card-dashboard">
-                                                        <table className="table table-striped table-bordered zero-configuration">
+                                                        <table className="custom-small-padding table table-striped table-bordered zero-configuration" >
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Transaction_Id</th>
-                                                                    <th>Product_Name</th>
+                                                                    <th>Transaction Id</th>
+                                                                    <th>Product Name</th>
                                                                     <th>Quantity</th>
-                                                                    <th>Status_Process</th>
-                                                                    <th>Create_At</th>
+                                                                    <th>Status Process</th>
+                                                                    <th>Last Update</th>
+                                                                    <th>Create Time</th>
                                                                     <th>Details</th>
 
                                                                 </tr>
@@ -112,14 +120,15 @@ class TransactionComponent extends Component {
                                                     </div>
                                                 </div>
                                                 :
-                                                <div>
-                                                    <h1 style={{
-                                                        textAlign: "center",
-                                                        marginTop: 20
-                                                    }}>
-                                                        Don't have transactions!
-                                                     </h1>
-                                                </div>
+                                                this.state.loading === true ?
+                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                        <CircularProgress color="primary" />
+                                                    </div>
+                                                    :
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                        <h3>Don't have transactions!</h3>
+                                                    </div>
                                         }
                                     </div>
                                 </div>

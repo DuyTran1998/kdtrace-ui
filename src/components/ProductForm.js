@@ -30,7 +30,6 @@ class ProductForm extends Component {
             type: this.state.type,
             unit: this.state.unit
         }
-        console.log(productModel);
 
         const token = localStorage.getItem('token');
         fetch(API_CREATE_PRODUCT, {
@@ -44,7 +43,6 @@ class ProductForm extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(res => {
-                console.log(res);
                 this.handleCloseProgress();
                 if(res.status === 200){
                     this.props.handleOpenAlert('success');

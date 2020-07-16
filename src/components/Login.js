@@ -79,7 +79,6 @@ class Login extends Component {
             })
             .catch(error => {
                 this.handleOpenAlert('fail');
-                console.log(error);
             })
         e.preventDefault();
     }

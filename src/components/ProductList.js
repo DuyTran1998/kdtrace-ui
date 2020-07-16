@@ -20,10 +20,8 @@ class ProductList extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.location);
         const url = API_GET_ALL_PRODUCT;
         const token = localStorage.getItem('token');
-        console.log(token);
         fetch(url, {
             method: "GET",
             headers: {
@@ -33,7 +31,6 @@ class ProductList extends Component {
         }).then(response => response.json())
             .then(jsonResponse => {
                 this.setState({ productList: jsonResponse.result });
-                console.log(this.state.productList);
             })
     }
 
@@ -71,7 +68,6 @@ class ProductList extends Component {
     decreatePage = () =>{
         let newPageNum = this.state.page;
         if(newPageNum > 1){
-            console.log(this.state.page);
             this.setState({
                 page: newPageNum - 1
             })
@@ -125,18 +121,6 @@ class ProductList extends Component {
                                                         <tbody>
                                                             {productList}
                                                         </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th>Id</th>
-                                                                <th>Product Name</th>
-                                                                <th>Type</th>
-                                                                <th>Quantity</th>
-                                                                <th>Unit</th>
-                                                                <th>Manufacture Date</th>
-                                                                <th>Expiration Date</th>
-                                                                <th>Details</th>
-                                                            </tr>
-                                                        </tfoot>
                                                     </table>
                                                     :
                                                     null
@@ -169,13 +153,13 @@ class ProductList extends Component {
                                         </Snackbar>
                                         <div className="content-header-right col-12">
                                             <div className="btn-group float-md-right">
-                                                <div class="float-right my-1">
-                                                    <ul class="pager pager-round">
+                                                <div className="float-right my-1">
+                                                    <ul className="pager pager-round">
                                                         <li>
-                                                            <Link to={'?page=' + ( this.state.page - 1 )} onClick={this.decreatePage}><i class="ft-arrow-left"></i> Previous</Link>
+                                                            <Link to={'?page=' + ( this.state.page - 1 )} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
                                                         </li>
                                                         <li>
-                                                            <Link to={'?page=' + ( this.state.page + 1 )} onClick={this.increatePage}>Next <i class="ft-arrow-right"></i></Link>
+                                                            <Link to={'?page=' + ( this.state.page + 1 )} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
                                                         </li>
                                                     </ul>
                                                 </div>

@@ -14,7 +14,7 @@ class TransactionRecord extends Component {
         return (
              <tr className="TransactionRecord">
                 <td className="Transaction">{this.props.transaction.id}</td>
-                <td className="Transaction">{this.props.transaction.productID}</td>
+                <td className="Transaction">{this.props.transaction.productModel.name}</td>
                 <td className="Transaction">{this.props.transaction.quanlity}</td>
                 <td className="Transaction">
                     {
@@ -24,7 +24,7 @@ class TransactionRecord extends Component {
                     }
                     {
                         this.props.transaction.statusProcess === 'WAITING_RESPONSE_PRODUCER' ?
-                        <h4><span className="badge" style={{backgroundColor: 'steelblue'}}>{this.props.transaction.statusProcess}</span></h4>
+                        <h4><span className="badge" style={{backgroundColor: 'palevioletred'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
@@ -43,12 +43,12 @@ class TransactionRecord extends Component {
                         : null
                     }
                     {
-                        this.props.transaction.statusProcess === 'ON_BOARDING_REVEIVE' ?
+                        this.props.transaction.statusProcess === 'ON_BOARDING_RECEIVE' ?
                         <h4><span className="badge" style={{backgroundColor: 'mediumorchid'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
                     {
-                        this.props.transaction.statusProcess === 'REVEIVED' ?
+                        this.props.transaction.statusProcess === 'RECEIVED' ?
                         <h4><span className="badge" style={{backgroundColor: 'mediumaquamarine'}}>{this.props.transaction.statusProcess}</span></h4>
                         : null
                     }
@@ -58,6 +58,7 @@ class TransactionRecord extends Component {
                         : null
                     }
                 </td>
+                <td className="Transaction">{this.props.transaction.updateAt}</td>
                 <td className="Transaction">{this.props.transaction.create_at}</td>
                 <td className="Transaction">
                     <Link to={link}><span className="ladda-label">View Details</span></Link>

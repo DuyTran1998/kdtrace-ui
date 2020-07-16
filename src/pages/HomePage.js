@@ -18,7 +18,6 @@ class HomePage extends Component {
                 role: this.props.userContext.role
             })
         }
-        console.log(this.state.role);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -26,7 +25,6 @@ class HomePage extends Component {
         })
     }
     render() {
-        console.log(this.props);
         return (
             <div>
                 {

@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import Navigation from './components/Navigation';
 import Menu from './components/Menu';
-//import routes from './routes';
 import routesAdmin from './routesAdmin';
 import history from './utils/@history';
 class App extends Component {
@@ -28,7 +27,6 @@ class App extends Component {
         history.push('/login');
       }
       window.onstorage = (e) => {
-        console.log('event storage')
         if (e.key === 'token') {
           this.setState({ token: e.newValue });
         }
@@ -56,7 +54,6 @@ class App extends Component {
       return result;
     }
     const { token } = this.state;
-    console.log("token", token);
     return (
       <Router history={history}>
         {

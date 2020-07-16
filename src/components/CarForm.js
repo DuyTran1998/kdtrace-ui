@@ -27,10 +27,8 @@ class CarForm extends Component {
             autoMaker: this.state.type,
             statusDeliveryTruck: "AVAILABLE"
         }
-        console.log(JSON.stringify(carModel));
 
         const token = localStorage.getItem('token');
-        console.log(token);
         fetch(API_CREATE_CAR, {
             method: "POST",
             body: JSON.stringify(carModel),
@@ -42,7 +40,6 @@ class CarForm extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(res => {
-                console.log(res);
                 if(res.status === 201){
                     this.setState({
                         numberPlate: ''
@@ -63,18 +60,18 @@ class CarForm extends Component {
             <form className="form" onSubmit={this.handleSubmit}>
                 <div className="form-body">
 
-                    <div class="form-group row">
-                        <label class="col-md-3 label-control" htmlfor="eventRegInput1">Number Plate</label>
-                        <div class="col-md-9">
+                    <div className="form-group row">
+                        <label className="col-md-3 label-control" htmlfor="eventRegInput1">Number Plate</label>
+                        <div className="col-md-9">
                             <input type="text" id="eventRegInput1" className="form-control" placeholder="Ex: 74A1-060.79" name="numberPlate" 
                             required onChange={this.handleChange} maxlength="10"
                             data-validation-maxlength-message="The number plate just have maxium 10 characters!"/>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-md-3 label-control" htmlfor="eventRegInput2">Type</label>
-                        <div class="col-md-9">
+                    <div className="form-group row">
+                        <label className="col-md-3 label-control" htmlfor="eventRegInput2">Type</label>
+                        <div className="col-md-9">
                             <select id="issueinput5" name="type" onChange={this.handleChange} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
                                 <option value="TOYOTA">TOYOTA</option>
                                 <option value="CHEVROLET">CHEVROLET</option>

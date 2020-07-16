@@ -24,7 +24,6 @@ class Menu extends Component {
         })
     }
     render() {
-        console.log("Menuuuuuuuu");
         return (
             <div>
                 {

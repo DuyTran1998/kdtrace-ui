@@ -75,18 +75,6 @@ class Market extends Component {
                                                             })
                                                         }
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Product Name</th>
-                                                            <th>Type</th>
-                                                            <th>Quantity</th>
-                                                            <th>Unit</th>
-                                                            <th>Manufacture Date</th>
-                                                            <th>Expiration Date</th>
-                                                            <th>Details</th>
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

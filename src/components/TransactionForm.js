@@ -25,7 +25,6 @@ class TransactionForm extends Component {
             id_product: this.props.product.id,
             quantity: this.state.quantity,
         }
-        console.log(transactionModel);
 
         const token = localStorage.getItem('token');
         fetch(API_CREATE_TRANSACTION, {
@@ -111,7 +110,7 @@ class TransactionForm extends Component {
                         <i className="ft-x"></i> Cancel
 								        </button>
                     <button type="submit" className="btn btn-primary">
-                        <i className="fa fa-check-square-o"></i> Save
+                        <i className="fa fa-check-square-o"></i> Submit
 					</button>
                 </div>
                 <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
