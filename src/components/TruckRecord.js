@@ -8,7 +8,6 @@ class TruckRecord extends Component {
                 <td className="TruckRecord">{this.props.truck.numberPlate}</td>
                 <td className="TruckRecord">{this.props.truck.autoMaker}</td>
                 <td className="TruckRecord">{this.props.truck.statusDeliveryTruck}</td>
-                <td className="TruckRecord"></td>
             </tr>
         );
     }

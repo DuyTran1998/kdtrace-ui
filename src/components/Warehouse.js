@@ -54,7 +54,7 @@ class Warehouse extends Component {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-header">
-                                        <h4 className="card-title">Transactions Management</h4>
+                                        <h4 className="card-title">WareHouse</h4>
                                         <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                     </div>
                                     {

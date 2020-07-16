@@ -59,10 +59,12 @@ class UserList extends Component {
             })
     }
     increatePage = () => {
-        let newPageNum = this.state.page + 1;
-        this.setState({
-            page: newPageNum
-        })
+        if(this.state.userList.length /(this.state.page*10) > 1){
+            let newPageNum = this.state.page + 1;
+            this.setState({
+                page: newPageNum
+            })
+        }
     }
 
     decreatePage = () => {
