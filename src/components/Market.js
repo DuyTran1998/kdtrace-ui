@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import {API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR} from '../constants/API/api';
+import { API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR } from '../constants/API/api';
 import Product from './ProductInMarket'
+import { CircularProgress } from '@material-ui/core';
 
 class Market extends Component {
     constructor(props) {
         super(props);
         this.state = {
             productList: [],
+            loading: true,
         }
     }
 
@@ -16,6 +18,7 @@ class Market extends Component {
     }
 
     getDataForMarket(url, token) {
+        this.setState({ loading: true })
         fetch(url, {
             method: "GET",
             headers: {
@@ -24,6 +27,7 @@ class Market extends Component {
             },
         }).then(res => res.json())
             .then(res => {
+                this.setState({ loading: false })
                 if (res.error) {
                     throw (res.error);
                 }
@@ -44,7 +48,7 @@ class Market extends Component {
                     <div className="content-body">
                         <section id="configuration">
                             <div className="row">
-                                <div className="col-15 ">
+                                <div className="col-12">
                                     <div className="card">
                                         <div className="card-header">
                                             <h4 className="card-title">Product Management</h4>
@@ -52,30 +56,43 @@ class Market extends Component {
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
-                                                <table className="table table-striped table-bordered zero-configuration">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Product Name</th>
-                                                            <th>Type</th>
-                                                            <th>Quantity</th>
-                                                            <th>Unit</th>
-                                                            <th>Manufacture Date</th>
-                                                            <th>Expiration Date</th>
-                                                            <th>Details</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            Array.isArray(this.state.productList)
-                                                            && this.state.productList.map(product => {
-                                                                return (
-                                                                    <Product key={product.id} product={product} />
-                                                                );
-                                                            })
-                                                        }
-                                                    </tbody>
-                                                </table>
+                                                {
+                                                    this.state.productList.length !== 0 ?
+                                                        <table className="table table-striped table-bordered zero-configuration">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Product Name</th>
+                                                                    <th>Type</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Unit</th>
+                                                                    <th>Manufacture Date</th>
+                                                                    <th>Expiration Date</th>
+                                                                    <th>Details</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {
+                                                                    Array.isArray(this.state.productList)
+                                                                    && this.state.productList.map(product => {
+                                                                        return (
+                                                                            <Product key={product.id} product={product} />
+                                                                        );
+                                                                    })
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                        :
+                                                        this.state.loading === true ?
+                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                <CircularProgress color="primary" />
+                                                            </div>
+                                                            :
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                                <h3>Don't have products!</h3>
+                                                            </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>

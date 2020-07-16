@@ -5,6 +5,8 @@ import { API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT } from '../constants/API/api'
 import { Link } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { CircularProgress } from '@material-ui/core';
+
 class UserList extends Component {
     constructor(props) {
         super(props)
@@ -14,6 +16,7 @@ class UserList extends Component {
             alertMessage: '',
             alertSuccess: false,
             alertFail: false,
+            loading: true,
         }
     }
     componentDidMount() {
@@ -26,7 +29,9 @@ class UserList extends Component {
         }
         this.getAllUser(localStorage.getItem('token'));
     }
+
     getAllUser = (token) => {
+        this.setState({ loading: true })
         const url = API_GET_ALL_USER;
         fetch(url, {
             method: "GET",
@@ -36,6 +41,7 @@ class UserList extends Component {
         })
             .then(response => response.json())
             .then(jsonResponse => {
+                this.setState({ loading: false })
                 this.setState({ userList: jsonResponse.result });
             })
     }
@@ -59,7 +65,7 @@ class UserList extends Component {
             })
     }
     increatePage = () => {
-        if(this.state.userList.length /(this.state.page*10) > 1){
+        if (this.state.userList.length / (this.state.page * 10) > 1) {
             let newPageNum = this.state.page + 1;
             this.setState({
                 page: newPageNum
@@ -111,46 +117,61 @@ class UserList extends Component {
                                             <h4 className="card-title">User Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
-                                        <div className="card-content collapse show">
-                                            <div className="card-body card-dashboard">
-                                                <table className="table table-striped table-bordered zero-configuration">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Username</th>
-                                                            <th>Email</th>
-                                                            <th>Role</th>
-                                                            <th>Create date</th>
-                                                            <th>Active</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            Array.isArray(list)
-                                                            && list.map(user => {
-                                                                return (
-                                                                    <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
-                                                                );
-                                                            })
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div className="content-header-right col-12">
-                                            <div className="btn-group float-md-right">
-                                                <div className="float-right my-1">
-                                                    <ul className="pager pager-round">
-                                                        <li>
-                                                            <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
-                                                        </li>
-                                                    </ul>
+                                        {
+                                            this.state.userList.length !== 0 ?
+                                                <div>
+                                                    <div className="card-content collapse show">
+                                                        <div className="card-body card-dashboard">
+                                                            <table className="table table-striped table-bordered zero-configuration">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Id</th>
+                                                                        <th>Username</th>
+                                                                        <th>Email</th>
+                                                                        <th>Role</th>
+                                                                        <th>Create date</th>
+                                                                        <th>Active</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {
+                                                                        Array.isArray(list)
+                                                                        && list.map(user => {
+                                                                            return (
+                                                                                <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
+                                                                            );
+                                                                        })
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div className="content-header-right col-12">
+                                                        <div className="btn-group float-md-right">
+                                                            <div className="float-right my-1">
+                                                                <ul className="pager pager-round">
+                                                                    <li>
+                                                                        <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
+                                                                    </li>
+                                                                    <li>
+                                                                        <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                                :
+                                                this.state.loading === true ?
+                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                        <CircularProgress color="primary" />
+                                                    </div>
+                                                    :
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                        <h3>Don't have users!</h3>
+                                                    </div>
+                                        }
                                     </div>
                                 </div>
                             </div>

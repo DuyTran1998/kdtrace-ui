@@ -16,8 +16,9 @@ class Register extends Component {
             success: null,
             message: '',
             status: '',
+            alertMessage: '',
             alertSuccess: false,
-            alertFail: false
+            alertFail: false,
         }
     }
     componentDidMount() {
@@ -46,17 +47,13 @@ class Register extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(jsonResponse => {
-                this.setState({ 'message': jsonResponse.message });
-                this.setState({ 'status': jsonResponse.status });
-                if(this.state.status === 200){
-                    this.handleOpenAlert('success');
+                if(jsonResponse.status === 200){
+                    this.handleOpenAlert('success', jsonResponse.message);
+                    history.push('/login')
+                    window.location.reload()
                 }
-                else if(this.state.status === 400){
-                    this.setState({ 'message': 'Invalid input' });
-                    this.handleOpenAlert('fail');
-                }
-                else {
-                    this.handleOpenAlert('fail');
+                else{
+                    this.handleOpenAlert('fail', jsonResponse.message);
                 }
             })
         e.preventDefault();
@@ -72,15 +69,16 @@ class Register extends Component {
         this.setState({ 'roleName': e.target.value });
     }
 
-    handleOpenAlert = (flag) => {
+    handleOpenAlert = (flag, message) => {
         if (flag === 'success') {
             this.setState({ alertSuccess: true });
         }
-        if (flag ==='fail') {
+        if (flag === 'fail') {
             this.setState({ alertFail: true })
         }
+        this.setState({ alertMessage: message });
     }
-    handleClose = e => {
+    handleCloseAlert = e => {
         this.setState({ alertSuccess: false, alertFail: false });
     }
     render() {

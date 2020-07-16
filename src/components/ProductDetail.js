@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import QRCodeRecord from './QRCode';
 import TransactionForm from './TransactionForm'
-import { API_GET_PRODUCT_DETAIL } from '../constants/API/api';
+import { API_GET_PRODUCT_AVAILABLE_DETAIL } from '../constants/API/api';
 import { connect } from 'react-redux';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -26,7 +26,7 @@ class ProductDetail extends Component {
     }
     componentDidMount() {
         let id = this.props.match.params.id;
-        const url = API_GET_PRODUCT_DETAIL + id;
+        const url = API_GET_PRODUCT_AVAILABLE_DETAIL + id;
         const token = localStorage.getItem('token');
         fetch(url, {
             method: "GET",

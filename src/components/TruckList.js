@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import TruckRecord from './TruckRecord';
-import {API_GET_ALL_TRUCK} from '../constants/API/api';
+import { API_GET_ALL_TRUCK } from '../constants/API/api';
 import TruckForm from './TruckForm';
-import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { CircularProgress } from '@material-ui/core';
 
 class TruckList extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class TruckList extends Component {
             alertMessage: '',
             alertSuccess: false,
             alertFail: false,
+            loading: true,
         }
     }
 
@@ -50,6 +52,7 @@ class TruckList extends Component {
     }
 
     getAllTrucks(token) {
+        this.setState({ loading: true })
         fetch(API_GET_ALL_TRUCK, {
             method: "GET",
             headers: {
@@ -58,6 +61,7 @@ class TruckList extends Component {
             },
         }).then(res => res.json())
             .then(res => {
+                this.setState({ loading: false })
                 if (res.error) {
                     throw (res.error);
                 }
@@ -97,50 +101,63 @@ class TruckList extends Component {
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
-                                                <table className="table table-striped table-bordered zero-configuration">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Number Plate</th>
-                                                            <th>Type</th>
-                                                            <th>Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            Array.isArray(this.state.trucks)
-                                                            && this.state.trucks.map(truck => {
-                                                                return (
-                                                                    <TruckRecord key={truck.id} truck={truck}/>
-                                                                );
-                                                            })
-                                                        }
-                                                    </tbody>
-                                                </table>
+                                                {
+                                                    this.state.trucks.length !== 0 ?
+                                                        <table className="table table-striped table-bordered zero-configuration">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Number Plate</th>
+                                                                    <th>Type</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {
+                                                                    Array.isArray(this.state.trucks)
+                                                                    && this.state.trucks.map(truck => {
+                                                                        return (
+                                                                            <TruckRecord key={truck.id} truck={truck} />
+                                                                        );
+                                                                    })
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                        :
+                                                        this.state.loading === true ?
+                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                <CircularProgress color="primary" />
+                                                            </div>
+                                                            :
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                                <h3>Don't have trucks!</h3>
+                                                            </div>
+                                                }
                                             </div>
                                         </div>
-                                        <Dialog
-                                            open={this.state.open}
-                                            keepMounted
-                                            onClose={this.handleClose}
-                                            fullWidth
-                                            aria-labelledby="alert-dialog-slide-title"
-                                            aria-describedby="alert-dialog-slide-description">
-                                            <DialogTitle id="alert-dialog-slide-title">{"Insert Profile New Truck"}</DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText id="alert-dialog-slide-description">
-                                                    <Typography>
-                                                        <TruckForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert}/>
-                                                    </Typography>
-                                                </DialogContentText>
-                                            </DialogContent>
-                                        </Dialog>
                                     </div>
                                 </div>
                             </div>
                         </section>
                     </div>
                 </div>
+                <Dialog
+                    open={this.state.open}
+                    keepMounted
+                    onClose={this.handleClose}
+                    fullWidth
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description">
+                    <DialogTitle id="alert-dialog-slide-title">{"Insert Profile New Truck"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            <Typography>
+                                <TruckForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert} />
+                            </Typography>
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
                 <Snackbar open={this.state.alertSuccess} onClose={this.handleCloseAlert}
                     autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="success" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
