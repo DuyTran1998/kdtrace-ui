@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import {API_CREATE_CAR} from '../constants/API/api';
+import {API_CREATE_TRUCK} from '../constants/API/api';
 import { Snackbar, CircularProgress } from '@material-ui/core';
 
-class CarForm extends Component {
+class TruckForm extends Component {
     constructor(props){
         super(props)
         this.state = {
             numberPlate: '',
             type: 'TOYOTA',
             progress: false
-        } 
+        }
     }
     handleChange = e => {
         const { name, value } = e.target;
@@ -22,16 +22,16 @@ class CarForm extends Component {
 
     handleSubmit = (e) => {
         this.setState({ progress: true });
-        const carModel = {
+        const truckModel = {
             numberPlate: this.state.numberPlate,
             autoMaker: this.state.type,
             statusDeliveryTruck: "AVAILABLE"
         }
 
         const token = localStorage.getItem('token');
-        fetch(API_CREATE_CAR, {
+        fetch(API_CREATE_TRUCK, {
             method: "POST",
-            body: JSON.stringify(carModel),
+            body: JSON.stringify(truckModel),
             cache: 'no-cache',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ class CarForm extends Component {
                     this.props.handleClose();
                 }
                 else{
-                    this.props.handleOpenAlert('fail', res.message); 
+                    this.props.handleOpenAlert('fail', res.message);
                 }
                 this.handleCloseProgress();
             })
@@ -63,7 +63,7 @@ class CarForm extends Component {
                     <div className="form-group row">
                         <label className="col-md-3 label-control" htmlfor="eventRegInput1">Number Plate</label>
                         <div className="col-md-9">
-                            <input type="text" id="eventRegInput1" className="form-control" placeholder="Ex: 74A1-060.79" name="numberPlate" 
+                            <input type="text" id="eventRegInput1" className="form-control" placeholder="Ex: 74A1-060.79" name="numberPlate"
                             required onChange={this.handleChange} maxlength="10"
                             data-validation-maxlength-message="The number plate just have maxium 10 characters!"/>
                         </div>
@@ -105,4 +105,4 @@ class CarForm extends Component {
     }
 }
 
-export default CarForm;
+export default TruckForm;

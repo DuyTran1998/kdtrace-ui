@@ -1,10 +1,10 @@
-import { fetchCarsError, fetchCarsPending, fetchCarsSuccess } from '../actions/transportAction';
+import { fetchTrucksError, fetchTrucksPending, fetchTrucksSuccess } from '../actions/transportAction';
 let token = localStorage.getItem('token');
 console.log(token);
-const fetchCars = () => {
+const fetchTrucks = () => {
     return dispatch => {
         if (token !== null) {
-            dispatch(fetchCarsPending);
+            dispatch(fetchTrucksPending);
             fetch('http://localhost:8080/api/transport/getAll', {
                 method: "GET",
                 headers: {
@@ -17,14 +17,14 @@ const fetchCars = () => {
                         throw (res.error);
                     }
                     console.log(res);
-                    dispatch(fetchCarsSuccess(res.result));
+                    dispatch(fetchTrucksSuccess(res.result));
                     return res.result;
                 })
                 .catch(error => {
-                    dispatch(fetchCarsError(error));
+                    dispatch(fetchTrucksError(error));
                 })
         }
 
     }
 }
-export default fetchCars;
+export default fetchTrucks;

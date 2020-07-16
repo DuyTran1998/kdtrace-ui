@@ -1,24 +1,24 @@
 import * as types from '../constants/ActionTypes';
 const initialState = {
     pending: false,
-    cars: [],
+    trucks: [],
     error: null
 }
 
 const transportReducer = (state = initialState, action) =>{
     switch(action.type){
-        case types.FETCH_CARS_PENDING:
+        case types.FETCH_TRUCKS_PENDING:
             return {
                 ...state,
                 pending: true
             }
-        case types.FETCH_CARS_SUCCESS:
+        case types.FETCH_TRUCKS_SUCCESS:
             return {
                 ...state,
                 pending: false,
-                cars: action.payload
+                trucks: action.payload
             }
-        case types.FETCH_CARS_ERROR:
+        case types.FETCH_TRUCKS_ERROR:
             return{
                 ...state,
                 pending: false,
@@ -30,6 +30,6 @@ const transportReducer = (state = initialState, action) =>{
 }
 export default transportReducer;
 
-export const getCars = state => state.products;
-export const getCarsPending = state => state.pending;
-export const getCarsError = state => state.error;
+export const getTrucks = state => state.products;
+export const getTrucksPending = state => state.pending;
+export const getTrucksError = state => state.error;

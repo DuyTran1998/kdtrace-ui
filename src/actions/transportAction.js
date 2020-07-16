@@ -1,21 +1,21 @@
 import * as types from '../constants/ActionTypes';
 
-export const fetchCarsPending = () => {
+export const fetchTrucksPending = () => {
     return {
-        type: types.FETCH_CARS_PENDING
+        type: types.FETCH_TRUCKS_PENDING
     }
 }
 
-export const fetchCarsSuccess = (cars) =>{
+export const fetchTrucksSuccess = (trucks) =>{
     console.log(1);
     return {
-        type: types.FETCH_CARS_SUCCESS,
-        cars: cars
+        type: types.FETCH_TRUCKS_SUCCESS,
+        trucks: trucks
     }
 }
 
-export const fetchCarsError = () =>{
+export const fetchTrucksError = () =>{
     return {
-        type: types.FETCH_CARS_ERROR,
+        type: types.FETCH_TRUCKS_ERROR,
     }
 }

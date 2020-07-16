@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import CarRecord from './CarRecord';
-import {API_GET_ALL_CAR} from '../constants/API/api';
-import CarForm from './CarForm';
+import TruckRecord from './TruckRecord';
+import {API_GET_ALL_TRUCK} from '../constants/API/api';
+import TruckForm from './TruckForm';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography} from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
-class CarList extends Component {
+class TruckList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cars: [],
+            trucks: [],
             error: '',
             open: false,
             alertMessage: '',
@@ -20,7 +20,7 @@ class CarList extends Component {
     }
 
     componentDidMount() {
-        this.getAllCars(localStorage.getItem('token'));
+        this.getAllTrucks(localStorage.getItem('token'));
     }
 
     handleOpenAlert = (flag, message) => {
@@ -49,8 +49,8 @@ class CarList extends Component {
         this.componentDidMount();
     }
 
-    getAllCars(token) {
-        fetch(API_GET_ALL_CAR, {
+    getAllTrucks(token) {
+        fetch(API_GET_ALL_TRUCK, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ class CarList extends Component {
                     throw (res.error);
                 }
                 this.setState({
-                    cars: res.result,
+                    trucks: res.result,
                 })
             })
             .catch(error => {
@@ -81,7 +81,7 @@ class CarList extends Component {
                                 <div className="col-12">
                                     <div className="card">
                                         <div className="card-header">
-                                            <h4 className="card-title">Car Management</h4>
+                                            <h4 className="card-title">Truck Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
                                         <div className="content-header-right col-12">
@@ -91,7 +91,7 @@ class CarList extends Component {
                                                     type="button"
                                                     aria-haspopup="true"
                                                     onClick={this.handleOpenDialog}>
-                                                    <i className="ft-settings icon-left"></i> New Car
+                                                    <i className="ft-settings icon-left"></i> New Truck
                                                 </button>
                                             </div>
                                         </div>
@@ -109,10 +109,10 @@ class CarList extends Component {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            Array.isArray(this.state.cars)
-                                                            && this.state.cars.map(car => {
+                                                            Array.isArray(this.state.trucks)
+                                                            && this.state.trucks.map(truck => {
                                                                 return (
-                                                                    <CarRecord key={car.id} car={car}/>
+                                                                    <TruckRecord key={truck.id} truck={truck}/>
                                                                 );
                                                             })
                                                         }
@@ -127,11 +127,11 @@ class CarList extends Component {
                                             fullWidth
                                             aria-labelledby="alert-dialog-slide-title"
                                             aria-describedby="alert-dialog-slide-description">
-                                            <DialogTitle id="alert-dialog-slide-title">{"Insert Profile New Car"}</DialogTitle>
+                                            <DialogTitle id="alert-dialog-slide-title">{"Insert Profile New Truck"}</DialogTitle>
                                             <DialogContent>
                                                 <DialogContentText id="alert-dialog-slide-description">
                                                     <Typography>
-                                                        <CarForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert}/>
+                                                        <TruckForm handleClose={this.handleClose} handleOpenAlert={this.handleOpenAlert}/>
                                                     </Typography>
                                                 </DialogContentText>
                                             </DialogContent>
@@ -175,4 +175,4 @@ class CarList extends Component {
         );
     }
 }
-export default CarList;
+export default TruckList;

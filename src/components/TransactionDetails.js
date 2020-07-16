@@ -4,7 +4,7 @@ import {
     API_GET_TRANSACTION, API_GET_ALL_TRANSPORT,
     API_ACCEPT_TO_SELL_TRANSACTION,
     API_CHOOSE_TRANSPORT,
-    API_GET_ALL_CAR_AVAILABLE,
+    API_GET_ALL_TRUCK_AVAILABLE,
     API_ACCEPT_TO_DELIVERY,
     API_CONFIRM_TO_GET,
     API_CONFIRM_TO_RECEIPT,
@@ -36,7 +36,7 @@ class TransactionDetails extends Component {
             role: '',
             listTransportCompany: [],
             id_transport: '',
-            listTruckCar: [],
+            listTruck: [],
             id_truck: '',
             progress: false,
             alertMessage: '',
@@ -80,9 +80,9 @@ class TransactionDetails extends Component {
                         listTransportCompany: res.result,
                     })
                 }
-                if (listName === 'listTruckCar') {
+                if (listName === 'listTruck') {
                     this.setState({
-                        listTruckCar: res.result,
+                        listTruck: res.result,
                     })
                 }
             })
@@ -122,7 +122,7 @@ class TransactionDetails extends Component {
                         this.getDataForSelect(API_GET_ALL_TRANSPORT, token, 'listTransportCompany');
                     }
                     if ((this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT') && this.state.role === 'ROLE_TRANSPORT') {
-                        this.getDataForSelect(API_GET_ALL_CAR_AVAILABLE, token, 'listTruckCar');
+                        this.getDataForSelect(API_GET_ALL_TRUCK_AVAILABLE, token, 'listTruck');
                     }
                 })
             })
@@ -274,6 +274,7 @@ class TransactionDetails extends Component {
     }
 
     render() {
+        console.log(this.state.deliveryTruckModel);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -375,7 +376,10 @@ class TransactionDetails extends Component {
                                                                     <ul className="list-unstyled mt-2 mb-2">
                                                                         <li>Phone: {this.state.producerModel.phone}</li>
                                                                         <li>Email: {this.state.producerModel.email}</li>
-                                                                        <li>Website: {this.state.producerModel.website}</li>
+                                                                        <li>Website:
+                                                                        <a href={this.state.producerModel.website} target='_blank'>
+                                                                                {this.state.producerModel.website}
+                                                                            </a></li>
                                                                         <li>Address: {this.state.producerModel.address}</li>
                                                                     </ul>
                                                                     {
@@ -417,9 +421,22 @@ class TransactionDetails extends Component {
                                                                                 <ul className="list-unstyled mt-2 mb-2">
                                                                                     <li>Phone: {this.state.transportModel.phone}</li>
                                                                                     <li>Email: {this.state.transportModel.email}</li>
-                                                                                    <li>Website: {this.state.transportModel.website}</li>
+                                                                                    <li>Website:
+                                                                                    <a href={this.state.producerModel.website} target='_blank'>
+                                                                                            {this.state.producerModel.website}
+                                                                                        </a></li>
                                                                                     <li>Address: {this.state.transportModel.address}</li>
                                                                                 </ul>
+                                                                                {
+                                                                                    (this.state.deliveryTruckModel !== undefined && this.state.deliveryTruckModel !== null) ?
+                                                                                        <ul className="list-unstyled mt-2 mb-2">
+                                                                                            <h2 className="pricing-card-title">Truck</h2>
+                                                                                            <li>Number Plate: {this.state.deliveryTruckModel.numberPlate}</li>
+                                                                                            <li>Model: {this.state.deliveryTruckModel.autoMaker}</li>
+                                                                                        </ul>
+                                                                                        :
+                                                                                        null
+                                                                                }
                                                                             </div>
                                                                             :
                                                                             <div>
@@ -459,10 +476,10 @@ class TransactionDetails extends Component {
                                                                             ?
                                                                             <div>
                                                                                 <select id="projectinput6" name="id_truck" className="form-control" onChange={this.handleOnChangeSelect} value={this.state.id_truck}>
-                                                                                    <option value="none" disabled="">Choose Car To Delivery</option>
+                                                                                    <option value="none" disabled="">Choose Truck To Delivery</option>
                                                                                     {
-                                                                                        Array.isArray(this.state.listTruckCar)
-                                                                                        && this.state.listTruckCar.map(truck => {
+                                                                                        Array.isArray(this.state.listTruck)
+                                                                                        && this.state.listTruck.map(truck => {
                                                                                             return (
                                                                                                 <option key={truck.id} value={truck.id} >{truck.numberPlate}</option>
                                                                                             );
@@ -482,7 +499,7 @@ class TransactionDetails extends Component {
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-info"
                                                                                 onClick={this.handleOnSubmitToConfirmTheGoodIsGotten}>
-                                                                                Confirm
+                                                                                Loading
                                                                             </button>
                                                                             :
                                                                             null
@@ -559,7 +576,7 @@ class TransactionDetails extends Component {
                                                 </div>
                                                 <div className="card-content collapse show">
                                                     <div className="card-body card-dashboard">
-                                                        <table className="table table-striped table-bordered zero-configuration" style={{borderRightWidth:'0px', borderLeftWidth:'0px'}}>
+                                                        <table className="table table-striped table-bordered zero-configuration" style={{ borderRightWidth: '0px', borderLeftWidth: '0px' }}>
                                                             <thead>
                                                                 <tr>
                                                                     <th>Id</th>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserList from '../components/UserList';
 import ProductList from '../components/ProductList';
-import CarList from '../components/CarList';
+import TruckList from '../components/TruckList';
 import Transactions from '../components/Transactions';
 
 class HomePage extends Component {
@@ -34,7 +34,7 @@ class HomePage extends Component {
                     this.state.role === 'ROLE_PRODUCER' ? <ProductList /> : null
                 }
                 {
-                    this.state.role === 'ROLE_TRANSPORT' ? <CarList /> : null
+                    this.state.role === 'ROLE_TRANSPORT' ? <TruckList /> : null
                 }
                  {
                     this.state.role === 'ROLE_DISTRIBUTOR' ? <Transactions /> : null
