@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { API_CREATE_PRODUCT} from '../constants/API/api';
-import {Snackbar, CircularProgress} from '@material-ui/core';
+import { API_CREATE_PRODUCT } from '../constants/API/api';
+import { Snackbar, CircularProgress } from '@material-ui/core';
 class ProductForm extends Component {
     constructor(props) {
         super(props);
@@ -11,13 +11,21 @@ class ProductForm extends Component {
             unit: 'PCS',
             exp: '',
             mfg: '',
-            progress: false
+            progress: false,
+            images: null,
         }
     }
 
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
+    }
+
+    handleFiles = e => {
+        let files = e.target.files;
+        this.setState({
+            images : files,
+        })
     }
 
     handleSubmit = (e) => {
@@ -30,32 +38,41 @@ class ProductForm extends Component {
             type: this.state.type,
             unit: this.state.unit
         }
-
+        let formData = new FormData();
+        let images = this.state.images;
+        const json = JSON.stringify(productModel);
+        const model = new Blob([json], {
+        type: 'application/json'
+        });
+        for(let i = 0; i < images.length; i++){
+            formData.append("file" + i, images.item(i));
+        }
+        formData.append("productModel", model);
+        
         const token = localStorage.getItem('token');
         fetch(API_CREATE_PRODUCT, {
             method: "POST",
-            body: JSON.stringify(productModel),
+            body: formData,
             cache: 'no-cache',
             headers: {
                 Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(res => {
                 this.handleCloseProgress();
-                if(res.status === 200){
+                if (res.status === 200) {
                     this.props.handleOpenAlert('success');
                     this.props.handleClose();
                 }
-                else{
+                else {
                     this.props.handleOpenAlert('fail');
                 }
             })
         e.preventDefault();
     }
     handleCloseProgress = e => {
-        this.setState({ progress: false});
+        this.setState({ progress: false });
     }
     render() {
         return (
@@ -63,7 +80,7 @@ class ProductForm extends Component {
                 <div className="form-body">
                     <div className="form-group">
                         <label htmlFor="issueinput1">Product Name</label>
-                        <input type="text" id="issueinput1" className="form-control" placeholder="Ex: Apple" name="name" onChange={this.handleChange} required/>
+                        <input type="text" id="issueinput1" className="form-control" placeholder="Ex: Apple" name="name" onChange={this.handleChange} required />
                     </div>
 
                     <div className="form-group">
@@ -88,41 +105,48 @@ class ProductForm extends Component {
 
                     <div className="form-group">
                         <label htmlFor="issueinput2">Quantity</label>
-                        <input type="text" id="issueinput2" className="form-control" placeholder="1,2,3..." name="quantity" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" required/>
+                        <input type="text" id="issueinput2" className="form-control" placeholder="1,2,3..." name="quantity" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" required />
                     </div>
 
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label htmlFor="issueinput3">Manufacture Date</label>
-                                <input type="date" id="issueinput3" className="form-control" name="mfg" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required/>
+                                <input type="date" id="issueinput3" className="form-control" name="mfg" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label htmlFor="issueinput4">Expiration Date</label>
-                                <input type="date" id="issueinput4" className="form-control" name="exp" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required/>
+                                <input type="date" id="issueinput4" className="form-control" name="exp" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required />
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="form-actions right">
-                    <button
-                        type="button"
-                        onClick={this.props.handleClose}
-                        className="btn btn-warning mr-1">
-                        <i className="ft-x"></i> Cancel
+                    <div className="form-group">
+                        <label htmlFor="issueinput6">Add Images...</label>
+                        <input className="form-control" type="file" name="files[]" multiple onChange={this.handleFiles}/>
+                    </div>
+
+
+                    </div>
+
+                    <div className="form-actions right">
+                        <button
+                            type="button"
+                            onClick={this.props.handleClose}
+                            className="btn btn-warning mr-1">
+                            <i className="ft-x"></i> Cancel
 								        </button>
-                    <button type="submit" className="btn btn-primary">
-                        <i className="fa fa-check-square-o"></i> Save
+                        <button type="submit" className="btn btn-primary">
+                            <i className="fa fa-check-square-o"></i> Save
 					</button>
-                </div>
-                <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
-                    <CircularProgress color="primary" />
-                </Snackbar>
+                    </div>
+                    <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
+                        <CircularProgress color="primary" />
+                    </Snackbar>
             </form>
-        );
-    }
-}
+                );
+            }
+        }
 export default ProductForm;
