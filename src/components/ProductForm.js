@@ -24,7 +24,7 @@ class ProductForm extends Component {
     handleFiles = e => {
         let files = e.target.files;
         this.setState({
-            images : files,
+            images: files,
         })
     }
 
@@ -42,13 +42,13 @@ class ProductForm extends Component {
         let images = this.state.images;
         const json = JSON.stringify(productModel);
         const model = new Blob([json], {
-        type: 'application/json'
+            type: 'application/json'
         });
-        for(let i = 0; i < images.length; i++){
-            formData.append("file" + i, images.item(i));
+        for (let i = 0; i < images.length; i++) {
+            formData.append("files", images.item(i));
         }
         formData.append("productModel", model);
-        
+
         const token = localStorage.getItem('token');
         fetch(API_CREATE_PRODUCT, {
             method: "POST",
@@ -125,28 +125,28 @@ class ProductForm extends Component {
 
                     <div className="form-group">
                         <label htmlFor="issueinput6">Add Images...</label>
-                        <input className="form-control" type="file" name="files[]" multiple onChange={this.handleFiles}/>
+                        <input className="form-control" type="file" name="files[]" multiple onChange={this.handleFiles} />
                     </div>
 
 
-                    </div>
+                </div>
 
-                    <div className="form-actions right">
-                        <button
-                            type="button"
-                            onClick={this.props.handleClose}
-                            className="btn btn-warning mr-1">
-                            <i className="ft-x"></i> Cancel
+                <div className="form-actions right">
+                    <button
+                        type="button"
+                        onClick={this.props.handleClose}
+                        className="btn btn-warning mr-1">
+                        <i className="ft-x"></i> Cancel
 								        </button>
-                        <button type="submit" className="btn btn-primary">
-                            <i className="fa fa-check-square-o"></i> Save
+                    <button type="submit" className="btn btn-primary">
+                        <i className="fa fa-check-square-o"></i> Save
 					</button>
-                    </div>
-                    <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
-                        <CircularProgress color="primary" />
-                    </Snackbar>
+                </div>
+                <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
+                    <CircularProgress color="primary" />
+                </Snackbar>
             </form>
-                );
-            }
-        }
+        );
+    }
+}
 export default ProductForm;
