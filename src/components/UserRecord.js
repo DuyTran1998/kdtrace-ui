@@ -19,11 +19,20 @@ class UserRecord extends Component {
         this.setState({ 'isChecked': value });
         this.props.onChange(this.props.user.id);
     }
+
+    handleEvent = e => {
+        this.props.getProfile(this.props.user.username, this.props.user.role.roleName);
+        this.props.open();
+    }
     render() {
         return (
             <tr className="UserRecord">
                 <td className="UserRecord_Id">{this.props.user.id}</td>
-                <td className="UserRecord_UserName">{this.props.user.username}</td>
+                <td className="UserRecord_UserName">
+                    <div onClick= {this.handleEvent}>
+                        {this.props.user.username}
+                    </div>
+                </td>
                 <td className="UserRecord_Email">{this.props.user.email}</td>
                 <td className="UserRecord_Role">{this.props.user.role.roleName}</td>
                 <td className="UserReCord_CreateAt">{this.props.user.createAt}</td>

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import UserRecord from './UserRecord';
 import { withRouter } from 'react-router-dom';
-import { API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT } from '../constants/API/api';
+import { API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT, API_GET_PROFILE } from '../constants/API/api';
 import { Link } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
+import UserProfile from './UserProfile';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
+import { throwStatement } from '@babel/types';
 
 class UserList extends Component {
     constructor(props) {
@@ -17,6 +20,8 @@ class UserList extends Component {
             alertSuccess: false,
             alertFail: false,
             loading: true,
+            open: false,
+            result: '',
         }
     }
     componentDidMount() {
@@ -64,6 +69,26 @@ class UserList extends Component {
                 }
             })
     }
+
+    getProfileUser = (username, role) => {
+        const token = localStorage.getItem('token');
+        let url = API_GET_PROFILE + "username=" + username + "&role=" + role;
+        fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                if (jsonResponse.status === 200) {
+                    this.setState({result: jsonResponse.result});
+                } else {
+                    console.log(jsonResponse);
+                }
+            })
+    }
+
     increatePage = () => {
         if (this.state.userList.length / (this.state.page * 10) > 1) {
             let newPageNum = this.state.page + 1;
@@ -80,6 +105,30 @@ class UserList extends Component {
                 page: newPageNum - 1
             })
         }
+    }
+
+    handleOpenDialog = () => {
+        this.setState({
+            open: true,
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false,
+        });
+        this.componentDidMount();
+    }
+    handleOpenAlert = (flag) => {
+        if (flag === 'success') {
+            this.setState({ alertSuccess: true });
+        }
+        if (flag === 'fail') {
+            this.setState({ alertFail: true })
+        }
+    }
+    handleCloseAlert = e => {
+        this.setState({ alertSuccess: false, alertFail: false });
     }
 
     pagation = (list, page) => {
@@ -138,7 +187,13 @@ class UserList extends Component {
                                                                         Array.isArray(list)
                                                                         && list.map(user => {
                                                                             return (
-                                                                                <UserRecord key={user.id} user={user} onChange={this.activeAccountUser} />
+                                                                                <UserRecord 
+                                                                                    key={user.id} 
+                                                                                    user={user} 
+                                                                                    onChange={this.activeAccountUser} 
+                                                                                    open={this.handleOpenDialog} 
+                                                                                    getProfile={this.getProfileUser}
+                                                                                />
                                                                             );
                                                                         })
                                                                     }
@@ -146,6 +201,22 @@ class UserList extends Component {
                                                             </table>
                                                         </div>
                                                     </div>
+                                                    <Dialog
+                                                        open={this.state.open}
+                                                        keepMounted
+                                                        onClose={this.handleClose}
+                                                        fullWidth
+                                                        aria-labelledby="alert-dialog-slide-title"
+                                                        aria-describedby="alert-dialog-slide-description">
+                                                        <DialogTitle id="alert-dialog-slide-title">{"User Profile"}</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-slide-description">
+                                                                <Typography>
+                                                                    <UserProfile result={this.state.result}></UserProfile>
+                                                                </Typography>
+                                                            </DialogContentText>
+                                                        </DialogContent>
+                                                    </Dialog>
                                                     <div className="content-header-right col-12">
                                                         <div className="btn-group float-md-right">
                                                             <div className="float-right my-1">
