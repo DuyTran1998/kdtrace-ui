@@ -19,6 +19,7 @@ class ProductDetail extends Component {
             mfg: '',
             exp: '',
             codes: [],
+            image: '',
             alertMessage: '',
             alertSuccess: false,
             alertFail: false,
@@ -45,6 +46,7 @@ class ProductDetail extends Component {
                     mfg: jsonResponse.result.mfg,
                     exp: jsonResponse.result.exp,
                     codes: jsonResponse.result.codes,
+                    image: jsonResponse.result.image,
                 })
             })
     }
@@ -75,6 +77,20 @@ class ProductDetail extends Component {
         this.setState({ alertSuccess: false, alertFail: false });
     }
     render() {
+        const { image } = this.state;
+        var imageString = "[raucu.jpg]"
+        if (image !== "" && image !== undefined && image !== null && image !== "[]") { imageString = image; }
+        imageString = imageString.slice(1, imageString.length - 1).split(",");
+        var imageList = [];
+        for (var i = 0; i < imageString.length; i++) {
+            imageList.push(
+                <div>
+                    <hr />
+                    <img src={imageString[i].trim()} width="100%" style={{maxWidth:"500px"}} alt="image" />
+                </div>
+            );
+        }
+
         const qrCodeList = this.state.codes.map(code => {
             return (
                 <QRCodeRecord key={code.id} code={code}></QRCodeRecord>
@@ -147,6 +163,14 @@ class ProductDetail extends Component {
                                                         {qrCodeList}
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                        </div>
+                                        <div className="card-header">
+                                            <h4 className="card-title">Images </h4>
+                                        </div>
+                                        <div className="card-content collapse show">
+                                            <div className="card-body card-dashboard">
+                                                {imageList}
                                             </div>
                                         </div>
                                         <Dialog

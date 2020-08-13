@@ -16,6 +16,12 @@ import { connect } from 'react-redux';
 import QRCode from './QRCode';
 import { Snackbar, CircularProgress } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 class TransactionDetails extends Component {
     constructor(props) {
@@ -38,10 +44,13 @@ class TransactionDetails extends Component {
             id_transport: '',
             listTruck: [],
             id_truck: '',
+            image: '',
             progress: false,
             alertMessage: '',
             alertSuccess: false,
             alertFail: false,
+            dataDialog: '',
+            messageDialog: ''
         }
     }
     componentDidMount() {
@@ -116,6 +125,7 @@ class TransactionDetails extends Component {
                     productModel: res.result.productModel,
                     qrCodeList: res.result.qrCodeModels,
                     create_at: res.result.create_at,
+                    image: res.result.productModel.image,
                 }, () => {
                     if ((this.state.statusProcess === 'CHOOSE_DELIVERYTRUCK_TRANSPORT' ||
                         this.state.statusProcess === 'TRANSPORT_REJECT') && this.state.role === 'ROLE_DISTRIBUTOR') {
@@ -185,12 +195,72 @@ class TransactionDetails extends Component {
         }
         this.setState({ alertMessage: message });
     }
-    handleOpenDialog = () => {
+    handleOpenDialog = (data) => {
+        switch (data) {
+            case 'handleClickAcceptToShell':
+                this.setState({ messageDialog: "Confirmation that you accept transaction"})
+                break;
+            case 'handleClickDeleteProcess':
+                this.setState({ messageDialog: "Delete transaction: " + this.state.id + ". Are you sure?" })
+                break;
+            case 'handleClickRejectToShell':
+                this.setState({ messageDialog: "Reject transaction. Are you sure?" })
+                break;
+            case 'handleOnSubmit':
+                this.setState({ messageDialog: "Confirmation that you request this transport to delivery"})
+                break;
+            case 'handleOnSubmitChooseTruck':
+                this.setState({ messageDialog: "Confirmation that you accept to delivery"})
+                break;
+            case 'handleOnRejectToDelivery':
+                this.setState({ messageDialog: "Reject delivery transaction: " + this.state.id + ". Are you sure?" })
+                break;
+            case 'handleOnSubmitToConfirmTheGoodIsGotten':
+                this.setState({ messageDialog: "Confirmation that you received product from producer" })
+                break;
+            case 'handleOnSubmitToConfirmTheGoodIsReceipted':
+                this.setState({ messageDialog: "Confirmation that you received product from transport" })
+                break;
+        }
         this.setState({
             open: true,
+            dataDialog: data
         });
     }
-
+    handleCloseDialog = () => {
+        this.setState({
+            open: false,
+        });
+    }
+    handlePostDataDialog = () => {
+        this.handleCloseDialog();
+        switch (this.state.dataDialog) {
+            case 'handleClickAcceptToShell':
+                this.handleClickAcceptToShell();
+                break;
+            case 'handleClickDeleteProcess':
+                this.handleClickDeleteProcess();
+                break;
+            case 'handleClickRejectToShell':
+                this.handleClickRejectToShell();
+                break;
+            case 'handleOnSubmitChooseTruck':
+                this.handleOnSubmitChooseTruck();
+                break;
+            case 'handleOnRejectToDelivery':
+                this.handleOnRejectToDelivery();
+                break;
+            case 'handleOnSubmitToConfirmTheGoodIsGotten':
+                this.handleOnSubmitToConfirmTheGoodIsGotten();
+                break;
+            case 'handleOnSubmit':
+                this.handleOnSubmit();
+                break;
+            case 'handleOnSubmitToConfirmTheGoodIsReceipted':
+                this.handleOnSubmitToConfirmTheGoodIsReceipted();
+                break;
+        }
+    }
     handleClickAcceptToShell = (e) => {
         const api = API_ACCEPT_TO_SELL_TRANSACTION + this.state.id;
         const token = localStorage.getItem('token');
@@ -275,6 +345,20 @@ class TransactionDetails extends Component {
 
     render() {
         console.log(this.state.qrCodeList);
+        const { image, open, messageDialog } = this.state;
+        console.log({messageDialog});
+        var imageString = "[raucu.jpg]"
+        if (image !== "" && image !== undefined && image !== null && image !== "[]") { imageString = image; }
+        imageString = imageString.slice(1, imageString.length - 1).split(",");
+        var imageList = [];
+        for (var i = 0; i < imageString.length; i++) {
+            imageList.push(
+                <div>
+                    <hr />
+                    <img src={imageString[i].trim()} width="100%" style={{ maxWidth: "500px" }} alt="image" />
+                </div>
+            );
+        }
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -388,12 +472,12 @@ class TransactionDetails extends Component {
                                                                             <div>
                                                                                 <button type="button"
                                                                                     className="btn btn-lg btn-block btn-info"
-                                                                                    onClick={this.handleClickAcceptToShell}>
+                                                                                    onClick={() => this.handleOpenDialog('handleClickAcceptToShell')}>
                                                                                     Accept
                                                                                 </button>
                                                                                 <button type="button"
                                                                                     className="btn btn-lg btn-block btn-info"
-                                                                                    onClick={this.handleClickRejectToShell}>
+                                                                                    onClick={() => this.handleOpenDialog('handleClickRejectToShell')}>
                                                                                     Reject
                                                                                 </button>
                                                                             </div>
@@ -421,9 +505,9 @@ class TransactionDetails extends Component {
                                                                                 <ul className="list-unstyled mt-2 mb-2">
                                                                                     <li>Phone: {this.state.transportModel.phone}</li>
                                                                                     <li>Email: {this.state.transportModel.email}</li>
-                                                                                    <li>Website: 
+                                                                                    <li>Website:
                                                                                     <a href={this.state.transportModel.website} target='_blank'>
-                                                                                             {this.state.transportModel.website}
+                                                                                            {this.state.transportModel.website}
                                                                                         </a></li>
                                                                                     <li>Address: {this.state.transportModel.address}</li>
                                                                                 </ul>
@@ -466,7 +550,7 @@ class TransactionDetails extends Component {
                                                                                     }
                                                                                 </select>
                                                                                 <br></br>
-                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmit}>Submit</button>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={() => this.handleOpenDialog('handleOnSubmit')}>Submit</button>
                                                                             </div>
                                                                             :
                                                                             null
@@ -487,8 +571,8 @@ class TransactionDetails extends Component {
                                                                                     }
                                                                                 </select>
                                                                                 <br></br>
-                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={this.handleOnSubmitChooseTruck}>Accept</button>
-                                                                                <button type="button" className="btn btn-lg btn-block btn-warning" onClick={this.handleOnRejectToDelivery}>Reject</button>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-info" onClick={() => this.handleOpenDialog('handleOnSubmitChooseTruck')}>Accept</button>
+                                                                                <button type="button" className="btn btn-lg btn-block btn-warning" onClick={() => this.handleOpenDialog('handleOnRejectToDelivery')}>Reject</button>
                                                                             </div>
                                                                             :
                                                                             null
@@ -498,7 +582,7 @@ class TransactionDetails extends Component {
                                                                             ?
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-info"
-                                                                                onClick={this.handleOnSubmitToConfirmTheGoodIsGotten}>
+                                                                                onClick={() => this.handleOpenDialog('handleOnSubmitToConfirmTheGoodIsGotten')}>
                                                                                 Loading
                                                                             </button>
                                                                             :
@@ -533,7 +617,7 @@ class TransactionDetails extends Component {
                                                                             ?
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-info"
-                                                                                onClick={this.handleOnSubmitToConfirmTheGoodIsReceipted}>
+                                                                                onClick={() => this.handleOpenDialog('handleOnSubmitToConfirmTheGoodIsReceipted')}>
                                                                                 Confirm
                                                                         </button>
                                                                             :
@@ -544,7 +628,7 @@ class TransactionDetails extends Component {
                                                                             ?
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-danger"
-                                                                                onClick={this.handleClickDeleteProcess}>
+                                                                                onClick={() => this.handleOpenDialog('handleClickDeleteProcess')}>
                                                                                 Delete Transaction
                                                                         </button>
                                                                             : null
@@ -554,7 +638,7 @@ class TransactionDetails extends Component {
                                                                             ?
                                                                             <button type="button"
                                                                                 className="btn btn-lg btn-block btn-danger"
-                                                                                onClick={this.handleClickDeleteProcess}>
+                                                                                onClick={() => this.handleOpenDialog('handleClickDeleteProcess')}>
                                                                                 Delete Transaction
                                                                         </button>
                                                                             : null
@@ -599,6 +683,14 @@ class TransactionDetails extends Component {
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <div className="card-header">
+                                                    <h4 className="card-title">Images </h4>
+                                                </div>
+                                                <div className="card-content collapse show">
+                                                    <div className="card-body card-dashboard">
+                                                        {imageList}
+                                                    </div>
+                                                </div>
                                             </div>
                                             :
                                             null
@@ -619,6 +711,23 @@ class TransactionDetails extends Component {
                     autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
                     <Alert severity="error" style={{ fontSize: '15px' }}>{this.state.alertMessage}</Alert>
                 </Snackbar>
+                <Dialog
+                    open={open}
+                    onClose={this.handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Message"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {messageDialog}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseDialog} color="secondary">Cancel</Button>
+                        <Button onClick={this.handlePostDataDialog} color="primary">OK</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
