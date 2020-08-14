@@ -10,6 +10,7 @@ class UserProfile extends Component {
 
     render() {
         const { result } = this.props;
+        console.log(result);
         return (
             <form className="form">
                 <div className="form-body">
@@ -74,8 +75,8 @@ class UserProfile extends Component {
                             type="tel"
                             placeholder="Contact Number"
                             name="phone"
-                            defaultValue={result.number}
-                            disabled={result.number} onChange={this.handleChange} required />
+                            defaultValue={result.phone}
+                            disabled={result.phone} onChange={this.handleChange} required />
                     </div>
 
                     <div className="form-group">

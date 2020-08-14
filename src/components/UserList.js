@@ -8,7 +8,6 @@ import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
 import UserProfile from './UserProfile';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
-import { throwStatement } from '@babel/types';
 
 class UserList extends Component {
     constructor(props) {
