@@ -22,9 +22,8 @@ class UserProfile extends Component {
                                     type="text"
                                     id="userinput1"
                                     className="form-control border-primary"
-                                    placeholder="name"
                                     name="companyName"
-                                    disabled={result.companyName}
+                                    disabled={this.state.disable}
                                     defaultValue={result.companyName}
                                     onChange={this.handleChange} required />
                             </div>
@@ -35,9 +34,8 @@ class UserProfile extends Component {
                                 <input
                                     type="text"
                                     id="userinput2"
-                                    className="form-control border-primary"
-                                    placeholder="text indentify num" name="tin"
-                                    disabled={result.tin}
+                                    className="form-control border-primary" name="tin"
+                                    disabled={this.state.disable}
                                     defaultValue={result.tin} onChange={this.handleChange} />
                             </div>
                         </div>
@@ -50,10 +48,9 @@ class UserProfile extends Component {
                         <input
                             className="form-control border-primary"
                             type="email"
-                            placeholder="Email"
                             name="email" id="userinput5"
                             defaultValue={result.email}
-                            disabled={result.email}
+                            disabled={this.state.disable}
                             onChange={this.handleChange} required />
                     </div>
 
@@ -61,10 +58,10 @@ class UserProfile extends Component {
                         <label htmlFor="userinput6">Website</label>
                         <input
                             className="form-control border-primary"
-                            type="url" placeholder="http://"
+                            type="url"
                             name="website" id="userinput6"
                             defaultValue={result.website}
-                            disabled={result.website} onChange={this.handleChange} />
+                            disabled={this.state.disable} onChange={this.handleChange} />
                     </div>
 
                     <div className="form-group">
@@ -73,10 +70,9 @@ class UserProfile extends Component {
                             className="form-control border-primary"
                             id="userinput7"
                             type="tel"
-                            placeholder="Contact Number"
                             name="phone"
                             defaultValue={result.phone}
-                            disabled={result.phone} onChange={this.handleChange} required />
+                            disabled={this.state.disable} onChange={this.handleChange} required />
                     </div>
 
                     <div className="form-group">
@@ -84,9 +80,9 @@ class UserProfile extends Component {
                         <textarea id="userinput8"
                             rows="5"
                             className="form-control border-primary"
-                            name="address" placeholder="Address"
+                            name="address"
                             defaultValue={result.address}
-                            disabled={result.address} onChange={this.handleChange} required></textarea>
+                            disabled={this.state.disable} onChange={this.handleChange} required></textarea>
                     </div>
                 </div>
             </form>
