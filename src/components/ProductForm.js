@@ -12,7 +12,7 @@ class ProductForm extends Component {
             exp: '',
             mfg: '',
             progress: false,
-            images: null,
+            images: [],
         }
     }
 
@@ -23,9 +23,11 @@ class ProductForm extends Component {
 
     handleFiles = e => {
         let files = e.target.files;
-        this.setState({
-            images: files,
-        })
+        if (files.length !== 0){
+            this.setState({
+                images: files,
+            })
+        }
     }
 
     handleSubmit = (e) => {
