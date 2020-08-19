@@ -78,7 +78,7 @@ class ProductDetail extends Component {
     }
     render() {
         const { image } = this.state;
-        var imageString = "[raucu.jpg]"
+        var imageString = "[/raucu.jpg]"
         if (image !== "" && image !== undefined && image !== null && image !== "[]") { imageString = image; }
         imageString = imageString.slice(1, imageString.length - 1).split(",");
         var imageList = [];

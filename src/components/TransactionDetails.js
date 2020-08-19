@@ -347,7 +347,7 @@ class TransactionDetails extends Component {
         console.log(this.state.qrCodeList);
         const { image, open, messageDialog } = this.state;
         console.log({messageDialog});
-        var imageString = "[raucu.jpg]"
+        var imageString = "[/raucu.jpg]"
         if (image !== "" && image !== undefined && image !== null && image !== "[]") { imageString = image; }
         imageString = imageString.slice(1, imageString.length - 1).split(",");
         var imageList = [];
