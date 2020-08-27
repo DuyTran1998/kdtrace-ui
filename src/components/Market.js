@@ -120,8 +120,8 @@ class Market extends Component {
                                                                     <th onClick={() => this.sortData('type')}>      Type                {this.handleArrow(this.state.showArrow.type)}</th>
                                                                     <th onClick={() => this.sortData('quantity')}>  Quantity            {this.handleArrow(this.state.showArrow.quantity)}</th>
                                                                     <th onClick={() => this.sortData('unit')}>      Unit                {this.handleArrow(this.state.showArrow.unit)}</th>
-                                                                    <th onClick={() => this.sortData('mfg')}>       Manufacture Date    {this.handleArrow(this.state.showArrow.mfg)}</th>
-                                                                    <th onClick={() => this.sortData('exp')}>       Expiration Date     {this.handleArrow(this.state.showArrow.exp)}</th>
+                                                                    <th onClick={() => this.sortData('mfg')}>       Manufacture         {this.handleArrow(this.state.showArrow.mfg)}</th>
+                                                                    <th onClick={() => this.sortData('exp')}>       Expiration          {this.handleArrow(this.state.showArrow.exp)}</th>
                                                                     <th>Details</th>
                                                                 </tr>
                                                             </thead>

@@ -22,7 +22,7 @@ class ProductInMarket extends Component {
                 <td className="ProductRecord_Exp">{this.props.product.exp}</td>
                 {/* <td className="ProductRecord_Details"><Link to={href}>Link</Link></td> */}
                 <td>
-                     <Link to={href}><button className="btn btn-info btn-min-width mr-1 mb-1 ladda-button" data-style="zoom-in"><span className="ladda-label">View Details</span></button></Link>
+                     <Link to={href}><span className="ladda-label">Details</span></Link>
                 </td>
             </tr>
         )

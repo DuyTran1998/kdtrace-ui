@@ -61,7 +61,7 @@ class TransactionRecord extends Component {
                 <td className="Transaction">{this.props.transaction.updateAt}</td>
                 <td className="Transaction">{this.props.transaction.create_at}</td>
                 <td className="Transaction">
-                    <Link to={link}><span className="ladda-label">View Details</span></Link>
+                    <Link to={link}><span className="ladda-label">Details</span></Link>
                 </td>
             </tr>
         );
