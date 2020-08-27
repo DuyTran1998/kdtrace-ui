@@ -8,6 +8,9 @@ import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
 import UserProfile from './UserProfile';
 import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 class UserList extends Component {
     constructor(props) {
@@ -21,6 +24,15 @@ class UserList extends Component {
             loading: true,
             open: false,
             result: '',
+            asc: true,
+            showArrow: {
+                id: false,
+                name: false,
+                type: false,
+                quantity: false,
+                unit: false,
+                mfg: false
+            }
         }
     }
     componentDidMount() {
@@ -32,6 +44,48 @@ class UserList extends Component {
             }
         }
         this.getAllUser(localStorage.getItem('token'));
+    }
+
+    hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
+    sortData = (column, subColumn) => {
+        let data = [];
+        data = this.state.userList.sort((a, b) => {
+            if (subColumn === null || subColumn === undefined) {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column]) - this.hasLeading(a[column]) || a[column] > b[column] || -(a[column] < b[column])
+                }
+                return this.hasLeading(a[column]) - this.hasLeading(b[column]) || b[column] > a[column] || -(b[column] < a[column])
+            } else {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column][subColumn]) - this.hasLeading(a[column][subColumn]) || a[column][subColumn] > b[column][subColumn] || -(a[column][subColumn] < b[column][subColumn])
+                }
+                return this.hasLeading(a[column][subColumn]) - this.hasLeading(b[column][subColumn]) || b[column][subColumn] > a[column][subColumn] || -(b[column][subColumn] < a[column][subColumn])
+            }
+        });
+        var showArrow = {
+            id: false,
+            name: false,
+            type: false,
+            quantity: false,
+            unit: false,
+            mfg: false
+        };
+        showArrow[column] = true;
+        this.setState({
+            listTransactions: data,
+            asc: !this.state.asc,
+            showArrow: showArrow
+        })
+    }
+
+    handleArrow = (show) => {
+        if (show) {
+            if (this.state.asc) return <ArrowDropUpIcon color="secondary" />
+            return <ArrowDropDownIcon color="secondary" />
+        }
+        else {
+            return <MoreHorizIcon color="disabled" />
+        }
     }
 
     getAllUser = (token) => {
@@ -81,7 +135,7 @@ class UserList extends Component {
             .then(response => response.json())
             .then(jsonResponse => {
                 if (jsonResponse.status === 200) {
-                    this.setState({result: jsonResponse.result});
+                    this.setState({ result: jsonResponse.result });
                 } else {
                     console.log(jsonResponse);
                 }
@@ -173,11 +227,11 @@ class UserList extends Component {
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Id</th>
-                                                                        <th>Username</th>
-                                                                        <th>Email</th>
-                                                                        <th>Role</th>
-                                                                        <th>Create date</th>
+                                                                        <th onClick={() => this.sortData('id')}>        Id          {this.handleArrow(this.state.showArrow.id)}</th>
+                                                                        <th onClick={() => this.sortData('username')}>  Username    {this.handleArrow(this.state.showArrow.username)}</th>
+                                                                        <th onClick={() => this.sortData('email')}>     Email       {this.handleArrow(this.state.showArrow.email)}</th>
+                                                                        <th onClick={() => this.sortData('role', 'roleName')}>  Role        {this.handleArrow(this.state.showArrow.role)}</th>
+                                                                        <th onClick={() => this.sortData('createAt')}>  Create date {this.handleArrow(this.state.showArrow.createAt)}</th>
                                                                         <th>Active</th>
                                                                     </tr>
                                                                 </thead>
@@ -186,11 +240,11 @@ class UserList extends Component {
                                                                         Array.isArray(list)
                                                                         && list.map(user => {
                                                                             return (
-                                                                                <UserRecord 
-                                                                                    key={user.id} 
-                                                                                    user={user} 
-                                                                                    onChange={this.activeAccountUser} 
-                                                                                    open={this.handleOpenDialog} 
+                                                                                <UserRecord
+                                                                                    key={user.id}
+                                                                                    user={user}
+                                                                                    onChange={this.activeAccountUser}
+                                                                                    open={this.handleOpenDialog}
                                                                                     getProfile={this.getProfileUser}
                                                                                 />
                                                                             );

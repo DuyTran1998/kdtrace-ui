@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import TransactionRecord from './TransactionRecord';
 import { API_GET_ALL_TRANSACTION } from '../constants/API/api';
 import { CircularProgress } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 class Transactions extends Component {
     constructor(props) {
@@ -9,11 +12,61 @@ class Transactions extends Component {
         this.state = {
             listTransactions: [],
             loading: true,
+            showArrow: {
+                id: false,
+                productModel: false,
+                quanlity: false,
+                statusProcess: false,
+                updateAt: false,
+                create_at: false
+            }
         }
     }
     componentDidMount() {
         const token = localStorage.getItem('token');
         this.getData(API_GET_ALL_TRANSACTION, token);
+    }
+
+    hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
+    sortData = (column, subColumn) => {
+        let data = [];
+        data = this.state.listTransactions.sort((a, b) => {
+            if (subColumn === null || subColumn === undefined) {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column]) - this.hasLeading(a[column]) || a[column] > b[column] || -(a[column] < b[column])
+                }
+                return this.hasLeading(a[column]) - this.hasLeading(b[column]) || b[column] > a[column] || -(b[column] < a[column])
+            } else {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column][subColumn]) - this.hasLeading(a[column][subColumn]) || a[column][subColumn] > b[column][subColumn] || -(a[column][subColumn] < b[column][subColumn])
+                }
+                return this.hasLeading(a[column][subColumn]) - this.hasLeading(b[column][subColumn]) || b[column][subColumn] > a[column][subColumn] || -(b[column][subColumn] < a[column][subColumn])
+            }
+        });
+        var showArrow = {
+            id: false,
+            productModel: false,
+            quanlity: false,
+            statusProcess: false,
+            updateAt: false,
+            create_at: false
+        };
+        showArrow[column] = true;
+        this.setState({
+            listTransactions: data,
+            asc: !this.state.asc,
+            showArrow: showArrow
+        })
+    }
+
+    handleArrow = (show) => {
+        if (show) {
+            if (this.state.asc) return <ArrowDropUpIcon color="secondary" />
+            return <ArrowDropDownIcon color="secondary" />
+        }
+        else {
+            return <MoreHorizIcon color="disabled" />
+        }
     }
 
     getData(url, token) {
@@ -65,14 +118,13 @@ class Transactions extends Component {
                                                             <table className="custom-small-padding table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr style={{ marginLeft: 0, marginRight: 0 }}>
-                                                                        <th>Transaction Id</th>
-                                                                        <th>Product Name</th>
-                                                                        <th>Quantity</th>
-                                                                        <th>Status Process</th>
-                                                                        <th>Last Update</th>
-                                                                        <th>Create Time</th>
+                                                                        <th onClick={() => this.sortData('id')}>                    Transaction Id      {this.handleArrow(this.state.showArrow.id)}</th>
+                                                                        <th onClick={() => this.sortData('productModel', 'name')}>  Product Name        {this.handleArrow(this.state.showArrow.productModel)}</th>
+                                                                        <th onClick={() => this.sortData('quanlity')}>              Quantity            {this.handleArrow(this.state.showArrow.quanlity)}</th>
+                                                                        <th onClick={() => this.sortData('statusProcess')}>         Status Process      {this.handleArrow(this.state.showArrow.statusProcess)}</th>
+                                                                        <th onClick={() => this.sortData('updateAt')}>              Last Update         {this.handleArrow(this.state.showArrow.updateAt)}</th>
+                                                                        <th onClick={() => this.sortData('create_at')}>             Create Time         {this.handleArrow(this.state.showArrow.create_at)}</th>
                                                                         <th>Details</th>
-
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

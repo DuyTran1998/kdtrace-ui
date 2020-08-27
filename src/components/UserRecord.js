@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Switch from '@material-ui/core/Switch';
+import ContactsIcon from "@material-ui/icons/Contacts";
 
 const tdStyle = {
     paddingTop: '1px',
@@ -29,8 +30,9 @@ class UserRecord extends Component {
             <tr className="UserRecord">
                 <td className="UserRecord_Id">{this.props.user.id}</td>
                 <td className="UserRecord_UserName">
-                    <div onClick= {this.handleEvent}>
+                    <div onClick={this.handleEvent} style={{ display: 'flex', justifyContent: 'space-between' }}>
                         {this.props.user.username}
+                        {this.state.isChecked ? <ContactsIcon style={{ color: 'cadetblue' }} /> : <ContactsIcon style={{ color: 'tomato' }} />}
                     </div>
                 </td>
                 <td className="UserRecord_Email">{this.props.user.email}</td>

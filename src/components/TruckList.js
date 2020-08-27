@@ -6,6 +6,9 @@ import { Dialog, DialogTitle, DialogContentText, DialogContent, Typography } fro
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 class TruckList extends Component {
     constructor(props) {
@@ -18,11 +21,62 @@ class TruckList extends Component {
             alertSuccess: false,
             alertFail: false,
             loading: true,
+            asc: true,
+            showArrow: {
+                id: false,
+                name: false,
+                type: false,
+                quantity: false,
+                unit: false,
+                mfg: false
+            }
         }
     }
 
     componentDidMount() {
         this.getAllTrucks(localStorage.getItem('token'));
+    }
+
+    hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
+    sortData = (column, subColumn) => {
+        let data = [];
+        data = this.state.trucks.sort((a, b) => {
+            if (subColumn === null || subColumn === undefined) {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column]) - this.hasLeading(a[column]) || a[column] > b[column] || -(a[column] < b[column])
+                }
+                return this.hasLeading(a[column]) - this.hasLeading(b[column]) || b[column] > a[column] || -(b[column] < a[column])
+            } else {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column][subColumn]) - this.hasLeading(a[column][subColumn]) || a[column][subColumn] > b[column][subColumn] || -(a[column][subColumn] < b[column][subColumn])
+                }
+                return this.hasLeading(a[column][subColumn]) - this.hasLeading(b[column][subColumn]) || b[column][subColumn] > a[column][subColumn] || -(b[column][subColumn] < a[column][subColumn])
+            }
+        });
+        var showArrow = {
+            id: false,
+            name: false,
+            type: false,
+            quantity: false,
+            unit: false,
+            mfg: false
+        };
+        showArrow[column] = true;
+        this.setState({
+            listTransactions: data,
+            asc: !this.state.asc,
+            showArrow: showArrow
+        })
+    }
+
+    handleArrow = (show) => {
+        if (show) {
+            if (this.state.asc) return <ArrowDropUpIcon color="secondary" />
+            return <ArrowDropDownIcon color="secondary" />
+        }
+        else {
+            return <MoreHorizIcon color="disabled" />
+        }
     }
 
     handleOpenAlert = (flag, message) => {
@@ -106,10 +160,10 @@ class TruckList extends Component {
                                                         <table className="table table-striped table-bordered zero-configuration">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Id</th>
-                                                                    <th>Number Plate</th>
-                                                                    <th>Type</th>
-                                                                    <th>Status</th>
+                                                                    <th onClick={() => this.sortData('id')}>                    Id              {this.handleArrow(this.state.showArrow.id)}</th>
+                                                                    <th onClick={() => this.sortData('numberPlate')}>           Number Plate    {this.handleArrow(this.state.showArrow.numberPlate)}</th>
+                                                                    <th onClick={() => this.sortData('autoMaker')}>             Type            {this.handleArrow(this.state.showArrow.autoMaker)}</th>
+                                                                    <th onClick={() => this.sortData('statusDeliveryTruck')}>   Status          {this.handleArrow(this.state.showArrow.statusDeliveryTruck)}</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>

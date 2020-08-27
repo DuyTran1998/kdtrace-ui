@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { isLoggedIn } from '../services/Authentication.js';
 import history from '../utils/@history';
-import {API_REGISTER} from '../constants/API/api';
+import { API_REGISTER } from '../constants/API/api';
+import img from './../assets/images/logo/logo.png';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 class Register extends Component {
@@ -23,7 +24,7 @@ class Register extends Component {
     }
     componentDidMount() {
         if (typeof localStorage !== undefined) {
-            if(localStorage.getItem('token')) {
+            if (localStorage.getItem('token')) {
                 history.push('/');
             }
         }
@@ -47,12 +48,12 @@ class Register extends Component {
             credentials: 'same-origin'
         }).then(response => response.json())
             .then(jsonResponse => {
-                if(jsonResponse.status === 200){
+                if (jsonResponse.status === 200) {
                     this.handleOpenAlert('success', jsonResponse.message);
                     history.push('/login')
                     window.location.reload()
                 }
-                else{
+                else {
                     this.handleOpenAlert('fail', jsonResponse.message);
                 }
             })
@@ -101,9 +102,9 @@ class Register extends Component {
                                         <div className="card border-grey border-lighten-3 px-2 py-2 m-0">
                                             <div className="card-header border-0">
                                                 <div className="card-title text-center">
-                                                    <img src="../../../app-assets/images/logo/logo-dark.png" alt="branding logo" />
+                                                    <div className="p-1"><img src={img} alt="branding logo" /></div>
                                                 </div>
-                                                <h6 className="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span>Create Account</span></h6>
+                                                <h6 className="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span style={{ fontSize: '18px' }}>Create Account with KDTrace</span></h6>
                                             </div>
                                             <div className="card-content">
                                                 <div className="card-body">
