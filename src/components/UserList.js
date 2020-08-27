@@ -160,6 +160,14 @@ class UserList extends Component {
         }
     }
 
+    pagation = (list, page) => {
+        if (list.length < 10) {
+            return list;
+        }
+        const newlist = list.slice(page * 10 - 10, page * 10);
+        return newlist;
+    }
+
     handleOpenDialog = () => {
         this.setState({
             open: true,
@@ -184,13 +192,6 @@ class UserList extends Component {
         this.setState({ alertSuccess: false, alertFail: false });
     }
 
-    pagation = (list, page) => {
-        if (list.length < 10) {
-            return list;
-        }
-        const newlist = list.slice(page * 10 - 10, page * 10);
-        return newlist;
-    }
 
     handleOpenAlert = (flag, message) => {
         if (flag === 'success') {
@@ -272,16 +273,24 @@ class UserList extends Component {
                                                     </Dialog>
                                                     <div className="content-header-right col-12">
                                                         <div className="btn-group float-md-right">
-                                                            <div className="float-right my-1">
-                                                                <ul className="pager pager-round">
-                                                                    <li>
-                                                                        <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
-                                                                    </li>
-                                                                    <li>
-                                                                        <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
+                                                            <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                <li class="page-item prev">
+                                                                    <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                </li>
+                                                                <li class="page-item active">
+                                                                    <a href="!#" class="page-link">{this.state.page}</a>
+                                                                </li>
+                                                                <li class="page-item next" onClick={this.increatePage}>
+                                                                    <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                </li>
+                                                                {/* <li>
+                                                                    <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
+                                                                </li>
+                                                                <li>
+                                                                    <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
+                                                                </li> */}
+
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>

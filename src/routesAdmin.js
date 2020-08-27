@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute';
 import TransactionDetails from './components/TransactionDetails';
 import TransactionComponent from './components/TransactionComponent'
 import Warehouse from './components/Warehouse';
+import ReportList from './components/ReportList';
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         path : '/login',
         exact : false,
         component : Login,
+    },
+    {
+        path : '/report',
+        exact : false,
+        component : ReportList,
     },
     {
         path : '/register',

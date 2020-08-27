@@ -10,7 +10,6 @@ class UserProfile extends Component {
 
     render() {
         const { result } = this.props;
-        console.log(result);
         return (
             <form className="form">
                 <div className="form-body">
