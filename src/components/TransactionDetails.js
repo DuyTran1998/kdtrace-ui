@@ -285,7 +285,7 @@ class TransactionDetails extends Component {
         const { name, value } = e.target;
         if (name === 'id_transport') {
             this.state.listTransportCompany.forEach(transport => {
-                if (transport.id === value) {
+                if (transport.id == value) {
                     this.setState({
                         transportModel: transport
                     })
