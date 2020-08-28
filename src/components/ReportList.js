@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import Report from '../components/Report';
 import { API_GET_REPORTS } from '../constants/API/api'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+
 
 class ReportList extends Component {
     constructor(props) {
@@ -10,10 +14,56 @@ class ReportList extends Component {
             page: 1,
             reportList: [],
             loading: true,
+            asc: true,
+            showArrow: {
+                id: false,
+                time: false,
+                productLink: false
+            }
+
         }
     }
     componentDidMount() {
         this.getAllReport();
+    }
+
+    hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
+    sortData = (column, subColumn) => {
+        let data = [];
+        data = this.state.reportList.sort((a, b) => {
+            if (subColumn === null || subColumn === undefined) {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column]) - this.hasLeading(a[column]) || a[column] > b[column] || -(a[column] < b[column])
+                }
+                return this.hasLeading(a[column]) - this.hasLeading(b[column]) || b[column] > a[column] || -(b[column] < a[column])
+            } else {
+                if (!this.state.asc) {
+                    return this.hasLeading(b[column][subColumn]) - this.hasLeading(a[column][subColumn]) || a[column][subColumn] > b[column][subColumn] || -(a[column][subColumn] < b[column][subColumn])
+                }
+                return this.hasLeading(a[column][subColumn]) - this.hasLeading(b[column][subColumn]) || b[column][subColumn] > a[column][subColumn] || -(b[column][subColumn] < a[column][subColumn])
+            }
+        });
+        var showArrow = {
+            id: false,
+            time: false,
+            productLink: false
+        };
+        showArrow[column] = true;
+        this.setState({
+            listTransactions: data,
+            asc: !this.state.asc,
+            showArrow: showArrow
+        })
+    }
+
+    handleArrow = (show) => {
+        if (show) {
+            if (this.state.asc) return <ArrowDropUpIcon color="secondary" />
+            return <ArrowDropDownIcon color="secondary" />
+        }
+        else {
+            return <MoreHorizIcon color="disabled" />
+        }
     }
 
     getAllReport = () => {
@@ -81,10 +131,10 @@ class ReportList extends Component {
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th align="center">Id</th>
-                                                                        <th align="center">Product URL</th>
+                                                                        <th align="center" onClick={() => this.sortData('id')}>Id{this.handleArrow(this.state.showArrow.id)}</th>
+                                                                        <th align="center" onClick={() => this.sortData('productLink')}>Product URL{this.handleArrow(this.state.showArrow.productLink)}</th>
                                                                         <th align="center">Phone Customer</th>
-                                                                        <th align="center">Time Report</th>
+                                                                        <th align="center" onClick={() => this.sortData('time')}>Time Report{this.handleArrow(this.state.showArrow.time)}</th>
                                                                         <th >Content Report</th>
                                                                     </tr>
                                                                 </thead>
@@ -104,27 +154,27 @@ class ReportList extends Component {
                                                             </table>
                                                         </div>
                                                         <div className="content-header-right col-12">
-                                                        <div className="btn-group float-md-right">
-                                                            <ul class="pagination pagination-separate pagination-curved page2-links">
-                                                                <li class="page-item prev">
-                                                                    <button onClick={this.decreatePage} class="page-link">Prev</button>
-                                                                </li>
-                                                                <li class="page-item active">
-                                                                    <a href="!#" class="page-link">{this.state.page}</a>
-                                                                </li>
-                                                                <li class="page-item next" onClick={this.increatePage}>
-                                                                    <button onClick={this.increatePage} class="page-link">Next</button>
-                                                                </li>
-                                                                {/* <li>
+                                                            <div className="btn-group float-md-right">
+                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                    <li class="page-item prev">
+                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                    </li>
+                                                                    <li class="page-item active">
+                                                                        <a href="!#" class="page-link">{this.state.page}</a>
+                                                                    </li>
+                                                                    <li class="page-item next" onClick={this.increatePage}>
+                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                    </li>
+                                                                    {/* <li>
                                                                     <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
                                                                 </li>
                                                                 <li>
                                                                     <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
                                                                 </li> */}
 
-                                                            </ul>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </div>
                                                 :
