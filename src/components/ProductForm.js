@@ -90,6 +90,9 @@ class ProductForm extends Component {
                         <select id="issueinput5" name="type" onChange={this.handleChange} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" required>
                             <option value="vegetable">Vegetable</option>
                             <option value="fruit">Fruits</option>
+                            <option value="meal">Meals</option>
+                            <option value="seafood">SeaFoods</option>
+                            <option value="cereals">Cereals</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
