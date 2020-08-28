@@ -50,5 +50,4 @@ const mapStateToProps = (state) => {
         userContext: state.profile,
     }
 }
-
 export default connect(mapStateToProps)(HomePage);

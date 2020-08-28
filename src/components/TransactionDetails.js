@@ -36,6 +36,7 @@ class TransactionDetails extends Component {
             distributorModel: {},
             transportModel: {},
             producerModel: {},
+            quantity: null,
             productModel: {},
             open: false,
             error: '',
@@ -114,6 +115,7 @@ class TransactionDetails extends Component {
                 if (res.error) {
                     throw (res.error);
                 }
+                console.log(res);
                 this.setState({
                     id: res.result.id,
                     productID: res.result.productID,
@@ -123,6 +125,7 @@ class TransactionDetails extends Component {
                     transportModel: res.result.transportModel,
                     producerModel: res.result.producerModel,
                     productModel: res.result.productModel,
+                    quantity: res.result.quanlity,
                     qrCodeList: res.result.qrCodeModels,
                     create_at: res.result.create_at,
                     image: res.result.productModel.image,
@@ -438,7 +441,7 @@ class TransactionDetails extends Component {
                                                 <td>{this.state.productModel.id}</td>
                                                 <td>{this.state.productModel.name}</td>
                                                 <td>{this.state.productModel.type}</td>
-                                                <td>{this.state.productModel.quantity}</td>
+                                                <td>{this.state.quantity}</td>
                                                 <td>{this.state.productModel.unit}</td>
                                                 <td>{this.state.productModel.mfg}</td>
                                                 <td>{this.state.productModel.exp}</td>
@@ -675,7 +678,7 @@ class TransactionDetails extends Component {
                                                                     Array.isArray(this.state.qrCodeList)
                                                                     && this.state.qrCodeList.map(code => {
                                                                         return (
-                                                                            <QRCode key={code.id} code={code}></QRCode>
+                                                                            <QRCode key={code.id} code={code} role={this.state.role}></QRCode>
                                                                         );
                                                                     })
                                                                 }
