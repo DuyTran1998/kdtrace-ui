@@ -1,21 +1,38 @@
 import React, { Component } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import Report from '../components/Report';
+import { API_GET_REPORTS } from '../constants/API/api'
 
 class ReportList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             page: 1,
-            reportList: [{
-                id: 1,
-                productLink: "https://checking.kdtrace.xyz/?code=P1-N1",
-                phone: "092214212",
-                time: "2020/08/27 14:36:50",
-                reportContent: "Hang gia, kem chat luong",
-            }],
+            reportList: [],
+            loading: true,
         }
     }
+    componentDidMount() {
+        this.getAllReport();
+    }
+
+    getAllReport = () => {
+        const token = localStorage.getItem('token');
+        this.setState({ loading: true })
+        const url = API_GET_REPORTS;
+        fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                this.setState({ loading: false })
+                this.setState({ reportList: jsonResponse.result });
+            })
+    }
+
     increatePage = () => {
         if (this.state.reportList.length / (this.state.page * 10) > 1) {
             let newPageNum = this.state.page + 1;
@@ -42,6 +59,7 @@ class ReportList extends Component {
         return newlist;
     }
     render() {
+        console.log(this.state.reportList);
         const list = this.pagation(this.state.reportList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">

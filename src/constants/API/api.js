@@ -13,6 +13,8 @@ export const API_ACTIVE_USER_ACCOUNT = "https://kdtrace.xyz/api/admin/active?use
 
 export const API_GET_PROFILE = "https://kdtrace.xyz/api/admin/getProfile?";
 
+export const API_GET_REPORTS = "https://kdtrace.xyz/api/admin/getAllReports";
+
 
 
 

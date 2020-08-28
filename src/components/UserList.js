@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import UserRecord from './UserRecord';
 import { withRouter } from 'react-router-dom';
 import { API_GET_ALL_USER, API_ACTIVE_USER_ACCOUNT, API_GET_PROFILE } from '../constants/API/api';
-import { Link } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
