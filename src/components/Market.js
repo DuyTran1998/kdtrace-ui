@@ -12,6 +12,7 @@ class Market extends Component {
         this.state = {
             productList: [],
             loading: true,
+            page: 1,
             asc: true,
             showArrow: {
                 id: false,
@@ -95,7 +96,34 @@ class Market extends Component {
                 })
             })
     }
+
+    increatePage = () => {
+        if (this.state.productList.length / (this.state.page * 10) > 1) {
+            let newPageNum = this.state.page + 1;
+            this.setState({
+                page: newPageNum
+            })
+        }
+    }
+
+    decreatePage = () => {
+        let newPageNum = this.state.page;
+        if (newPageNum > 1) {
+            this.setState({
+                page: newPageNum - 1
+            })
+        }
+    }
+
+    pagation = (list, page) => {
+        if (list.length < 10) {
+            return list;
+        }
+        const newlist = list.slice(page * 10 - 10, page * 10);
+        return newlist;
+    }
     render() {
+        const list = this.pagation(this.state.productList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -112,6 +140,7 @@ class Market extends Component {
                                             <div className="card-body card-dashboard">
                                                 {
                                                     this.state.productList.length !== 0 ?
+                                                    <div>
                                                         <table className="table table-striped table-bordered zero-configuration">
                                                             <thead>
                                                                 <tr>
@@ -127,8 +156,8 @@ class Market extends Component {
                                                             </thead>
                                                             <tbody>
                                                                 {
-                                                                    Array.isArray(this.state.productList)
-                                                                    && this.state.productList.map(product => {
+                                                                    Array.isArray(list)
+                                                                    && list.map(product => {
                                                                         return (
                                                                             <Product key={product.id} product={product} />
                                                                         );
@@ -136,6 +165,22 @@ class Market extends Component {
                                                                 }
                                                             </tbody>
                                                         </table>
+                                                        <div className="content-header-right col-12">
+                                                            <div className="btn-group float-md-right">
+                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                    <li class="page-item prev">
+                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                    </li>
+                                                                    <li class="page-item active">
+                                                                        <button class="page-link">{this.state.page}</button>
+                                                                    </li>
+                                                                    <li class="page-item next" onClick={this.increatePage}>
+                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                         :
                                                         this.state.loading === true ?
                                                             <div style={{ display: 'flex', justifyContent: 'center' }}>

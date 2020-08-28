@@ -18,6 +18,7 @@ class TransactionComponent extends Component {
             listTransactions: [],
             token: '',
             role: '',
+            page: 1,
             loading: true,
             asc: true,
             showArrow: {
@@ -101,6 +102,31 @@ class TransactionComponent extends Component {
             this.getData(API_GET_ALL_TRANSACTION, token);
         }
     }
+    increatePage = () => {
+        if (this.state.listTransactions.length / (this.state.page * 10) > 1) {
+            let newPageNum = this.state.page + 1;
+            this.setState({
+                page: newPageNum
+            })
+        }
+    }
+
+    decreatePage = () => {
+        let newPageNum = this.state.page;
+        if (newPageNum > 1) {
+            this.setState({
+                page: newPageNum - 1
+            })
+        }
+    }
+
+    pagation = (list, page) => {
+        if (list.length < 10) {
+            return list;
+        }
+        const newlist = list.slice(page * 10 - 10, page * 10);
+        return newlist;
+    }
 
     getData(url, token) {
         this.setState({
@@ -131,6 +157,7 @@ class TransactionComponent extends Component {
             })
     }
     render() {
+        const list = this.pagation(this.state.listTransactions, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -162,8 +189,8 @@ class TransactionComponent extends Component {
                                                             </thead>
                                                             <tbody>
                                                                 {
-                                                                    Array.isArray(this.state.listTransactions)
-                                                                    && this.state.listTransactions.map(transaction => {
+                                                                    Array.isArray(list)
+                                                                    && list.map(transaction => {
                                                                         return (
                                                                             <TransactionRecord key={transaction.id} transaction={transaction} />
                                                                         );
@@ -171,6 +198,21 @@ class TransactionComponent extends Component {
                                                                 }
                                                             </tbody>
                                                         </table>
+                                                        <div className="content-header-right col-12">
+                                                            <div className="btn-group float-md-right">
+                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                    <li class="page-item prev">
+                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                    </li>
+                                                                    <li class="page-item active">
+                                                                        <button class="page-link">{this.state.page}</button>
+                                                                    </li>
+                                                                    <li class="page-item next" onClick={this.increatePage}>
+                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 :

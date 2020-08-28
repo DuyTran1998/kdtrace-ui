@@ -278,18 +278,11 @@ class UserList extends Component {
                                                                     <button onClick={this.decreatePage} class="page-link">Prev</button>
                                                                 </li>
                                                                 <li class="page-item active">
-                                                                    <a href="!#" class="page-link">{this.state.page}</a>
+                                                                    <button class="page-link">{this.state.page}</button>
                                                                 </li>
                                                                 <li class="page-item next" onClick={this.increatePage}>
                                                                     <button onClick={this.increatePage} class="page-link">Next</button>
                                                                 </li>
-                                                                {/* <li>
-                                                                    <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
-                                                                </li> */}
-
                                                             </ul>
                                                         </div>
                                                     </div>

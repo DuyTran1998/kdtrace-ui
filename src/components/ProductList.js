@@ -5,7 +5,6 @@ import ProductForm from './ProductForm';
 import { API_GET_ALL_PRODUCT } from '../constants/API/api'
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import { Link } from "react-router-dom";
 import { CircularProgress } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -116,10 +115,12 @@ class ProductList extends Component {
     }
 
     increatePage = () => {
-        let newPageNum = this.state.page + 1;
-        this.setState({
-            page: newPageNum
-        })
+        if (this.state.productList.length / (this.state.page * 10) > 1) {
+            let newPageNum = this.state.page + 1;
+            this.setState({
+                page: newPageNum
+            })
+        }
     }
 
     decreatePage = () => {
@@ -130,12 +131,17 @@ class ProductList extends Component {
             })
         }
     }
+
+    pagation = (list, page) => {
+        if (list.length < 10) {
+            return list;
+        }
+        const newlist = list.slice(page * 10 - 10, page * 10);
+        return newlist;
+    }
+
     render() {
-        const productList = this.state.productList.map(product => {
-            return (
-                <ProductRecord key={product.id} product={product}></ProductRecord>
-            );
-        })
+        const list = this.pagation(this.state.productList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
                 <div className="content-wrapper">
@@ -176,21 +182,31 @@ class ProductList extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {productList}
+                                                                {
+                                                                    Array.isArray(list)
+                                                                    && list.map(product => {
+                                                                        return (
+                                                                            <ProductRecord key={product.id} 
+                                                                                            product={product} 
+                                                                            />
+                                                                        );
+                                                                    })
+                                                                }
                                                             </tbody>
                                                         </table>
                                                         <div className="content-header-right col-12">
                                                             <div className="btn-group float-md-right">
-                                                                <div className="float-right my-1">
-                                                                    <ul className="pager pager-round">
-                                                                        <li>
-                                                                            <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
-                                                                        </li>
-                                                                        <li>
-                                                                            <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                    <li class="page-item prev">
+                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                    </li>
+                                                                    <li class="page-item active">
+                                                                        <button  class="page-link">{this.state.page}</button>
+                                                                    </li>
+                                                                    <li class="page-item next" onClick={this.increatePage}>
+                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
