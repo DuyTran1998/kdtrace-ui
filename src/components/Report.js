@@ -6,7 +6,7 @@ class Report extends Component {
             <tr className="Report">
                 <td className="ReportId">{this.props.report.id}</td>
                 <td className="UserRecord_UserName">
-                    <a href={this.props.report.productLink} target="_blank">View Trace</a>
+                    <a href={"https://" + this.props.report.productLink} target="_blank">View Trace</a>
                 </td>
                 <td className="UserRecord_Email">{this.props.report.phone}</td>
                 <td className="UserRecord_Role">{this.props.report.time}</td>
