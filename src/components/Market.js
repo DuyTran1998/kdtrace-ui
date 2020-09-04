@@ -5,11 +5,14 @@ import { CircularProgress } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { TextField, MenuItem } from '@material-ui/core';
 
 class Market extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            listKeyFilter: new Map(),
+            productListOrigin: [],
             productList: [],
             loading: true,
             page: 1,
@@ -72,6 +75,34 @@ class Market extends Component {
         }
     }
 
+    handleKeyFilter(e) {
+        var keyMap = this.state.listKeyFilter;
+        keyMap.set(e.target.name, e.target.value);
+        this.setState({
+            listKeyFilter: keyMap,
+        })
+        this.handleFilter();
+    }
+
+    handleFilter(e) {
+        var filterList = [];
+        var list = this.state.productListOrigin;
+        console.log(this.state.listKeyFilter);
+        for (var [key, value] of this.state.listKeyFilter) {
+            filterList = []
+            for (let i = 0; i < list.length; i++) {
+                if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                    filterList.push(list[i]);
+                }
+            }
+            list = filterList;
+        }
+
+        this.setState({
+            productList: filterList,
+        })
+    }
+
     getDataForMarket(url, token) {
         this.setState({ loading: true })
         fetch(url, {
@@ -88,6 +119,7 @@ class Market extends Component {
                 }
                 this.setState({
                     productList: res.result,
+                    productListOrigin: res.result
                 })
             })
             .catch(error => {
@@ -123,6 +155,36 @@ class Market extends Component {
         return newlist;
     }
     render() {
+        const types = [
+            {
+                value: '',
+                label: '',
+            },
+            {
+                value: 'vegetable',
+                label: 'vegetable',
+            },
+            {
+                value: 'fruit',
+                label: 'fruit',
+            },
+            {
+                value: 'meal',
+                label: 'meal',
+            },
+            {
+                value: 'seafood',
+                label: 'seafood',
+            },
+            {
+                value: 'cereals',
+                label: 'cereals',
+            },
+            {
+                value: 'other',
+                label: 'other',
+            },
+        ];
         const list = this.pagation(this.state.productList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
@@ -138,49 +200,73 @@ class Market extends Component {
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
-                                                {
-                                                    this.state.productList.length !== 0 ?
-                                                    <div>
-                                                        <table className="table table-striped table-bordered zero-configuration">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th onClick={() => this.sortData('id')}>        Id                  {this.handleArrow(this.state.showArrow.id)}</th>
-                                                                    <th onClick={() => this.sortData('name')}>      Product Name        {this.handleArrow(this.state.showArrow.name)}</th>
-                                                                    <th onClick={() => this.sortData('type')}>      Type                {this.handleArrow(this.state.showArrow.type)}</th>
-                                                                    <th onClick={() => this.sortData('quantity')}>  Quantity            {this.handleArrow(this.state.showArrow.quantity)}</th>
-                                                                    <th onClick={() => this.sortData('unit')}>      Unit                {this.handleArrow(this.state.showArrow.unit)}</th>
-                                                                    <th onClick={() => this.sortData('mfg')}>       Manufacture         {this.handleArrow(this.state.showArrow.mfg)}</th>
-                                                                    <th onClick={() => this.sortData('exp')}>       Expiration          {this.handleArrow(this.state.showArrow.exp)}</th>
-                                                                    <th>Details</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {
-                                                                    Array.isArray(list)
-                                                                    && list.map(product => {
-                                                                        return (
-                                                                            <Product key={product.id} product={product} />
-                                                                        );
-                                                                    })
-                                                                }
-                                                            </tbody>
-                                                        </table>
-                                                        <div className="content-header-right col-12">
-                                                            <div className="btn-group float-md-right">
-                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
-                                                                    <li class="page-item prev">
-                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
-                                                                    </li>
-                                                                    <li class="page-item active">
-                                                                        <button class="page-link">{this.state.page}</button>
-                                                                    </li>
-                                                                    <li class="page-item next" onClick={this.increatePage}>
-                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
-                                                                    </li>
-                                                                </ul>
+                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                                    <tr>
+                                                        <div className="row">
+                                                            <div className="col-md-6">
+                                                                <div className="form-group">
+                                                                    <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <div className="form-group">
+                                                                    <select id="issueinput5" name="type" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                                        <option value="">Type</option>
+                                                                        <option value="vegetable">Vegetable</option>
+                                                                        <option value="fruit">Fruits</option>
+                                                                        <option value="meal">Meals</option>
+                                                                        <option value="seafood">SeaFoods</option>
+                                                                        <option value="cereals">Cereals</option>
+                                                                        <option value="other">Other</option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </tr>
+                                                </table>
+                                                {
+                                                    this.state.productList.length !== 0 ?
+                                                        <div>
+                                                            <table className="table table-striped table-bordered zero-configuration">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th onClick={() => this.sortData('id')}>        Id                  {this.handleArrow(this.state.showArrow.id)}</th>
+                                                                        <th onClick={() => this.sortData('name')}>      Product Name        {this.handleArrow(this.state.showArrow.name)}</th>
+                                                                        <th onClick={() => this.sortData('type')}>      Type                {this.handleArrow(this.state.showArrow.type)}</th>
+                                                                        <th onClick={() => this.sortData('quantity')}>  Quantity            {this.handleArrow(this.state.showArrow.quantity)}</th>
+                                                                        <th onClick={() => this.sortData('unit')}>      Unit                {this.handleArrow(this.state.showArrow.unit)}</th>
+                                                                        <th onClick={() => this.sortData('mfg')}>       Manufacture         {this.handleArrow(this.state.showArrow.mfg)}</th>
+                                                                        <th onClick={() => this.sortData('exp')}>       Expiration          {this.handleArrow(this.state.showArrow.exp)}</th>
+                                                                        <th>Details</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {
+                                                                        Array.isArray(list)
+                                                                        && list.map(product => {
+                                                                            return (
+                                                                                <Product key={product.id} product={product} />
+                                                                            );
+                                                                        })
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                            <div className="content-header-right col-12">
+                                                                <div className="btn-group float-md-right">
+                                                                    <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                        <li class="page-item prev">
+                                                                            <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                        </li>
+                                                                        <li class="page-item active">
+                                                                            <button class="page-link">{this.state.page}</button>
+                                                                        </li>
+                                                                        <li class="page-item next" onClick={this.increatePage}>
+                                                                            <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         :
                                                         this.state.loading === true ?
                                                             <div style={{ display: 'flex', justifyContent: 'center' }}>
