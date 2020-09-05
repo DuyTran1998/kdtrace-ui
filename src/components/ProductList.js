@@ -14,6 +14,8 @@ class ProductList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            listKeyFilter: new Map(),
+            productListOrigin: [],
             productList: [],
             open: false,
             reload: false,
@@ -44,8 +46,40 @@ class ProductList extends Component {
             },
         }).then(response => response.json())
             .then(jsonResponse => {
-                this.setState({ loading: false, productList: jsonResponse.result });
+                this.setState({
+                    loading: false,
+                    productList: jsonResponse.result,
+                    productListOrigin: jsonResponse.result
+                });
             })
+    }
+
+    handleKeyFilter(e) {
+        var keyMap = this.state.listKeyFilter;
+        keyMap.set(e.target.name, e.target.value);
+        this.setState({
+            listKeyFilter: keyMap,
+        })
+        this.handleFilter();
+    }
+
+    handleFilter(e) {
+        var filterList = [];
+        var list = this.state.productListOrigin;
+        console.log(this.state.listKeyFilter);
+        for (var [key, value] of this.state.listKeyFilter) {
+            filterList = []
+            for (let i = 0; i < list.length; i++) {
+                if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                    filterList.push(list[i]);
+                }
+            }
+            list = filterList;
+        }
+
+        this.setState({
+            productList: filterList,
+        })
     }
 
     hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
@@ -166,6 +200,34 @@ class ProductList extends Component {
                                         </div>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
+                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                                    <tr>
+                                                        <td>
+                                                            <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                        </td>
+                                                        <td style={{ width: '121px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td>
+                                                            <select id="issueinput5" name="type" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                                <option value="">Type</option>
+                                                                <option value="vegetable">Vegetable</option>
+                                                                <option value="fruit">Fruits</option>
+                                                                <option value="meal">Meals</option>
+                                                                <option value="seafood">SeaFoods</option>
+                                                                <option value="cereals">Cereals</option>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                        </td>
+                                                        <td style={{ width: '110px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Manufacture" name="mfg" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td style={{ width: '105px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Expiration" name="exp" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                    </tr>
+                                                    <tr><p></p></tr>
+                                                </table>
                                                 {this.state.productList.length !== 0 ?
                                                     <div>
                                                         <table className="table table-striped table-bordered zero-configuration">
@@ -186,8 +248,8 @@ class ProductList extends Component {
                                                                     Array.isArray(list)
                                                                     && list.map(product => {
                                                                         return (
-                                                                            <ProductRecord key={product.id} 
-                                                                                            product={product} 
+                                                                            <ProductRecord key={product.id}
+                                                                                product={product}
                                                                             />
                                                                         );
                                                                     })
@@ -201,7 +263,7 @@ class ProductList extends Component {
                                                                         <button onClick={this.decreatePage} class="page-link">Prev</button>
                                                                     </li>
                                                                     <li class="page-item active">
-                                                                        <button  class="page-link">{this.state.page}</button>
+                                                                        <button class="page-link">{this.state.page}</button>
                                                                     </li>
                                                                     <li class="page-item next" onClick={this.increatePage}>
                                                                         <button onClick={this.increatePage} class="page-link">Next</button>

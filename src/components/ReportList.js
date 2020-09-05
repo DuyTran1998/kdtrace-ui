@@ -12,6 +12,8 @@ class ReportList extends Component {
         super(props);
         this.state = {
             page: 1,
+            listKeyFilter: new Map(),
+            reportListOrigin: [],
             reportList: [],
             loading: true,
             asc: true,
@@ -26,6 +28,39 @@ class ReportList extends Component {
     componentDidMount() {
         this.getAllReport();
     }
+
+    handleKeyFilter(e) {
+        var keyMap = this.state.listKeyFilter;
+        keyMap.set(e.target.name, e.target.value);
+        this.setState({
+            listKeyFilter: keyMap,
+        })
+        this.handleFilter();
+    }
+
+    handleFilter(e) {
+        var filterList = [];
+        var list = this.state.reportListOrigin;
+        console.log(this.state.listKeyFilter);
+        for (var [key, value] of this.state.listKeyFilter) {
+            filterList = []
+            for (let i = 0; i < list.length; i++) {
+                if (key === 'productLink') {
+                    if (list[i][key].toUpperCase().slice(27).indexOf(value.toUpperCase()) > -1) {
+                        filterList.push(list[i]);
+                    }
+                } else if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                    filterList.push(list[i]);
+                }
+            }
+            list = filterList;
+        }
+
+        this.setState({
+            reportList: filterList,
+        })
+    }
+
 
     hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
     sortData = (column, subColumn) => {
@@ -79,7 +114,10 @@ class ReportList extends Component {
             .then(response => response.json())
             .then(jsonResponse => {
                 this.setState({ loading: false })
-                this.setState({ reportList: jsonResponse.result });
+                this.setState({
+                    reportList: jsonResponse.result,
+                    reportListOrigin: jsonResponse.result
+                });
             })
     }
 
@@ -109,7 +147,6 @@ class ReportList extends Component {
         return newlist;
     }
     render() {
-        console.log(this.state.reportList);
         const list = this.pagation(this.state.reportList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
@@ -123,11 +160,25 @@ class ReportList extends Component {
                                             <h4 className="card-title">Report From Customers</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
-                                        {
-                                            this.state.reportList.length !== 0 ?
-                                                <div>
-                                                    <div className="card-content collapse show">
-                                                        <div className="card-body card-dashboard">
+                                        <div className="card-content collapse show">
+                                            <div className="card-body card-dashboard">
+                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                                    <tr>
+                                                        <td>
+                                                            <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                        </td>
+                                                        <td style={{ width: '121px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Product URL" name="productLink" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td style={{ width: '121px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Time Report" name="time" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                    </tr>
+                                                    <tr><p></p></tr>
+                                                </table>
+                                                {
+                                                    this.state.reportList.length !== 0 ?
+                                                        <div>
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
@@ -152,42 +203,43 @@ class ReportList extends Component {
                                                                     }
                                                                 </tbody>
                                                             </table>
-                                                        </div>
-                                                        <div className="content-header-right col-12">
-                                                            <div className="btn-group float-md-right">
-                                                                <ul class="pagination pagination-separate pagination-curved page2-links">
-                                                                    <li class="page-item prev">
-                                                                        <button onClick={this.decreatePage} class="page-link">Prev</button>
-                                                                    </li>
-                                                                    <li class="page-item active">
-                                                                        <a href="!#" class="page-link">{this.state.page}</a>
-                                                                    </li>
-                                                                    <li class="page-item next" onClick={this.increatePage}>
-                                                                        <button onClick={this.increatePage} class="page-link">Next</button>
-                                                                    </li>
-                                                                    {/* <li>
+                                                            <div className="content-header-right col-12">
+                                                                <div className="btn-group float-md-right">
+                                                                    <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                        <li class="page-item prev">
+                                                                            <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                        </li>
+                                                                        <li class="page-item active">
+                                                                            <a href="!#" class="page-link">{this.state.page}</a>
+                                                                        </li>
+                                                                        <li class="page-item next" onClick={this.increatePage}>
+                                                                            <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                        </li>
+                                                                        {/* <li>
                                                                     <Link to={'?page=' + (this.state.page - 1)} onClick={this.decreatePage}><i className="ft-arrow-left"></i> Previous</Link>
                                                                 </li>
                                                                 <li>
                                                                     <Link to={'?page=' + (this.state.page + 1)} onClick={this.increatePage}>Next <i className="ft-arrow-right"></i></Link>
                                                                 </li> */}
 
-                                                                </ul>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
+
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                this.state.loading === true ?
-                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                        <CircularProgress color="primary" />
-                                                    </div>
-                                                    :
-                                                    <div style={{ textAlign: 'center' }}>
-                                                        <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
-                                                        <h3>Don't have users!</h3>
-                                                    </div>
-                                        }
+                                                        :
+                                                        this.state.loading === true ?
+                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                <CircularProgress color="primary" />
+                                                            </div>
+                                                            :
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                                <h3>Don't have users!</h3>
+                                                            </div>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

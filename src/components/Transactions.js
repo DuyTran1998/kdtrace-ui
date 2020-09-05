@@ -10,6 +10,8 @@ class Transactions extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            listKeyFilter: new Map(),
+            listTransactionsOrigin: [],
             listTransactions: [],
             page: 1,
             loading: true,
@@ -26,6 +28,38 @@ class Transactions extends Component {
     componentDidMount() {
         const token = localStorage.getItem('token');
         this.getData(API_GET_ALL_TRANSACTION, token);
+    }
+
+    handleKeyFilter(e) {
+        var keyMap = this.state.listKeyFilter;
+        keyMap.set(e.target.name, e.target.value);
+        this.setState({
+            listKeyFilter: keyMap,
+        })
+        this.handleFilter();
+    }
+
+    handleFilter(e) {
+        var filterList = [];
+        var list = this.state.listTransactionsOrigin;
+        console.log(this.state.listKeyFilter);
+        for (var [key, value] of this.state.listKeyFilter) {
+            filterList = []
+            for (let i = 0; i < list.length; i++) {
+                if (key === 'name' || key === 'type') {
+                    if (list[i].productModel[key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                        filterList.push(list[i]);
+                    }
+                } else if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                    filterList.push(list[i]);
+                }
+            }
+            list = filterList;
+        }
+
+        this.setState({
+            listTransactions: filterList,
+        })
     }
 
     hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
@@ -115,6 +149,7 @@ class Transactions extends Component {
                 }
                 this.setState({
                     listTransactions: res.result,
+                    listTransactionsOrigin: res.result
                 })
             })
             .catch(error => {
@@ -137,11 +172,53 @@ class Transactions extends Component {
                                             <h4 className="card-title">Transactions Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
-                                        {
-                                            this.state.listTransactions.length !== 0 ?
-                                                <div>
-                                                    <div className="card-content collapse show">
-                                                        <div className="card-body card-dashboard">
+                                        <div className="card-content collapse show">
+                                            <div className="card-body card-dashboard">
+                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                                    <tr>
+                                                        <td>
+                                                            <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                        </td>
+                                                        <td style={{ width: '121px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td>
+                                                            <select id="issueinput5" name="type" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                                <option value="">Product Type</option>
+                                                                <option value="vegetable">Vegetable</option>
+                                                                <option value="fruit">Fruits</option>
+                                                                <option value="meal">Meals</option>
+                                                                <option value="seafood">SeaFoods</option>
+                                                                <option value="cereals">Cereals</option>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select id="issueinput5" name="statusProcess" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                                <option value="">Status Process</option>
+                                                                <option value="PRODUCER_REJECT">PRODUCER_REJECT</option>
+                                                                <option value="WAITING_RESPONSE_PRODUCER">WAITING_RESPONSE_PRODUCER</option>
+                                                                <option value="CHOOSE_DELIVERYTRUCK_TRANSPORT">CHOOSE_DELIVERYTRUCK_TRANSPORT</option>
+                                                                <option value="WAITING_RESPONSE_TRANSPORT">WAITING_RESPONSE_TRANSPORT</option>
+                                                                <option value="ON_BOARDING_GET">ON_BOARDING_GET</option>
+                                                                <option value="ON_BOARDING_RECEIVE">ON_BOARDING_RECEIVE</option>
+                                                                <option value="RECEIVED">RECEIVED</option>
+                                                                <option value="TRANSPORT_REJECT">TRANSPORT_REJECT</option>
+                                                            </select>
+                                                        </td>
+                                                        <td style={{ width: '110px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Last Update" name="updateAt" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td style={{ width: '105px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Create Time" name="create_at" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                    </tr>
+                                                    <tr><p></p></tr>
+                                                </table>
+                                                {
+                                                    this.state.listTransactions.length !== 0 ?
+                                                        <div>
+
                                                             <table className="custom-small-padding table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr style={{ marginLeft: 0, marginRight: 0 }}>
@@ -180,20 +257,21 @@ class Transactions extends Component {
                                                                     </ul>
                                                                 </div>
                                                             </div>
+
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                this.state.loading === true ?
-                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                        <CircularProgress color="primary" />
-                                                    </div>
-                                                    :
-                                                    <div style={{ textAlign: 'center' }}>
-                                                        <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
-                                                        <h3>Don't have transactions!</h3>
-                                                    </div>
-                                        }
+                                                        :
+                                                        this.state.loading === true ?
+                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                <CircularProgress color="primary" />
+                                                            </div>
+                                                            :
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                                <h3>Don't have transactions!</h3>
+                                                            </div>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

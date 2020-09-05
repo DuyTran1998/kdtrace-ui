@@ -5,7 +5,6 @@ import { CircularProgress } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { TextField, MenuItem } from '@material-ui/core';
 
 class Market extends Component {
     constructor(props) {
@@ -155,36 +154,6 @@ class Market extends Component {
         return newlist;
     }
     render() {
-        const types = [
-            {
-                value: '',
-                label: '',
-            },
-            {
-                value: 'vegetable',
-                label: 'vegetable',
-            },
-            {
-                value: 'fruit',
-                label: 'fruit',
-            },
-            {
-                value: 'meal',
-                label: 'meal',
-            },
-            {
-                value: 'seafood',
-                label: 'seafood',
-            },
-            {
-                value: 'cereals',
-                label: 'cereals',
-            },
-            {
-                value: 'other',
-                label: 'other',
-            },
-        ];
         const list = this.pagation(this.state.productList, this.state.page);
         return (
             <div className="app-content container center-layout mt-2">
@@ -198,32 +167,36 @@ class Market extends Component {
                                             <h4 className="card-title">Product Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
+                                        <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                            <tr>
+                                                <td>
+                                                    <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                </td>
+                                                <td style={{ width: '121px' }}>
+                                                    <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                </td>
+                                                <td>
+                                                    <select id="issueinput5" name="type" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                        <option value="">Type</option>
+                                                        <option value="vegetable">Vegetable</option>
+                                                        <option value="fruit">Fruits</option>
+                                                        <option value="meal">Meals</option>
+                                                        <option value="seafood">SeaFoods</option>
+                                                        <option value="cereals">Cereals</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </td>
+                                                <td style={{ width: '110px' }}>
+                                                    <input type="text" id="issueinput1" className="form-control" placeholder="Manufacture" name="mfg" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                </td>
+                                                <td style={{ width: '105px' }}>
+                                                    <input type="text" id="issueinput1" className="form-control" placeholder="Expiration" name="exp" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                </td>
+                                            </tr>
+                                            <tr><p></p></tr>
+                                        </table>
                                         <div className="card-content collapse show">
                                             <div className="card-body card-dashboard">
-                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
-                                                    <tr>
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <div className="form-group">
-                                                                    <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-md-6">
-                                                                <div className="form-group">
-                                                                    <select id="issueinput5" name="type" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
-                                                                        <option value="">Type</option>
-                                                                        <option value="vegetable">Vegetable</option>
-                                                                        <option value="fruit">Fruits</option>
-                                                                        <option value="meal">Meals</option>
-                                                                        <option value="seafood">SeaFoods</option>
-                                                                        <option value="cereals">Cereals</option>
-                                                                        <option value="other">Other</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </tr>
-                                                </table>
                                                 {
                                                     this.state.productList.length !== 0 ?
                                                         <div>

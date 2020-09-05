@@ -15,6 +15,8 @@ class UserList extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            listKeyFilter: new Map(),
+            userListOrigin: [],
             userList: [],
             page: 1,
             alertMessage: '',
@@ -43,6 +45,38 @@ class UserList extends Component {
             }
         }
         this.getAllUser(localStorage.getItem('token'));
+    }
+
+    handleKeyFilter(e) {
+        var keyMap = this.state.listKeyFilter;
+        keyMap.set(e.target.name, e.target.value);
+        this.setState({
+            listKeyFilter: keyMap,
+        })
+        this.handleFilter();
+    }
+
+    handleFilter(e) {
+        var filterList = [];
+        var list = this.state.userListOrigin;
+        console.log(this.state.listKeyFilter);
+        for (var [key, value] of this.state.listKeyFilter) {
+            filterList = []
+            for (let i = 0; i < list.length; i++) {
+                if (key === 'roleName') {
+                    if (list[i].role[key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                        filterList.push(list[i]);
+                    }
+                }else if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                    filterList.push(list[i]);
+                }
+            }
+            list = filterList;
+        }
+
+        this.setState({
+            userList: filterList,
+        })
     }
 
     hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
@@ -99,7 +133,10 @@ class UserList extends Component {
             .then(response => response.json())
             .then(jsonResponse => {
                 this.setState({ loading: false })
-                this.setState({ userList: jsonResponse.result });
+                this.setState({
+                    userList: jsonResponse.result,
+                    userListOrigin: jsonResponse.result
+                });
             })
     }
 
@@ -219,11 +256,36 @@ class UserList extends Component {
                                             <h4 className="card-title">User Management</h4>
                                             <a className="heading-elements-toggle" href="!#"><i className="fa fa-ellipsis-v font-medium-3"></i></a>
                                         </div>
-                                        {
-                                            this.state.userList.length !== 0 ?
-                                                <div>
-                                                    <div className="card-content collapse show">
-                                                        <div className="card-body card-dashboard">
+                                        <div className="card-content collapse show">
+                                            <div className="card-body card-dashboard">
+                                                <table style={{ marginLeft: 'auto', marginRight: '0' }}>
+                                                    <tr>
+                                                        <td>
+                                                            <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                        </td>
+                                                        <td style={{ width: '121px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Username" name="username" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td style={{ width: '110px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Email" name="email" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                        <td>
+                                                            <select id="issueinput5" name="roleName" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                                <option value="">Role</option>
+                                                                <option value="ROLE_PRODUCER">ROLE_PRODUCER</option>
+                                                                <option value="ROLE_TRANSPORT">ROLE_TRANSPORT</option>
+                                                                <option value="ROLE_DISTRIBUTOR">ROLE_DISTRIBUTOR</option>
+                                                            </select>
+                                                        </td>
+                                                        <td style={{ width: '105px' }}>
+                                                            <input type="text" id="issueinput1" className="form-control" placeholder="Create Date" name="createAt" onChange={(e) => { this.handleKeyFilter(e) }} />
+                                                        </td>
+                                                    </tr>
+                                                    <tr><p></p></tr>
+                                                </table>
+                                                {
+                                                    this.state.userList.length !== 0 ?
+                                                        <div>
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
@@ -231,7 +293,7 @@ class UserList extends Component {
                                                                         <th onClick={() => this.sortData('username')}>  Username    {this.handleArrow(this.state.showArrow.username)}</th>
                                                                         <th onClick={() => this.sortData('email')}>     Email       {this.handleArrow(this.state.showArrow.email)}</th>
                                                                         <th onClick={() => this.sortData('role', 'roleName')}>  Role        {this.handleArrow(this.state.showArrow.role)}</th>
-                                                                        <th onClick={() => this.sortData('createAt')}>  Create date {this.handleArrow(this.state.showArrow.createAt)}</th>
+                                                                        <th onClick={() => this.sortData('createAt')}>  Create Date {this.handleArrow(this.state.showArrow.createAt)}</th>
                                                                         <th>Active</th>
                                                                     </tr>
                                                                 </thead>
@@ -252,51 +314,51 @@ class UserList extends Component {
                                                                     }
                                                                 </tbody>
                                                             </table>
+                                                            <Dialog
+                                                                open={this.state.open}
+                                                                keepMounted
+                                                                onClose={this.handleClose}
+                                                                fullWidth
+                                                                aria-labelledby="alert-dialog-slide-title"
+                                                                aria-describedby="alert-dialog-slide-description">
+                                                                <DialogTitle id="alert-dialog-slide-title">{"User Profile"}</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-slide-description">
+                                                                        <Typography>
+                                                                            <UserProfile result={this.state.result}></UserProfile>
+                                                                        </Typography>
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                            </Dialog>
+                                                            <div className="content-header-right col-12">
+                                                                <div className="btn-group float-md-right">
+                                                                    <ul class="pagination pagination-separate pagination-curved page2-links">
+                                                                        <li class="page-item prev">
+                                                                            <button onClick={this.decreatePage} class="page-link">Prev</button>
+                                                                        </li>
+                                                                        <li class="page-item active">
+                                                                            <button class="page-link">{this.state.page}</button>
+                                                                        </li>
+                                                                        <li class="page-item next" onClick={this.increatePage}>
+                                                                            <button onClick={this.increatePage} class="page-link">Next</button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <Dialog
-                                                        open={this.state.open}
-                                                        keepMounted
-                                                        onClose={this.handleClose}
-                                                        fullWidth
-                                                        aria-labelledby="alert-dialog-slide-title"
-                                                        aria-describedby="alert-dialog-slide-description">
-                                                        <DialogTitle id="alert-dialog-slide-title">{"User Profile"}</DialogTitle>
-                                                        <DialogContent>
-                                                            <DialogContentText id="alert-dialog-slide-description">
-                                                                <Typography>
-                                                                    <UserProfile result={this.state.result}></UserProfile>
-                                                                </Typography>
-                                                            </DialogContentText>
-                                                        </DialogContent>
-                                                    </Dialog>
-                                                    <div className="content-header-right col-12">
-                                                        <div className="btn-group float-md-right">
-                                                            <ul class="pagination pagination-separate pagination-curved page2-links">
-                                                                <li class="page-item prev">
-                                                                    <button onClick={this.decreatePage} class="page-link">Prev</button>
-                                                                </li>
-                                                                <li class="page-item active">
-                                                                    <button class="page-link">{this.state.page}</button>
-                                                                </li>
-                                                                <li class="page-item next" onClick={this.increatePage}>
-                                                                    <button onClick={this.increatePage} class="page-link">Next</button>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                this.state.loading === true ?
-                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                        <CircularProgress color="primary" />
-                                                    </div>
-                                                    :
-                                                    <div style={{ textAlign: 'center' }}>
-                                                        <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
-                                                        <h3>Don't have users!</h3>
-                                                    </div>
-                                        }
+                                                        :
+                                                        this.state.loading === true ?
+                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                <CircularProgress color="primary" />
+                                                            </div>
+                                                            :
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div><img width='130' src={'/no_data.png'} alt="nodata" /></div>
+                                                                <h3>Don't have users!</h3>
+                                                            </div>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
