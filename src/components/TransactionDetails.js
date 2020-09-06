@@ -10,7 +10,8 @@ import {
     API_CONFIRM_TO_RECEIPT,
     API_REJECT_TO_SHELL_TRANSACTION,
     API_REJECT_TO_DELIVERY,
-    API_DELETE_TRANSACTION
+    API_DELETE_TRANSACTION,
+    API_REPLACE_TRANSPORT
 } from '../constants/API/api';
 import { connect } from 'react-redux';
 import QRCode from './QRCode';
@@ -353,7 +354,7 @@ class TransactionDetails extends Component {
     }
 
     handleOnReplaceTransport = () => {
-        const url = this.state.id;
+        const url = API_REPLACE_TRANSPORT + this.state.id;
         const token = localStorage.getItem('token');
         this.postData(url, token);
     }

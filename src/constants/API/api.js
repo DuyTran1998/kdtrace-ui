@@ -53,6 +53,7 @@ export const API_REJECT_TO_DELIVERY = "https://kdtrace.xyz/api/process/rejectToD
 
 export const API_CONFIRM_TO_GET = "https://kdtrace.xyz/api/process/confirmToGet?id=";
 
+export const API_REPLACE_TRANSPORT = "https://kdtrace.xyz/api/process/replaceTransport?id=";
 
 export const API_GET_PROFILE_DISTRIBUTOR = "https://kdtrace.xyz/api/distributor/get";
 
@@ -159,3 +160,7 @@ export const API_WAREHOUSE = "https://kdtrace.xyz/api/process/getAllForWarehouse
 // export const API_DELETE_TRANSACTION = "http://localhost:8080/api/process/delete?id=";
 
 // export const API_WAREHOUSE = "http://localhost:8080/api/process/getAllForWarehouse";
+
+// export const API_REPLACE_TRANSPORT = "http://localhost:8080/api/process/replaceTransport?id=";
+
+//  export const API_GET_REPORTS = "http://localhost:8080/api/admin/getAllReports";
