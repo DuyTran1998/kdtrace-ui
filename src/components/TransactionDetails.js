@@ -224,6 +224,9 @@ class TransactionDetails extends Component {
             case 'handleOnSubmitToConfirmTheGoodIsReceipted':
                 this.setState({ messageDialog: "Confirmation that you received product from transport" })
                 break;
+            case 'handleOnReplaceTransport':
+                this.setState({ messageDialog: "Confirmation that you want to replace transport" })
+                break;
         }
         this.setState({
             open: true,
@@ -261,6 +264,9 @@ class TransactionDetails extends Component {
                 break;
             case 'handleOnSubmitToConfirmTheGoodIsReceipted':
                 this.handleOnSubmitToConfirmTheGoodIsReceipted();
+                break;
+            case 'handleOnReplaceTransport':
+                this.handleOnReplaceTransport();
                 break;
         }
     }
@@ -342,6 +348,12 @@ class TransactionDetails extends Component {
 
     handleOnSubmitToConfirmTheGoodIsReceipted = () => {
         const url = API_CONFIRM_TO_RECEIPT + this.state.id;
+        const token = localStorage.getItem('token');
+        this.postData(url, token);
+    }
+
+    handleOnReplaceTransport = () => {
+        const url = this.state.id;
         const token = localStorage.getItem('token');
         this.postData(url, token);
     }
@@ -587,6 +599,17 @@ class TransactionDetails extends Component {
                                                                                 className="btn btn-lg btn-block btn-info"
                                                                                 onClick={() => this.handleOpenDialog('handleOnSubmitToConfirmTheGoodIsGotten')}>
                                                                                 Loading
+                                                                            </button>
+                                                                            :
+                                                                            null
+                                                                    }
+                                                                    {
+                                                                        this.state.statusProcess === 'WAITING_RESPONSE_TRANSPORT' && this.state.role === 'ROLE_DISTRIBUTOR'
+                                                                            ?
+                                                                            <button type="button"
+                                                                                className="btn btn-lg btn-block btn-warning"
+                                                                                onClick={() => this.handleOpenDialog('handleOnReplaceTransport')}>
+                                                                                Replace Transport
                                                                             </button>
                                                                             :
                                                                             null
