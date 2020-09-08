@@ -6,6 +6,11 @@ class ProductForm extends Component {
         super(props);
         this.state = {
             name: '',
+            root: '',
+            startDay: null,
+            endDay: null,
+            medicines: [],
+            price: null,
             quantity: '',
             type: 'Vegetable',
             unit: 'PCS',
@@ -13,6 +18,8 @@ class ProductForm extends Component {
             mfg: '',
             progress: false,
             images: [],
+            nameMedecine: '',
+            date: '',
         }
     }
 
@@ -21,11 +28,41 @@ class ProductForm extends Component {
         this.setState({ [name]: value });
     }
 
+    handleDelete = element => {
+        console.log(element);
+        let list = this.state.medicines;
+        let temp  = 0;
+        for(let object in this.state.medicines){
+            if(object.nameMedecine === element){
+                delete list[temp];
+            }
+            temp++
+        }
+        this.setState({
+            medicines: list
+        })
+        
+    }
+
     handleFiles = e => {
         let files = e.target.files;
-        if (files.length !== 0){
+        if (files.length !== 0) {
             this.setState({
                 images: files,
+            })
+        }
+    }
+
+    handleClick = () => {
+        if (this.state.nameMedecine !== '' && this.state.date !== '') {
+            let object = {
+                nameMedecine: this.state.nameMedecine,
+                date: this.state.date
+            }
+            let list = this.state.medicines;
+            list.push(object);
+            this.setState({
+                medicines: list
             })
         }
     }
@@ -77,28 +114,82 @@ class ProductForm extends Component {
         this.setState({ progress: false });
     }
     render() {
+        console.log(this.state);
         return (
             <form className="form" onSubmit={this.handleSubmit}>
+
                 <div className="form-body">
+                    <h4 class="form-section"><i class="ft-clipboard"></i> Root Product</h4>
                     <div className="form-group">
-                        <label htmlFor="issueinput1">Product Name</label>
-                        <input type="text" id="issueinput1" className="form-control" placeholder="Ex: Apple" name="name" onChange={this.handleChange} required />
+                        <label htmlFor="issueinput7">Root Type</label>
+                        <input type="text" id="issueinput15" className="form-control" placeholder="Example: Carot Seeds..." name="root" onChange={this.handleChange} required />
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="issueinput8">Start Day</label>
+                                <input type="date" id="issueinput2" className="form-control" name="startDay" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="issueinput9">Harvest Day</label>
+                                <input type="date" id="issueinput3" className="form-control" name="endDay" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="issueinput3">Medicine History</label>
+                                <input type="text" id="issueinput4" className="form-control" name="nameMedecine" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="issueinput3">Time</label>
+                                <input type="date" id="issueinput5" className="form-control" name="date" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onClick={this.handleClick}>
+                        <i class="ft-plus"></i> Add new
+                    </button>
+                    <h3></h3>
+
+                    {
+                        Array.isArray(this.state.medicines)
+                        && this.state.medicines.map(medicine => {
+                            return (
+                                <div class="input-group mb-1" data-repeater-item="">
+                                    <input type="text" placeholder={medicine.nameMedecine + "-" + medicine.date} class="form-control" id="example-tel-input" disabled />
+                                    <span class="input-group-append" id="button-addon2">
+                                        <button class="btn btn-danger" type="button" onClick={() => this.handleDelete(medicine.nameMedecine)}><i class="ft-x"></i></button>
+                                    </span>
+                                </div>
+                            );
+                        })
+                    }
+                    <h4 class="form-section"><i class="ft-clipboard"></i> Product Detail</h4>
+                    <div className="form-group">
+                        <label htmlFor="issueinput13">Product Name</label>
+                        <input type="text" id="issueinput13" className="form-control" placeholder="Ex: Apple" name="name" onChange={this.handleChange} required />
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="issueinput5">Type</label>
-                        <select id="issueinput5" name="type" onChange={this.handleChange} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" required>
-                            <option value="vegetable">Vegetable</option>
-                            <option value="fruit">Fruits</option>
-                            <option value="meal">Meals</option>
-                            <option value="seafood">SeaFoods</option>
-                            <option value="cereals">Cereals</option>
-                            <option value="other">Other</option>
+                        <select id="issueinput7" name="type" onChange={this.handleChange} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" required>
+                            <option value="Vegetable">Vegetable</option>
+                            <option value="Fruit">Fruits</option>
+                            <option value="Meal">Meals</option>
+                            <option value="SeaFood">SeaFoods</option>
+                            <option value="Cereal">Cereals</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="issueinput6">Unit</label>
+                        <label htmlFor="issueinput8">Unit</label>
                         <select id="issueinput6" name="unit" onChange={this.handleChange} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Status" required>
                             <option value="PCS">PCS</option>
                             <option value="DOZENS">DOZENS</option>
@@ -109,21 +200,21 @@ class ProductForm extends Component {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="issueinput2">Quantity</label>
-                        <input type="text" id="issueinput2" className="form-control" placeholder="1,2,3..." name="quantity" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" required />
+                        <label htmlFor="issueinput14">Quantity</label>
+                        <input type="text" id="issueinput14" className="form-control" placeholder="1,2,3..." name="quantity" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" required />
                     </div>
 
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label htmlFor="issueinput3">Manufacture Date</label>
-                                <input type="date" id="issueinput3" className="form-control" name="mfg" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
+                                <label htmlFor="issueinput10">Manufacture Date</label>
+                                <input type="date" id="issueinput10" className="form-control" name="mfg" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label htmlFor="issueinput4">Expiration Date</label>
-                                <input type="date" id="issueinput4" className="form-control" name="exp" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required />
+                                <label htmlFor="issueinput11">Expiration Date</label>
+                                <input type="date" id="issueinput11" className="form-control" name="exp" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" required />
                             </div>
                         </div>
                     </div>
@@ -150,7 +241,7 @@ class ProductForm extends Component {
                 <Snackbar open={this.state.progress} onClose={this.handleCloseProgress}  >
                     <CircularProgress color="primary" />
                 </Snackbar>
-            </form>
+            </form >
         );
     }
 }

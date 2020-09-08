@@ -298,7 +298,7 @@ class ProductList extends Component {
                     fullWidth
                     aria-labelledby="alert-dialog-slide-title"
                     aria-describedby="alert-dialog-slide-description">
-                    <DialogTitle id="alert-dialog-slide-title">{"Create product form"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-slide-title">{"INPUT INFORMATION PRODUCT"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             <Typography>
