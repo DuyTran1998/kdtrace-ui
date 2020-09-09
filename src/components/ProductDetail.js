@@ -158,6 +158,7 @@ class ProductDetail extends Component {
                                                         <th>Root Name</th>
                                                         <th>Start Day</th>
                                                         <th>Harvest Day</th>
+                                                        <th>Price</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -165,6 +166,7 @@ class ProductDetail extends Component {
                                                         <td>{this.state.root}</td>
                                                         <td>{this.state.startDay}</td>
                                                         <td>{this.state.endDay}</td>
+                                                        <td>{this.state.price}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

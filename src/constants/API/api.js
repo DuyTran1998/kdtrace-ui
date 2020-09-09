@@ -61,6 +61,8 @@ export const API_UPDATE_PROFILE_DISTRIBUTOR = "https://kdtrace.xyz/api/distribut
 
 export const API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR = "https://kdtrace.xyz/api/distributor/getAllProduct";
 
+export const API_GET_ALL_PRODUCER_NAME_FOR_DISTRIBUTOR = "https://kdtrace.xyz/api/distributor/getAllProducer";
+
 
 export const API_CREATE_TRANSACTION = "https://kdtrace.xyz/api/process/create";
 
@@ -141,6 +143,8 @@ export const API_WAREHOUSE = "https://kdtrace.xyz/api/process/getAllForWarehouse
 // export const API_UPDATE_PROFILE_DISTRIBUTOR = "http://localhost:8080/api/distributor/update";
 
 // export const API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR = "http://localhost:8080/api/distributor/getAllProduct";
+
+// export const API_GET_ALL_PRODUCER_NAME_FOR_DISTRIBUTOR = "http://localhost:8080/api/distributor/getAllProducer";
 
 
 // export const API_CREATE_TRANSACTION = "http://localhost:8080/api/process/create";

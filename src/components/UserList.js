@@ -67,7 +67,7 @@ class UserList extends Component {
                     if (list[i].role[key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
                         filterList.push(list[i]);
                     }
-                }else if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
+                } else if (list[i][key].toUpperCase().indexOf(value.toUpperCase()) > -1) {
                     filterList.push(list[i]);
                 }
             }
@@ -289,8 +289,8 @@ class UserList extends Component {
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th onClick={() => this.sortData('id')}>        Id          {this.handleArrow(this.state.showArrow.id)}</th>
                                                                         <th onClick={() => this.sortData('username')}>  Username    {this.handleArrow(this.state.showArrow.username)}</th>
+                                                                        <th onClick={() => this.sortData('rate')}>      Rate        {this.handleArrow(this.state.showArrow.rate)}</th>
                                                                         <th onClick={() => this.sortData('email')}>     Email       {this.handleArrow(this.state.showArrow.email)}</th>
                                                                         <th onClick={() => this.sortData('role', 'roleName')}>  Role        {this.handleArrow(this.state.showArrow.role)}</th>
                                                                         <th onClick={() => this.sortData('createAt')}>  Create Date {this.handleArrow(this.state.showArrow.createAt)}</th>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR } from '../constants/API/api';
+import { API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR, API_GET_ALL_PRODUCER_NAME_FOR_DISTRIBUTOR } from '../constants/API/api';
 import Product from './ProductInMarket'
 import { CircularProgress } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -23,13 +23,15 @@ class Market extends Component {
                 quantity: false,
                 unit: false,
                 mfg: false
-            }
+            },
+            producerNameList: []
         }
     }
 
     componentDidMount() {
         let token = localStorage.getItem('token');
         this.getDataForMarket(API_GET_ALL_PRODUCT_FOR_DISTRIBUTOR, token);
+        this.getAllProducerName(API_GET_ALL_PRODUCER_NAME_FOR_DISTRIBUTOR, token);
     }
 
     hasLeading = s => /^\S+\s\S+\s\S+$/.test(s);
@@ -128,6 +130,33 @@ class Market extends Component {
             })
     }
 
+    getAllProducerName(url, token) {
+        this.setState({ loading: true })
+        fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        }).then(res => res.json())
+            .then(res => {
+                this.setState({ loading: false })
+                if (res.error) {
+                    throw (res.error);
+                }
+                console.log({res});
+                this.setState({
+                    producerNameList: res
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    error: error,
+                })
+            })
+    }
+
+
     increatePage = () => {
         if (this.state.productList.length / (this.state.page * 10) > 1) {
             let newPageNum = this.state.page + 1;
@@ -171,6 +200,16 @@ class Market extends Component {
                                             <tr>
                                                 <td>
                                                     <img src={"/seach.gif"} width="100%" style={{ maxWidth: "50px" }} alt="image" />
+                                                </td>
+                                                <td>
+                                                    <select id="issueinput5" name="companyName" onChange={(e) => { this.handleKeyFilter(e) }} className="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" >
+                                                        <option value="">Producer</option>
+                                                        {
+                                                            this.state.producerNameList.map(producerName => {
+                                                                return <option value={producerName}>{producerName}</option>
+                                                            })
+                                                        }
+                                                    </select>
                                                 </td>
                                                 <td style={{ width: '121px' }}>
                                                     <input type="text" id="issueinput1" className="form-control" placeholder="Product Name" name="name" onChange={(e) => { this.handleKeyFilter(e) }} />

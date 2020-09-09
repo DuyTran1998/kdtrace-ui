@@ -182,11 +182,12 @@ class ReportList extends Component {
                                                             <table className="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th align="center" onClick={() => this.sortData('id')}>Id{this.handleArrow(this.state.showArrow.id)}</th>
                                                                         <th align="center" onClick={() => this.sortData('productLink')}>Product URL{this.handleArrow(this.state.showArrow.productLink)}</th>
+                                                                        <th >Name of Customer</th>
                                                                         <th align="center">Phone Customer</th>
                                                                         <th align="center" onClick={() => this.sortData('time')}>Time Report{this.handleArrow(this.state.showArrow.time)}</th>
                                                                         <th >Content Report</th>
+                                                                        <th onClick={() => this.sortData('rate')}>Rate{this.handleArrow(this.state.showArrow.rate)}</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
