@@ -37,6 +37,7 @@ class ProductDetail extends Component {
             },
         }).then(response => response.json())
             .then(jsonResponse => {
+                console.log(jsonResponse.result);
                 this.setState({
                     id: jsonResponse.result.id,
                     productName: jsonResponse.result.name,
@@ -47,6 +48,11 @@ class ProductDetail extends Component {
                     exp: jsonResponse.result.exp,
                     codes: jsonResponse.result.codes,
                     image: jsonResponse.result.image,
+                    root: jsonResponse.result.root,
+                    startDay: jsonResponse.result.startDay,
+                    endDay: jsonResponse.result.endDay,
+                    price: jsonResponse.result.price,
+                    medicines: jsonResponse.result.medicines,
                 })
             })
     }
@@ -86,7 +92,7 @@ class ProductDetail extends Component {
             imageList.push(
                 <div>
                     <hr />
-                    <img src={imageString[i].trim()} width="100%" style={{maxWidth:"500px"}} alt="image" />
+                    <img src={imageString[i].trim()} width="100%" style={{ maxWidth: "500px" }} alt="image" />
                 </div>
             );
         }
@@ -105,7 +111,7 @@ class ProductDetail extends Component {
                                 <div className="col-12">
                                     <div className="card">
                                         <div className="card-header">
-                                            <h4 className="card-title"><i className="fa fa-eye"></i>Product Management</h4>
+                                            <h4 class="info"><i class="ft-clipboard"></i> Product Information</h4>
                                             {
                                                 this.props.userContext.role === 'ROLE_DISTRIBUTOR'
                                                     ?
@@ -139,11 +145,41 @@ class ProductDetail extends Component {
                                                     <td>{this.state.type}</td>
                                                     <td>{this.state.quantity}</td>
                                                     <td>{this.state.unit}</td>
-                                                    <td>{this.state.mfg}</td>
-                                                    <td>{this.state.exp}</td>
+                                                    <td className="warning">{this.state.mfg}</td>
+                                                    <td className="danger" >{this.state.exp}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div class="bs-callout-success callout-border-right callout-bordered callout-transparent mt-1 p-1">
+                                            <h4 class="success"><i class="ft-clipboard"></i> Root Product</h4>
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Root Name</th>
+                                                        <th>Start Day</th>
+                                                        <th>Harvest Day</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{this.state.root}</td>
+                                                        <td>{this.state.startDay}</td>
+                                                        <td>{this.state.endDay}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <h5>Medicines History</h5>
+                                            {
+                                                Array.isArray(this.state.medicines)
+                                                && this.state.medicines.map(medicine => {
+                                                    return (
+                                                        <div key={medicine.medicine} class="input-group col-mb-3" data-repeater-item="">
+                                                            <input type="text" placeholder={medicine.time+ ":      " + medicine.medicine} class="form-control" id="example-tel-input" disabled />
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </div>
                                         <div className="card-header">
                                             <h4 className="card-title">QR Code List </h4>
                                         </div>

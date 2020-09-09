@@ -18,7 +18,7 @@ class ProductForm extends Component {
             mfg: '',
             progress: false,
             images: [],
-            nameMedecine: '',
+            nameMedicine: '',
             date: '',
         }
     }
@@ -29,11 +29,10 @@ class ProductForm extends Component {
     }
 
     handleDelete = element => {
-        console.log(element);
         let list = this.state.medicines;
-        let temp  = 0;
-        for(let object in this.state.medicines){
-            if(object.nameMedecine === element){
+        let temp = 0;
+        for (let object in this.state.medicines) {
+            if (object.nameMedicine === element) {
                 delete list[temp];
             }
             temp++
@@ -41,7 +40,7 @@ class ProductForm extends Component {
         this.setState({
             medicines: list
         })
-        
+
     }
 
     handleFiles = e => {
@@ -54,10 +53,10 @@ class ProductForm extends Component {
     }
 
     handleClick = () => {
-        if (this.state.nameMedecine !== '' && this.state.date !== '') {
+        if (this.state.nameMedicine !== '' && this.state.date !== '') {
             let object = {
-                nameMedecine: this.state.nameMedecine,
-                date: this.state.date
+                medicine: this.state.nameMedicine,
+                time: this.state.date
             }
             let list = this.state.medicines;
             list.push(object);
@@ -72,10 +71,15 @@ class ProductForm extends Component {
         const productModel = {
             exp: this.state.exp,
             mfg: this.state.mfg,
+            startDay: this.state.startDay,
+            endDay: this.state.endDay,
             name: this.state.name,
+            root: this.state.root,
             quantity: parseInt(this.state.quantity),
             type: this.state.type,
-            unit: this.state.unit
+            unit: this.state.unit,
+            medicines: this.state.medicines,
+            price: parseInt(this.state.price),
         }
         let formData = new FormData();
         let images = this.state.images;
@@ -114,7 +118,6 @@ class ProductForm extends Component {
         this.setState({ progress: false });
     }
     render() {
-        console.log(this.state);
         return (
             <form className="form" onSubmit={this.handleSubmit}>
 
@@ -142,7 +145,7 @@ class ProductForm extends Component {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label htmlFor="issueinput3">Medicine History</label>
-                                <input type="text" id="issueinput4" className="form-control" name="nameMedecine" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
+                                <input type="text" id="issueinput4" className="form-control" name="nameMedicine" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" required />
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -161,10 +164,10 @@ class ProductForm extends Component {
                         Array.isArray(this.state.medicines)
                         && this.state.medicines.map(medicine => {
                             return (
-                                <div class="input-group mb-1" data-repeater-item="">
-                                    <input type="text" placeholder={medicine.nameMedecine + "-" + medicine.date} class="form-control" id="example-tel-input" disabled />
+                                <div key={medicine.medicine} class="input-group mb-1" data-repeater-item="">
+                                    <input type="text" placeholder={medicine.medicine + "-" + medicine.time} class="form-control" id="example-tel-input" disabled />
                                     <span class="input-group-append" id="button-addon2">
-                                        <button class="btn btn-danger" type="button" onClick={() => this.handleDelete(medicine.nameMedecine)}><i class="ft-x"></i></button>
+                                        <button class="btn btn-danger" type="button" onClick={() => this.handleDelete(medicine.nameMedicine)}><i class="ft-x"></i></button>
                                     </span>
                                 </div>
                             );
@@ -203,6 +206,17 @@ class ProductForm extends Component {
                         <label htmlFor="issueinput14">Quantity</label>
                         <input type="text" id="issueinput14" className="form-control" placeholder="1,2,3..." name="quantity" onChange={this.handleChange} data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opened By" required />
                     </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Price Per Product" aria-label="Amount (to the nearest dollar)" name="price" onChange={this.handleChange}/>
+                        <div class="input-group-append">
+                            <span class="input-group-text">VND</span>
+                        </div>
+                    </div>
+                    <h1></h1>
 
                     <div className="row">
                         <div className="col-md-6">
